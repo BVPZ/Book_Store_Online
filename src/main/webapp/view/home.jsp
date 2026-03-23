@@ -34,7 +34,23 @@
             <div class="col-md-3 d-flex justify-content-end">
                 <a href="#" class="icon-btn"><i class="bi bi-box-seam"></i>Tra cứu đơn hàng</a>
                 <a href="#" class="icon-btn"><i class="bi bi-cart2"></i>Giỏ hàng</a>
-                <a href="login" class="icon-btn"><i class="bi bi-person"></i>Tài khoản</a>
+
+                <%
+                    String user = (String) session.getAttribute("user");
+                    if (user == null) {
+                %>
+                <a href="login" class="icon-btn">
+                    <i class="bi bi-person"></i>Đăng nhập
+                </a>
+                <%
+                } else {
+                %>
+                <a href="profile" class="icon-btn">
+                    <i class="bi bi-person"></i>Tài khoản
+                </a>
+                <%
+                    }
+                %>
             </div>
         </div>
     </div>

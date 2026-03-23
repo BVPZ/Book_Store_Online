@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.bookshop.util.DBConnection;
 import java.io.IOException;
 import java.sql.Connection;
-@WebServlet("/connecttoDB")
+@WebServlet("/connectDB")
 public class ConnectDB extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws

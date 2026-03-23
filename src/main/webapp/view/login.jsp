@@ -26,10 +26,10 @@
     <h2>Nhà Sách Tri Thức</h2>
     <div class="subtitle">Đăng nhập để tiếp tục</div>
 
-    <form action="home" method="POST">
+    <form action="login" method="post">
         <div class="input-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="example@email.com" required>
+            <label for="usename">Username</label>
+            <input type="text" id="usename" name="username" placeholder="username" required>
         </div>
 
         <div class="input-group">
@@ -39,13 +39,23 @@
 
         <button type="submit" class="submit-btn">Đăng nhập</button>
     </form>
-
+    <%
+        String error = (String) session.getAttribute("error");
+        if (error != null) {
+    %>
+    <div style="color: red; margin-top: 10px;">
+        <%= error %>
+    </div>
+    <%
+            session.removeAttribute("error"); // xóa sau khi hiển thị
+        }
+    %>
     <div class="register-link">
         Chưa có tài khoản? <a href="${pageContext.request.contextPath}/view/register.jsp">Đăng ký ngay</a>
     </div>
 
     <div class="demo-text">
-        Demo: Nhập bất kỳ email và mật khẩu để đăng nhập
+        Demo: nhập admin cả 2 vùng
     </div>
 </div>
 
