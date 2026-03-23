@@ -12,4 +12,8 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         req.getRequestDispatcher("view/home.jsp").forward(req, resp);
     }
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        req.getRequestDispatcher("view/home.jsp").forward(req, resp);
+    }
 }
