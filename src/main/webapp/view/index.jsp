@@ -18,6 +18,8 @@
     <form action="login" method="get">
         <input type="submit" value="enter">
     </form>
-
+    <form action="connecttoDB" method="get">
+        <input type="submit" value="connect to db">
+    </form>
 </body>
 </html>
