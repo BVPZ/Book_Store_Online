@@ -79,48 +79,53 @@
 
     <section class="content-wrapper">
 
-        <div class="product-section">
-            <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-                <h2 class="section-title">SÁCH MỚI LÊN KỆ</h2>
-                <a href="#" class="view-more">Xem thêm <i class="bi bi-chevron-right"></i></a>
-            </div>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-3">
-                <div class="col">
-                    <div class="product-card">
-                        <div class="product-img-wrap"><img src="https://m.media-amazon.com/images/I/81PndgdGCXL._AC_UF1000,1000_QL80_.jpg" class="product-img" alt="Book"></div>
-                        <div class="product-info">
-                            <a href="#" class="product-title">The Correspondent </a>
-                            <p class="product-price">299.000đ</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col"><div class="product-card"><div class="product-img-wrap"><img src="https://bizweb.dktcdn.net/thumb/1024x1024/100/576/749/products/38f61786-16ea-4a59-8f90-a2b5dd8978c4.jpg?v=1773741971217" class="product-img"></div><div class="product-info"><a href="#" class="product-title">Ngày Nay Có Một Ông Trời</a><p class="product-price">259.000đ</p></div></div></div>
-                <div class="col"><div class="product-card"><div class="product-img-wrap"><img src="https://cdn1.fahasa.com/media/catalog/product/z/7/z7012700093197_a8fafde4c12b2c28a893345d31d1beb2.jpg" class="product-img"></div><div class="product-info"><a href="#" class="product-title">Beartown - Thị Trấn Nhỏ, Giấc Mơ Lớn</a><p class="product-price">279.000đ</p></div></div></div>
-                <div class="col"><div class="product-card"><div class="product-img-wrap"><img src="https://firstnews.vn/upload/products/original/-1752812863.jpg" class="product-img"></div><div class="product-info"><a href="#" class="product-title">Thuyết mặc kệ họ</a><p class="product-price">349.000đ</p></div></div></div>
-            </div>
-        </div>
+       <div class="product-section">
+           <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+               <h2 class="section-title">SÁCH MỚI LÊN KỆ</h2>
+               <a href="#" class="view-more">Xem thêm <i class="bi bi-chevron-right"></i></a>
+           </div>
+           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-3">
+               <div class="col">
+                   <div class="product-card">
+                       <div class="product-img-wrap"><img src="https://m.media-amazon.com/images/I/81PndgdGCXL._AC_UF1000,1000_QL80_.jpg" class="product-img" alt="Book"></div>
+                       <div class="product-info">
+                           <a href="book-detail?id=12" class="product-title">The Correspondent </a>
+                           <p class="product-price">299.000đ</p>
+                       </div>
+                   </div>
+               </div>
+               <div class="col"><div class="product-card"><div class="product-img-wrap"><img src="https://bizweb.dktcdn.net/thumb/1024x1024/100/576/749/products/38f61786-16ea-4a59-8f90-a2b5dd8978c4.jpg?v=1773741971217" class="product-img"></div><div class="product-info">
+                   <a href="book-detail?id=13" class="product-title">Ngày Nay Có Một Ông Trời</a><p class="product-price">259.000đ</p></div></div></div>
+               <div class="col"><div class="product-card"><div class="product-img-wrap"><img src="https://cdn1.fahasa.com/media/catalog/product/z/7/z7012700093197_a8fafde4c12b2c28a893345d31d1beb2.jpg" class="product-img"></div><div class="product-info">
+                   <a href="book-detail?id=14" class="product-title">Beartown - Thị Trấn Nhỏ, Giấc Mơ Lớn</a><p class="product-price">279.000đ</p></div></div></div>
+               <div class="col"><div class="product-card"><div class="product-img-wrap"><img src="https://firstnews.vn/upload/products/original/-1752812863.jpg" class="product-img"></div><div class="product-info">
+                   <a href="book-detail?id=15" class="product-title">Thuyết mặc kệ họ</a><p class="product-price">349.000đ</p></div></div></div>
+           </div>
+       </div>
 
-        <div class="product-section">
-            <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-                <h2 class="section-title">SÁCH BÁN CHẠY</h2>
-                <a href="#" class="view-more">Xem thêm <i class="bi bi-chevron-right"></i></a>
-            </div>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-3">
-                <div class="col">
-                    <div class="product-card">
-                        <span class="badge-hot">Hot</span>
-                        <div class="product-img-wrap"><img src="https://upload.wikimedia.org/wikipedia/vi/9/9c/Nh%C3%A0_gi%E1%BA%A3_kim_%28s%C3%A1ch%29.jpg" class="product-img"></div>
-                        <div class="product-info"><a href="#" class="product-title">Nhà Giả Kim </a><p class="product-price">199.000đ</p></div>
+       <div class="product-section">
+           <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+               <h2 class="section-title">SÁCH BÁN CHẠY</h2>
+               <a href="#" class="view-more">Xem thêm <i class="bi bi-chevron-right"></i></a>
+           </div>
+           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-3">
+               <div class="col">
+                   <div class="product-card">
+                       <span class="badge-hot">Hot</span>
+                       <div class="product-img-wrap"><img src="https://upload.wikimedia.org/wikipedia/vi/9/9c/Nh%C3%A0_gi%E1%BA%A3_kim_%28s%C3%A1ch%29.jpg" class="product-img"></div>
+                       <div class="product-info">
+                           <a href="book-detail?id=16" class="product-title">Nhà Giả Kim </a><p class="product-price">199.000đ</p></div>
 
-                    </div>
-                </div>
-                <div class="col"><div class="product-card"><span class="badge-hot">Hot</span><div class="product-img-wrap"><img src="https://product.hstatic.net/1000376556/product/bia_1_-_ong_gia_va_bien_ca_e1758ab5f74f4f1bb0bd7e48b07611dd_1024x1024.png" class="product-img" alt="Ông già và biển cả"></div><div class="product-info"><a href="#" class="product-title">Ông già và biển cả</a><p class="product-price">89.000đ</p></div></div></div>
-                <div class="col"><div class="product-card"><span class="badge-hot">Hot</span><div class="product-img-wrap"><img src="https://bizweb.dktcdn.net/100/197/269/products/sapiens-luoc-su-ve-loai-nguoi-outline-5-7-2017-02.jpg?v=1520935327270" class="product-img" alt="Sapiens"></div><div class="product-info"><a href="#" class="product-title">Sapiens - Lược Sử Loài Người</a><p class="product-price">145.000đ</p></div></div></div>
-                <div class="col"><div class="product-card"><span class="badge-hot">Hot</span><div class="product-img-wrap"><img src="https://www.nxbtre.com.vn/Images/Book/nxbtre_full_07352019_043547.jpg" class="product-img" alt="Atomic Habits"></div><div class="product-info"><a href="#" class="product-title">Cà Phê Cùng Tony</a><p class="product-price">189.000đ</p></div></div></div>
-
-            </div>
-
-        </div>
+                   </div>
+               </div>
+               <div class="col"><div class="product-card"><span class="badge-hot">Hot</span><div class="product-img-wrap"><img src="https://product.hstatic.net/1000376556/product/bia_1_-_ong_gia_va_bien_ca_e1758ab5f74f4f1bb0bd7e48b07611dd_1024x1024.png" class="product-img" alt="Ông già và biển cả"></div><div class="product-info">
+                   <a href="book-detail?id=17" class="product-title">Ông già và biển cả</a><p class="product-price">89.000đ</p></div></div></div>
+               <div class="col"><div class="product-card"><span class="badge-hot">Hot</span><div class="product-img-wrap"><img src="https://bizweb.dktcdn.net/100/197/269/products/sapiens-luoc-su-ve-loai-nguoi-outline-5-7-2017-02.jpg?v=1520935327270" class="product-img" alt="Sapiens"></div><div class="product-info">
+                   <a href="book-detail?id=18" class="product-title">Sapiens - Lược Sử Loài Người</a><p class="product-price">145.000đ</p></div></div></div>
+               <div class="col"><div class="product-card"><span class="badge-hot">Hot</span><div class="product-img-wrap"><img src="https://www.nxbtre.com.vn/Images/Book/nxbtre_full_07352019_043547.jpg" class="product-img" alt="Atomic Habits"></div><div class="product-info">
+                   <a href="book-detail?id=19" class="product-title">Cà Phê Cùng Tony</a><p class="product-price">189.000đ</p></div></div></div>
+           </div>
+       </div>
 
         <div class="product-section all-books-section mt-5">
             <h2 class="section-title mb-4" style="font-size: 1.2rem; font-weight: bold; text-transform: uppercase;">Tất cả sách</h2>
@@ -134,7 +139,8 @@
                         </div>
                         <div class="product-info p-3">
                             <div class="category-tag text-success fw-medium small">Văn học</div>
-                            <a href="#" class="product-title mt-1">Chí Phèo</a>
+                          <a href="${pageContext.request.contextPath}/book-detail?id=4"
+                             class="product-title mt-1">Chí Phèo</a>
                             <div class="author-name">Nam Cao</div>
                             <div class="rating-box">
                                 <i class="bi bi-star-fill"></i> 4.5 <span class="text-muted ms-1">(1234)</span>
@@ -154,7 +160,10 @@
                         </div>
                         <div class="product-info p-3">
                             <div class="category-tag text-success fw-medium small">Trinh thám</div>
-                            <a href="#" class="product-title mt-1">Cuộc Điều Tra Màu Đỏ</a>
+                            <a href="${pageContext.request.contextPath}/book-detail?id=2"
+                               class="product-title mt-1">
+                                Cuộc Điều Tra Màu Đỏ
+                            </a>
                             <div class="author-name">
                                 Sir Arthur Conan Doyle</div>
                             <div class="rating-box">
@@ -175,7 +184,8 @@
                         </div>
                         <div class="product-info p-3">
                             <div class="category-tag text-success fw-medium small">Văn học cổ điển</div>
-                            <a href="#" class="product-title mt-1">Đồi Gió Hú</a>
+                          <a href="${pageContext.request.contextPath}/book-detail?id=5"
+                             class="product-title mt-1">Đồi Gió Hú</a>
                             <div class="author-name">Jane Austen</div>
                             <div class="rating-box">
                                 <i class="bi bi-star-fill"></i> 4.8 <span class="text-muted ms-1">(2341)</span>
@@ -195,7 +205,10 @@
                         </div>
                         <div class="product-info p-3">
                             <div class="text-success small fw-medium">Văn học</div>
-                            <a href="#" class="product-title d-block fw-bold text-dark text-decoration-none mt-1">Gatsby Vĩ Đại</a>
+                            <a href="${pageContext.request.contextPath}/book-detail?id=1"
+                               class="product-title d-block fw-bold text-dark text-decoration-none mt-1">
+                                Gatsby Vĩ Đại
+                            </a>
                             <p class="text-muted small mb-1">F. Scott Fitzgerald</p>
                             <div class="rating-box small text-warning mb-3">★ 4.5 <span class="text-muted">(1,234)</span></div>
                             <div class="d-flex justify-content-between align-items-center">
@@ -215,7 +228,10 @@
                         </div>
                         <div class="product-info p-3">
                             <div class="text-success small fw-medium">Trinh thám</div>
-                            <a href="#" class="product-title d-block fw-bold text-dark text-decoration-none mt-1">Trắng Án</a>
+                           <a href="${pageContext.request.contextPath}/book-detail?id=6"
+                              class="product-title d-block fw-bold text-dark text-decoration-none mt-1">
+                               Trắng Án
+                           </a>
                             <p class="text-muted small mb-1">Agatha Christie</p>
                             <div class="rating-box small text-warning mb-3">★ 4.7 <span class="text-muted">(987)</span></div>
                             <div class="d-flex justify-content-between align-items-center">
@@ -235,7 +251,10 @@
                         </div>
                         <div class="product-info p-3">
                             <div class="text-success small fw-medium">Văn học cổ điển</div>
-                            <a href="#" class="product-title d-block fw-bold text-dark text-decoration-none mt-1">Kiêu Hãnh Và Định Kiến</a>
+                           <a href="${pageContext.request.contextPath}/book-detail?id=7"
+                              class="product-title d-block fw-bold text-dark text-decoration-none mt-1">
+                               Kiêu Hãnh Và Định Kiến
+                           </a>
                             <p class="text-muted small mb-1">Jane Austen</p>
                             <div class="rating-box small text-warning mb-3">★ 4.8 <span class="text-muted">(2,341)</span></div>
                             <div class="d-flex justify-content-between align-items-center">
@@ -255,7 +274,10 @@
                         </div>
                         <div class="product-info p-3">
                             <div class="text-success small fw-medium">Khoa học</div>
-                            <a href="#" class="product-title d-block fw-bold text-dark text-decoration-none mt-1">Cosmos</a>
+                           <a href="${pageContext.request.contextPath}/book-detail?id=8"
+                              class="product-title d-block fw-bold text-dark text-decoration-none mt-1">
+                               Cosmos
+                           </a>
                             <p class="text-muted small mb-1">Stephen Hawking</p>
                             <div class="rating-box small text-warning mb-3">★ 4.6 <span class="text-muted">(1,567)</span></div>
                             <div class="d-flex justify-content-between align-items-center">
@@ -275,7 +297,10 @@
                         </div>
                         <div class="product-info p-3">
                             <div class="text-success small fw-medium">Lịch sử</div>
-                            <a href="#" class="product-title d-block fw-bold text-dark text-decoration-none mt-1">Lịch Sử Việt Nam -Truyền Thống Và Hiện Đại</a>
+                           <a href="${pageContext.request.contextPath}/book-detail?id=3"
+                              class="product-title d-block fw-bold text-dark text-decoration-none mt-1">
+                               Lịch Sử Việt Nam -Truyền Thống Và Hiện Đại
+                           </a>
                             <p class="text-muted small mb-1">Vũ Minh Giang</p>
                             <div class="rating-box small text-warning mb-3">★ 4.9 <span class="text-muted">(3,456)</span></div>
                             <div class="d-flex justify-content-between align-items-center">
@@ -295,7 +320,10 @@
                         </div>
                         <div class="product-info p-3">
                             <div class="text-success small fw-medium">Lãng mạn</div>
-                            <a href="#" class="product-title d-block fw-bold text-dark text-decoration-none mt-1">Romeo Và Juliet</a>
+                           <a href="${pageContext.request.contextPath}/book-detail?id=9"
+                              class="product-title d-block fw-bold text-dark text-decoration-none mt-1">
+                               Romeo Và Juliet
+                           </a>
                             <p class="text-muted small mb-1">William Shakespeare</p>
                             <div class="rating-box small text-warning mb-3">★ 4.4 <span class="text-muted">(872)</span></div>
                             <div class="d-flex justify-content-between align-items-center">
@@ -315,7 +343,10 @@
                         </div>
                         <div class="product-info p-3">
                             <div class="text-success small fw-medium">Giả tưởng</div>
-                            <a href="#" class="product-title d-block fw-bold text-dark text-decoration-none mt-1">Harry Potter Và Hoàng Tử Lai</a>
+                          <a href="${pageContext.request.contextPath}/book-detail?id=10"
+                             class="product-title d-block fw-bold text-dark text-decoration-none mt-1">
+                              Harry Potter Và Hoàng Tử Lai
+                          </a>
                             <p class="text-muted small mb-1">J.K.Rowling</p>
                             <div class="rating-box small text-warning mb-3">★ 4.9 <span class="text-muted">(4,567)</span></div>
                             <div class="d-flex justify-content-between align-items-center">
@@ -335,7 +366,10 @@
                         </div>
                         <div class="product-info p-3">
                             <div class="text-success small fw-medium">Kinh doanh</div>
-                            <a href="#" class="product-title d-block fw-bold text-dark text-decoration-none mt-1">Nghĩ Lớn Để Thành Công</a>
+                         <a href="${pageContext.request.contextPath}/book-detail?id=11"
+                            class="product-title d-block fw-bold text-dark text-decoration-none mt-1">
+                             Nghĩ Lớn Để Thành Công
+                         </a>
                             <p class="text-muted small mb-1">Donald J Trump</p>
                             <div class="rating-box small text-warning mb-3">★ 4.7 <span class="text-muted">(2,198)</span></div>
                             <div class="d-flex justify-content-between align-items-center">

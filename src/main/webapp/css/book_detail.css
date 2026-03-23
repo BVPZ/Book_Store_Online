@@ -1,0 +1,278 @@
+/* RESET */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background: #f5f5fa;
+}
+
+/* HEADER + NAV */
+.top-header {
+    background: #fff;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+
+/* SIDEBAR */
+.sidebar-wrapper {
+    width: 250px;
+    padding: 20px;
+    background: transparent;
+}
+
+/* CONTENT */
+.content-wrapper {
+    flex: 1;
+    padding: 30px;
+}
+
+/* CARD */
+.product-detail-card {
+    background: #fff;
+    border-radius: 12px;
+    display: flex;
+    gap: 40px;
+    padding: 30px;
+    max-width: 1000px;
+}
+
+/* IMAGE */
+.image-column {
+    width: 35%;
+}
+
+.product-image {
+    width: 100%;
+    border-radius: 8px;
+}
+
+/* INFO */
+.info-column {
+    flex: 1;
+}
+
+
+.price {
+    font-size: 28px;
+    color: #00a651;
+    font-weight: bold;
+}
+
+
+
+:root {
+    --primary-green: #00b14f;
+    --hover-green: #008a3d;
+    --text-color: #333333;
+    --price-color: #00b14f;
+    --bg-body: #f5f5fa;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; /* Font sạch giống mẫu */
+}
+
+
+.back-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 14px;
+    transition: 0.2s;
+    margin-bottom: 20px;
+}
+
+.back-container:hover {
+    color: var(--primary-green);
+}
+
+
+.image-column {
+    flex: 0 0 35%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: contain;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.info-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.genre {
+    color: var(--primary-green);
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 12px;
+}
+
+.author {
+    color: #666;
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+.rating-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.stars {
+    color: #ffc107;
+    font-size: 18px;
+}
+
+.review-text {
+    color: #777;
+    font-size: 14px;
+}
+
+.price {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--price-color);
+    margin-bottom: 25px;
+}
+
+.desc-header {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.desc-text {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 35px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.btn {
+    flex: 1;
+    padding: 14px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-buy-now {
+    background-color: var(--primary-green);
+    color: white;
+    border: none;
+}
+
+.btn-buy-now:hover {
+    background-color: var(--hover-green);
+    box-shadow: 0 4px 10px rgba(0, 177, 79, 0.3);
+}
+
+.btn-add-cart {
+    background-color: #ffffff;
+    color: var(--text-color);
+    border: 1px solid #e0e0e0;
+}
+
+/* HIỆU ỨNG HOVER NÚT THÊM VÀO GIỎ */
+.btn-add-cart:hover {
+    background-color: #f9f9f9;
+    border-color: #ccc;
+}
+
+/* --- BLOCK CAM KẾT (CÁC ICON Ở DƯỚI CÙNG) --- */
+.features-container {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #eee; /* Đường kẻ ngang phân cách */
+    padding-top: 25px;
+}
+
+.feature-item {
+    text-align: center;
+    flex: 1;
+}
+
+.feature-item i {
+    display: block;
+    color: var(--primary-green); /* Icon màu xanh */
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.feature-item span {
+    color: #666;
+    font-size: 13px;
+}
+
+
+body {
+    display: flex;
+    flex-direction: column;
+    background: #f5f5fa;
+}
+
+/* HEADER + NAV */
+.top-header {
+    background: #fff;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.main-nav {
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+}
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    background-color: var(--bg-body);
+    position: relative;
+    min-height: calc(100vh - 140px);
+}
+
