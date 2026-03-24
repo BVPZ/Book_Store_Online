@@ -16,5 +16,9 @@
 
     %>
     <h1>Tên đăng nhập người dùng: <%= user.getUsername() %></h1>
+    <form action="profile" method="post">
+        <input type="submit" value="Đăng xuất">
+    </form>
+
 </body>
 </html>

@@ -25,18 +25,31 @@
 
     <h2>Nhà Sách Tri Thức</h2>
     <div class="subtitle">Tạo tài khoản mới</div>
-
-    <form action="#" method="POST">
+    <%
+      String error = (String) session.getAttribute("error");
+      if (error != null) {
+    %>
+    <div style="color: red; margin-top: 5px; margin-bottom: 5px">
+      <%= error %>
+    </div>
+    <%
+        session.removeAttribute("error"); // xóa sau khi hiển thị
+      }
+    %>
+    <form action="register" method="POST">
       <div class="input-group">
         <label for="fullname">Họ và tên</label>
         <input type="text" id="fullname" name="fullname" placeholder="Nguyễn Văn A" required>
       </div>
 
       <div class="input-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="example@email.com" required>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="username" required>
       </div>
-
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Example@gmail.com" required>
+      </div>
       <div class="input-group">
         <label for="password">Mật khẩu</label>
         <div class="password-container">
@@ -48,10 +61,10 @@
       </div>
 
       <div class="input-group">
-        <label for="confirm_password">Xác nhận mật khẩu</label>
+        <label for="confirmPassword">Xác nhận mật khẩu</label>
         <div class="password-container">
-            <input type="password" id="confirm_password" name="confirm_password" placeholder="••••••••" required>
-            <span class="toggle-password" onclick="togglePasswordVisibility('confirm_password', this)">
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••" required>
+            <span class="toggle-password" onclick="togglePasswordVisibility('confirmPassword', this)">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
             </span>
         </div>
@@ -61,9 +74,8 @@
     </form>
 
     <div class="register-link">
-      Đã có tài khoản? <a href="${pageContext.request.contextPath}/view/login.jsp">Đăng nhập ngay</a>
+      Đã có tài khoản? <a href="login">Đăng nhập ngay</a>
     </div>
-
   </div>
 
 <script>

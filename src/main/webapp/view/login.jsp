@@ -25,7 +25,17 @@
 
     <h2>Nhà Sách Tri Thức</h2>
     <div class="subtitle">Đăng nhập để tiếp tục</div>
-
+    <%
+        String success = (String) session.getAttribute("success");
+        if (success != null) {
+    %>
+    <div style="color: green; margin-top: 5px;">
+        <%= success %>
+    </div>
+    <%
+            session.removeAttribute("success"); // xóa sau khi hiển thị
+        }
+    %>
     <form action="login" method="post">
         <div class="input-group">
             <label for="usename">Username</label>
@@ -56,7 +66,7 @@
         }
     %>
     <div class="register-link">
-        Chưa có tài khoản? <a href="${pageContext.request.contextPath}/view/register.jsp">Đăng ký ngay</a>
+        Chưa có tài khoản? <a href="register">Đăng ký ngay</a>
     </div>
 
     <div class="demo-text">
