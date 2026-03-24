@@ -1,3 +1,4 @@
+<%@ page import="com.bookshop.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="vi">
@@ -36,7 +37,7 @@
                 <a href="#" class="icon-btn"><i class="bi bi-cart2"></i>Giỏ hàng</a>
 
                 <%
-                    String user = (String) session.getAttribute("user");
+                    User user = (User) session.getAttribute("user");
                     if (user == null) {
                 %>
                 <a href="login" class="icon-btn">

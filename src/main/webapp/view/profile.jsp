@@ -1,4 +1,4 @@
-<%--
+<%@ page import="com.bookshop.model.User" %><%--
   Created by IntelliJ IDEA.
   User: Admin
   Date: 23/03/2026
@@ -12,9 +12,9 @@
 </head>
 <body>
 <%
-    String user = (String) session.getAttribute("user");
+    User user = (User) session.getAttribute("user");
 
     %>
-    <h1>Tên đăng nhập người dùng: <%= user %></h1>
+    <h1>Tên đăng nhập người dùng: <%= user.getUsername() %></h1>
 </body>
 </html>
