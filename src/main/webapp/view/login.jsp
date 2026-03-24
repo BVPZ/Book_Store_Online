@@ -55,7 +55,8 @@
     </div>
 
     <div class="demo-text">
-        Demo: nhập admin cả 2 vùng
+        Demo username:hello
+        pass hello123
     </div>
 </div>
 
