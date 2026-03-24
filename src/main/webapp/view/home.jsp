@@ -15,15 +15,17 @@
 <header class="top-header">
     <div class="container-fluid px-4">
         <div class="row align-items-center">
-            <div class="col-md-3 d-flex align-items-center">
-                <div class="bg-success text-white rounded p-2 me-2" style="font-weight:bold; font-size:18px;">
-                    <i class="bi bi-book"></i>
+            <a href ="home" style="text-decoration: none ">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bg-success text-white rounded p-2 me-2" style="font-weight:bold; font-size:18px;">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    <div>
+                            <div class="logo-text">Nhà Sách Tri Thức</div>
+                            <div class="logo-sub">Đọc sách - Mở tương lai</div>
+                    </div>
                 </div>
-                <div>
-                    <div class="logo-text">Nhà Sách Tri Thức</div>
-                    <div class="logo-sub">Đọc sách - Mở tương lai</div>
-                </div>
-            </div>
+            </a>
             <div class="col-md-6">
                 <form action="search" method="GET">
                     <div class="input-group">

@@ -1,3 +1,4 @@
+<%@ page import="com.bookshop.model.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="vi">
@@ -11,18 +12,23 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/homestyle.css">
 </head>
 <body>
+
 <header class="top-header">
     <div class="container-fluid px-4">
         <div class="row align-items-center">
+            <a href="home" style="text-decoration: none">
             <div class="col-md-3 d-flex align-items-center">
-                <div class="bg-success text-white rounded p-2 me-2" style="font-weight:bold; font-size:18px;">
-                    <i class="bi bi-book"></i>
-                </div>
-                <div>
-                    <div class="logo-text">Nhà Sách Tri Thức</div>
-                    <div class="logo-sub">Đọc sách - Mở tương lai</div>
-                </div>
+                    <div class="bg-success text-white rounded p-2 me-2" style="font-weight:bold; font-size:18px;">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    <div>
+
+                            <div class="logo-text">Nhà Sách Tri Thức</div>
+                            <div class="logo-sub">Đọc sách - Mở tương lai</div>
+
+                    </div>
             </div>
+            </a>
             <div class="col-md-6">
                 <form action="search" method="GET">
                     <div class="input-group">
@@ -34,7 +40,23 @@
             <div class="col-md-3 d-flex justify-content-end">
                 <a href="#" class="icon-btn"><i class="bi bi-box-seam"></i>Tra cứu đơn hàng</a>
                 <a href="#" class="icon-btn"><i class="bi bi-cart2"></i>Giỏ hàng</a>
-                <a href="login" class="icon-btn"><i class="bi bi-person"></i>Tài khoản</a>
+
+                <%
+                    User user = (User) session.getAttribute("user");
+                    if (user == null) {
+                %>
+                <a href="login" class="icon-btn">
+                    <i class="bi bi-person"></i>Đăng nhập
+                </a>
+                <%
+                } else {
+                %>
+                <a href="profile" class="icon-btn">
+                    <i class="bi bi-person"></i>Tài khoản
+                </a>
+                <%
+                    }
+                %>
             </div>
         </div>
     </div>
