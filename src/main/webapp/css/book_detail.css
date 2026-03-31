@@ -12,17 +12,22 @@ body {
 
 /* HEADER + NAV */
 .top-header {
-    background: #fff;
+    flex-shrink: 0; /* Giữ nguyên chiều cao header */
+    background-color: #fff;
     padding: 15px 0;
     border-bottom: 1px solid #eee;
+    z-index: 1020;
 }
 
 
 /* SIDEBAR */
 .sidebar-wrapper {
-    width: 250px;
-    padding: 20px;
+    width: 16.66667%; /* Tương đương col-lg-2 */
+    height: 100%;
+    overflow-y: auto; /* Nếu menu quá dài vẫn có thể cuộn riêng bên trong sidebar */
     background: transparent;
+    padding: 24px 0 24px 24px;
+    flex-shrink: 0;
 }
 
 /* CONTENT */
@@ -229,7 +234,8 @@ body {
     border-top: 1px solid #eee; /* Đường kẻ ngang phân cách */
     padding-top: 25px;
 }
-
+.search-btn { background-color: var(--primary-green); color: white; padding: 0 20px; border: none; }
+.search-btn:hover { background-color: #008a43; }
 .feature-item {
     text-align: center;
     flex: 1;
@@ -268,11 +274,12 @@ body {
 .main-layout {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     padding-top: 50px;
     padding-bottom: 50px;
     background-color: var(--bg-body);
     position: relative;
     min-height: calc(100vh - 140px);
 }
+
 
