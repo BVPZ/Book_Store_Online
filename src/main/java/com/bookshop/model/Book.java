@@ -1,14 +1,21 @@
 package com.bookshop.model;
 
 
-import java.util.UUID;
+import com.bookshop.util.DBConnection;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 public class Book {
     private String id;
     private String title;
-    private String author;
-    private String genre;
+    private int authorId;
+    private ArrayList<String> genres;
     private double price;
+    private int stock;
     private String description;
     private String imageUrl;
     private double rating;
@@ -17,11 +24,11 @@ public class Book {
         this.id = UUID.randomUUID().toString();
     }
 
-    public Book(String title, String author, String genre, double price, String description, String imageUrl, double rating, int reviewCount) {
+    public Book(String title, int authorId, ArrayList<String> genre, double price, String description, String imageUrl, double rating, int reviewCount) {
         this();
         this.title = title;
-        this.author = author;
-        this.genre = genre;
+        this.authorId = authorId;
+        this.genres = genre;
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
@@ -32,14 +39,31 @@ public class Book {
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
+    public int getStock() {return stock;}
+    public void setStock(int stock) {this.stock = stock;}
+
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 
-    public String getAuthor() { return author; }
-    public void setAuthor(String author) { this.author = author; }
+    public int getAuthorId() { return authorId; }
+    public void setAuthorId(int authorId) { this.authorId = authorId; }
 
-    public String getGenre() { return genre; }
-    public void setGenre(String genre) { this.genre = genre; }
+    public ArrayList<String> getGenres() { return genres; }
+    public void setGenres(int bookId) {
+        ArrayList<String> genres = new ArrayList<>();
+        try(Connection con = DBConnection.getConnection()) {
+            String sql = "select * from book_categories where book_id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, bookId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                genres.add(Category.getCategorybyId(rs.getInt("category_id")).getCategoryName());
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        this.genres = genres;
+    }
 
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
