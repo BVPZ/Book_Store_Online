@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.bookshop.model.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -22,10 +23,8 @@
                         <i class="bi bi-book"></i>
                     </div>
                     <div>
-
                             <div class="logo-text">Nhà Sách Tri Thức</div>
                             <div class="logo-sub">Đọc sách - Mở tương lai</div>
-
                     </div>
             </div>
             </a>
@@ -90,12 +89,16 @@
         </div>
 
         <div class="info-column">
-            <div class="genre">${book.genre}</div>
+            <div class="genre">
+                <c:forEach var="g" items="${book.genres}">
+                    ${g}
+                </c:forEach>
+            </div>
 
             <h1 class="title">${book.title}</h1>
 
-            <div class="author">Tác giả: ${book.author}</div>
-
+            <div class="author">Tác giả: ${book.authorId}</div>
+            <!--
             <div class="rating-container">
                 <div class="stars">
                     <i class="fas fa-star"></i>
@@ -104,10 +107,11 @@
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star-half-alt"></i>
                 </div>
-                <span class="review-text">${book.rating} (${book.reviewCount} đánh giá)</span>
-            </div>
 
-            <div class="price">${book.getFormattedPrice()}</div>
+            <span class="review-text">${book.rating} (${book.reviewCount} đánh giá)</span>
+            </div>-->
+
+        <div class="price">${book.getFormattedPrice()}</div>
 
             <div class="desc-header">Mô tả sản phẩm</div>
             <div class="desc-text">${book.description}</div>
