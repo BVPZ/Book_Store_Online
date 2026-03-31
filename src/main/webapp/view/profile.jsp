@@ -1,24 +1,174 @@
-<%@ page import="com.bookshop.model.User" %><%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 23/03/2026
-  Time: 5:53 CH
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="com.bookshop.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Người dùng</title>
-</head>
-<body>
 <%
     User user = (User) session.getAttribute("user");
+%>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhà Sách Tri Thức - Tài Khoản</title>
 
-    %>
-    <h1>Tên đăng nhập người dùng: <%= user.getUsername() %></h1>
-    <form action="profile" method="post">
-        <input type="submit" value="Đăng xuất">
-    </form>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile_style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/homestyle.css">
+</head>
+<body>
+
+<header class="top-header">
+    <div class="container-fluid px-4">
+        <div class="row align-items-center">
+            <div class="col-md-3 d-flex align-items-center">
+                <a href="${pageContext.request.contextPath}/home"
+                   class="d-flex align-items-center text-decoration-none text-dark">
+                    <div class="bg-success text-white rounded p-2 me-2">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    <div>
+                        <div class="logo-text">Nhà Sách Tri Thức</div>
+                        <div class="logo-sub">Đọc sách - Mở tương lai</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <form action="search" method="GET">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Tìm kiếm sách, tác giả..." style="border-color: #00a651; box-shadow: none;">
+                        <button class="btn search-btn" type="submit"><i class="bi bi-search"></i> Tìm kiếm</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-3 d-flex justify-content-end">
+                <a href="#" class="icon-btn"><i class="bi bi-box-seam"></i>Tra cứu đơn hàng</a>
+                <a href="#" class="icon-btn"><i class="bi bi-cart2"></i>Giỏ hàng</a>
+
+                <%
+                    user = (User) session.getAttribute("user");
+                    if (user == null) {
+                %>
+                <a href="login" class="icon-btn">
+                    <i class="bi bi-person"></i>Đăng nhập
+                </a>
+                <%
+                } else {
+                %>
+                <a href="profile" class="icon-btn">
+                    <i class="bi bi-person"></i>Tài khoản
+                </a>
+                <%
+                    }
+                %>
+            </div>
+        </div>
+    </div>
+</header>
+
+<nav class="sub-nav-bar">
+    <div class="container d-flex align-items-center">
+        <div class="nav-category-wrapper">
+            <a href="#" class="nav-category-btn">
+                <i class="bi bi-list"></i> DANH MỤC SÁCH
+            </a>
+        </div>
+
+        <div class="nav-content-right flex-grow-1 d-flex justify-content-between align-items-center">
+            <a href="#" class="nav-link-item ms-3">Sản phẩm đã xem</a>
+            <div class="promo-banner-group">
+                <span class="promo-tag text-success">
+                    <i class="bi bi-truck"></i> Ship COD Trên Toàn Quốc
+                </span>
+                <span class="promo-tag text-warning ms-4">
+                    <i class="bi bi-gift"></i> Free Ship Đơn Hàng Trên 300k
+                </span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="container main-layout-container">
+    <aside class="sidebar-info">
+        <div class="sidebar-user-header">
+            <div class="user-avatar-circle">
+                <i class="bi bi-person"></i>
+            </div>
+            <div class="fw-bold mt-2">
+                <%= (user != null && user.getFullName() != null) ? user.getFullName() : "Khách hàng" %>
+            </div>
+            <div class="small opacity-75">
+                <%= (user != null && user.getEmail() != null) ? user.getEmail() : "" %>
+            </div>
+        </div>
+
+        <div class="sidebar-nav-menu">
+            <a href="#" class="nav-menu-item active">Thông tin cá nhân</a>
+            <a href="#" class="nav-menu-item">Đơn hàng của tôi</a>
+            <a href="#" class="nav-menu-item">Sách yêu thích</a>
+            <a href="#" class="nav-menu-item">Cài đặt</a>
+            <hr>
+            <a href="logout" class="nav-menu-item text-danger">Đăng xuất</a>
+        </div>
+    </aside>
+
+    <div class="main-profile-content">
+        <div class="info-details-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold m-0">Thông tin cá nhân</h5>
+                <button class="btn-edit-profile">Chỉnh sửa</button>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="info-label">Họ và tên</label>
+                    <div class="info-display-box">
+                        <%= (user != null && user.getFullName() != null) ? user.getFullName() : "Chưa cập nhật" %>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="info-label">Email</label>
+                    <div class="info-display-box">
+                        <%= (user != null && user.getEmail() != null) ? user.getEmail() : "Chưa cập nhật" %>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="info-label">Số điện thoại</label>
+                    <div class="info-display-box">
+                        <%= (user != null && user.getPhone() != null) ? user.getPhone() : "Chưa cập nhật" %>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="info-label">Địa chỉ</label>
+                    <div class="info-display-box">
+                        <%= (user != null && user.getAddress() != null) ? user.getAddress() : "Chưa cập nhật" %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h5 class="mt-4 fw-bold mb-3">Thống kê</h5>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="stat-card bg-green">
+                    <div class="stat-value">12</div>
+                    <div>Đơn hàng</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card bg-blue">
+                    <div class="stat-value">28</div>
+                    <div>Sách đã mua</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card bg-purple">
+                    <div class="stat-value">15</div>
+                    <div>Yêu thích</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 
 </body>
 </html>
