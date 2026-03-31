@@ -1,6 +1,7 @@
 package com.bookshop.model;
 
 
+import com.bookshop.dao.CategoryDao;
 import com.bookshop.util.DBConnection;
 
 import java.sql.Connection;
@@ -57,7 +58,7 @@ public class Book {
             ps.setInt(1, bookId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                genres.add(Category.getCategorybyId(rs.getInt("category_id")).getCategoryName());
+                genres.add(CategoryDao.getCategoryById(rs.getInt("category_id")).getCategoryName());
             }
         }catch (SQLException e){
             e.printStackTrace();
