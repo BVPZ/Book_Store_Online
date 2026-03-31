@@ -11,6 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/homestyle.css">
+
 </head>
 <body>
 
@@ -90,54 +91,40 @@
         </div>
 
         <div class="info-column">
-            <div class="genre">
-                <c:forEach var="g" items="${book.genres}">
-                    ${g}
-                </c:forEach>
-            </div>
+                    <div class="genre">
+                        <c:forEach var="g" items="${book.genres}">
+                            ${g}
+                        </c:forEach>
+                    </div>
 
-            <h1 class="title">${book.title}</h1>
+                    <h1 class="title">${book.title}</h1>
 
-            <div class="author">Tác giả: ${book.authorId}</div>
-            <!--
-            <div class="rating-container">
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
+                    <div class="author">Tác giả: ${book.authorId}</div>
+
+                    <div class="price">${book.getFormattedPrice()}</div>
+
+                    <div class="desc-header">Mô tả sản phẩm</div>
+                    <div class="desc-text">${book.description}</div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-buy-now">Mua ngay</button>
+
+                        <button class="btn btn-add-cart">
+                            <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
+                        </button>
+                    </div>
+                    <div class="features-container">
+                        <div class="feature-item">
+                            <i class="fas fa-box"></i> <span>Hàng chính hãng</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-truck"></i> <span>Giao hàng toàn quốc</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-shield-alt"></i> <span>Đổi trả 7 ngày</span>
+                        </div>
+                    </div>
                 </div>
-
-            <span class="review-text">${book.rating} (${book.reviewCount} đánh giá)</span>
-            </div>-->
-
-        <div class="price">${book.getFormattedPrice()}</div>
-
-            <div class="desc-header">Mô tả sản phẩm</div>
-            <div class="desc-text">${book.description}</div>
-
-            <div class="action-buttons">
-                <button class="btn btn-buy-now">Mua ngay</button>
-
-                <button class="btn btn-add-cart">
-                    <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
-                </button>
-            </div>
-
-            <div class="features-container">
-                <div class="feature-item">
-                    <i class="fas fa-box"></i> <span>Hàng chính hãng</span>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-truck"></i> <span>Giao hàng toàn quốc</span>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-shield-alt"></i> <span>Đổi trả 7 ngày</span>
-                </div>
-            </div>
-
-        </div> </div>
 
 </main>
 
