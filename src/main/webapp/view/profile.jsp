@@ -65,28 +65,20 @@
     </div>
 </header>
 
-<nav class="sub-nav-bar">
-    <div class="container d-flex align-items-center">
-        <div class="nav-category-wrapper">
-            <a href="#" class="nav-category-btn">
-                <i class="bi bi-list"></i> DANH MỤC SÁCH
-            </a>
-        </div>
-
-        <div class="nav-content-right flex-grow-1 d-flex justify-content-between align-items-center">
-            <a href="#" class="nav-link-item ms-3">Sản phẩm đã xem</a>
-            <div class="promo-banner-group">
-                <span class="promo-tag text-success">
-                    <i class="bi bi-truck"></i> Ship COD Trên Toàn Quốc
-                </span>
-                <span class="promo-tag text-warning ms-4">
-                    <i class="bi bi-gift"></i> Free Ship Đơn Hàng Trên 300k
-                </span>
+<nav class="main-nav">
+    <div class="container-fluid px-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <a href="#" class="nav-link-custom fw-bold"><i class="bi bi-list me-2"></i> DANH MỤC SÁCH</a>
+                <a href="#" class="nav-link-custom border-start ms-2 ps-3">Sản phẩm đã xem</a>
+            </div>
+            <div class="d-flex gap-4">
+                <span class="nav-promo"><i class="bi bi-truck me-1"></i> Ship COD Trên Toàn Quốc</span>
+                <span class="nav-promo orange"><i class="bi bi-gift me-1"></i> Free Ship Đơn Hàng Trên 300k</span>
             </div>
         </div>
     </div>
 </nav>
-
 <main class="container main-layout-container">
     <aside class="sidebar-info">
         <div class="sidebar-user-header">
