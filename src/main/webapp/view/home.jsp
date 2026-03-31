@@ -19,17 +19,18 @@
 <header class="top-header">
     <div class="container-fluid px-4">
         <div class="row align-items-center">
-            <a href ="home" style="text-decoration: none ">
-                <div class="col-md-3 d-flex align-items-center">
-                    <div class="bg-success text-white rounded p-2 me-2" style="font-weight:bold; font-size:18px;">
+            <div class="col-md-3 d-flex align-items-center">
+                <a href="${pageContext.request.contextPath}/home"
+                   class="d-flex align-items-center text-decoration-none text-dark">
+                    <div class="bg-success text-white rounded p-2 me-2">
                         <i class="bi bi-book"></i>
                     </div>
                     <div>
-                            <div class="logo-text">Nhà Sách Tri Thức</div>
-                            <div class="logo-sub">Đọc sách - Mở tương lai</div>
+                        <div class="logo-text">Nhà Sách Tri Thức</div>
+                        <div class="logo-sub">Đọc sách - Mở tương lai</div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
             <div class="col-md-6">
                 <form action="search" method="GET">
                     <div class="input-group">
