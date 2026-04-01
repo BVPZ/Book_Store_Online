@@ -40,7 +40,7 @@
             </div>
             <div class="col-md-3 d-flex justify-content-end">
                 <a href="#" class="icon-btn"><i class="bi bi-box-seam"></i>Tra cứu đơn hàng</a>
-                <a href="#" class="icon-btn"><i class="bi bi-cart2"></i>Giỏ hàng</a>
+                <a href="cart" class="icon-btn"><i class="bi bi-cart2"></i>Giỏ hàng</a>
 
                 <%
                     User user = (User) session.getAttribute("user");
