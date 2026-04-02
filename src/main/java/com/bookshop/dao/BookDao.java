@@ -14,23 +14,23 @@ public class BookDao {
     {
 
     }
-    public static Book getBookById(int id) throws SQLException
+    public static Book getBookById(int bookId) throws SQLException
     {
         Connection con = DBConnection.getConnection();
         String sql = "select * from books where book_id = ?";
         PreparedStatement ps = con.prepareStatement(sql);
-        ps.setInt(1,id);
+        ps.setInt(1,bookId);
         ResultSet rs = ps.executeQuery();
         rs.next();
         Book book = new Book();
-        book.setId(String.valueOf(id));
+        book.setBookId(bookId);
         book.setTitle(rs.getString("title"));
         book.setAuthorId(rs.getInt("author_id"));
         book.setPrice(rs.getDouble("price"));
         book.setImageUrl(rs.getString("image"));
         book.setDescription(rs.getString("description"));
         book.setStock(rs.getInt("stock"));
-        book.setGenres(id);
+        System.out.println("lay thong tin sach dua tren id thanh cong");
         return book;
     }
     public static ArrayList<Book> getNewBooks() throws SQLException
@@ -42,12 +42,14 @@ public class BookDao {
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             Book book = new Book();
-            book.setId(rs.getString("book_id"));
+            book.setBookId(rs.getInt("book_id"));
             book.setPrice(rs.getDouble("price"));
             book.setTitle(rs.getString("title"));
             book.setImageUrl(rs.getString("image"));
             new_books.add(book);
         }
+        if (new_books.isEmpty()) System.out.println("lay sach moi ko thanh cong");
+        else System.out.println("lay sach moi thanh cong");
         return new_books;
     }
     public static ArrayList<Book> getBestSellerBooks() throws SQLException
@@ -59,12 +61,14 @@ public class BookDao {
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             Book book = new Book();
-            book.setId(rs.getString("book_id"));
+            book.setBookId(rs.getInt("book_id"));
             book.setPrice(rs.getDouble("price"));
             book.setTitle(rs.getString("title"));
             book.setImageUrl(rs.getString("image"));
             best_seller_books.add(book);
         }
+        if(best_seller_books.isEmpty()) System.out.println("lay sach ban chay ko thanh cong");
+        else System.out.println("lay sach ban chay thanh cong");
         return best_seller_books;
     }
     public static  ArrayList<Book> getAllBooks() throws SQLException
@@ -76,12 +80,16 @@ public class BookDao {
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             Book book = new Book();
-            book.setId(rs.getString("book_id"));
+            book.setBookId(rs.getInt("book_id"));
             book.setPrice(rs.getDouble("price"));
             book.setTitle(rs.getString("title"));
             book.setImageUrl(rs.getString("image"));
             all_books.add(book);
+
         }
+
+        if (all_books.isEmpty()) System.out.println("lay toan bo sach ko thanh cong");
+        else System.out.println("Lay toan bo sach thanh cong");
         return  all_books;
     }
 }
