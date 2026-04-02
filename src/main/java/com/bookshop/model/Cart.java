@@ -1,22 +1,23 @@
 package com.bookshop.model;
 
 public class Cart {
-    private String CartId;
-    private String userId;
-    public Cart(String cartId, String userId) {
-        this.CartId = cartId;
+    private int cartId;
+    private int userId;
+    public Cart(){}
+    public Cart(int cartId, int userId) {
+        this.cartId = cartId;
         this.userId = userId;
     }
-    public String getCartId() {
-        return CartId;
+    public int getCartId() {
+        return cartId;
     }
-    public void setCartId(String CartId) {
-        this.CartId = CartId;
+    public void setCartId(int CartId) {
+        this.cartId = CartId;
     }
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

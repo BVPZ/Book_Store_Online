@@ -1,17 +1,11 @@
 package com.bookshop.model;
 
 
-import com.bookshop.dao.CategoryDao;
-import com.bookshop.util.DBConnection;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.bookshop.dao.BookCategoryDao;
 import java.util.*;
 
 public class Book {
-    private String id;
+    private int bookId;
     private String title;
     private int authorId;
     private ArrayList<String> genres;
@@ -22,7 +16,7 @@ public class Book {
     private double rating;
     private int reviewCount;
     public Book() {
-        this.id = UUID.randomUUID().toString();
+
     }
 
     public Book(String title, int authorId, ArrayList<String> genre, double price, String description, String imageUrl, double rating, int reviewCount) {
@@ -37,8 +31,8 @@ public class Book {
         this.reviewCount = reviewCount;
     }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public int getBookId() { return bookId; }
+    public void setBookId(int bookId) { this.bookId = bookId; }
 
     public int getStock() {return stock;}
     public void setStock(int stock) {this.stock = stock;}
@@ -50,21 +44,7 @@ public class Book {
     public void setAuthorId(int authorId) { this.authorId = authorId; }
 
     public ArrayList<String> getGenres() { return genres; }
-    public void setGenres(int bookId) {
-        ArrayList<String> genres = new ArrayList<>();
-        try(Connection con = DBConnection.getConnection()) {
-            String sql = "select * from book_categories where book_id = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, bookId);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                genres.add(CategoryDao.getCategoryById(rs.getInt("category_id")).getCategoryName());
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        this.genres = genres;
-    }
+    public void setGenres() {this.genres = BookCategoryDao.getAllGenresByBookId(this.bookId);}
 
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
