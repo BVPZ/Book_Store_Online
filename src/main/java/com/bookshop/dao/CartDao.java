@@ -19,7 +19,7 @@ public class CartDao {
         rs.next();
         cart.setUserId(userId);
         cart.setCartId(rs.getInt("cart_id"));
-        if (cart!=null) System.out.println("lay thong tin gio hang thanh cong");
+        System.out.println("lay thong tin gio hang thanh cong");
         return cart;
     }
 }
