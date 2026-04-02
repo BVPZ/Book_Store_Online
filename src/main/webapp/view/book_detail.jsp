@@ -108,10 +108,12 @@
 
                     <div class="action-buttons">
                         <button class="btn btn-buy-now">Mua ngay</button>
+                        <form action="addtocart" method="Post">
+                            <button class="btn btn-add-cart" type="submit">
+                                <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
+                            </button>
+                        </form>
 
-                        <button class="btn btn-add-cart">
-                            <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
-                        </button>
                     </div>
                     <div class="features-container">
                         <div class="feature-item">

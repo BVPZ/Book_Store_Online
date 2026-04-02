@@ -117,7 +117,7 @@
                                <img src="${book.imageUrl}" class="product-img" alt="Book">
                            </div>
                            <div class="product-info">
-                               <a href="book-detail?id=${book.id}" class="product-title">
+                               <a href="book-detail?id=${book.bookId}" class="product-title">
                                        ${book.title}
                                </a>
                                <span class="product-price">
@@ -145,7 +145,7 @@
                                <img src="${book.imageUrl}" class="product-img" alt="Book">
                            </div>
                            <div class="product-info">
-                               <a href="book-detail?id=${book.id}" class="product-title">
+                               <a href="book-detail?id=${book.bookId}" class="product-title">
                                        ${book.title}
                                </a>
                                <span class="product-price">
@@ -171,7 +171,7 @@
                                 <img src="${book.imageUrl}" class="product-img" alt="Book">
                             </div>
                             <div class="product-info">
-                                <a href="book-detail?id=${book.id}" class="product-title">
+                                <a href="book-detail?id=${book.bookId}" class="product-title">
                                         ${book.title}
                                 </a>
                                 <span class="product-price">
