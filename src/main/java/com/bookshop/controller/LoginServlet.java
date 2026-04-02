@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
                 return;
             } else {
                 // login sai
-                session.setAttribute("error", "Sai tài khoản hoặc mật khẩu");
+                if (session.getAttribute("error") == null) session.setAttribute("error", "Sai tài khoản hoặc mật khẩu");
                 req.getRequestDispatcher("view/login.jsp").forward(req, resp);
             }
         } catch (Exception e) {

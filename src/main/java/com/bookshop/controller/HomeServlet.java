@@ -23,9 +23,9 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         try{
             HttpSession session = req.getSession();
-            session.setAttribute("new_books", BookDao.getNewBooks());
-            session.setAttribute("best_seller_books", BookDao.getBestSellerBooks());
-            session.setAttribute("all_books", BookDao.getAllBooks());
+            if (session.getAttribute("new_books")==null) session.setAttribute("new_books", BookDao.getNewBooks());
+            if (session.getAttribute("best_seller_books")==null) session.setAttribute("best_seller_books", BookDao.getBestSellerBooks());
+            if (session.getAttribute("all_books")==null) session.setAttribute("all_books", BookDao.getAllBooks());
         } catch (Exception e) {
             e.printStackTrace();
         }
