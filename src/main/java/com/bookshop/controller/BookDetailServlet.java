@@ -29,7 +29,7 @@ public class BookDetailServlet extends HttpServlet {
         }
 
         if (book != null) {
-            request.setAttribute("book", book);
+            request.setAttribute("book" , book);
             request.getSession().setAttribute("book",book);
             request.getRequestDispatcher("/view/book_detail.jsp").forward(request, response);
         } else {

@@ -34,6 +34,7 @@ public class CartItemDao {
             cartItem.setBookId(rs.getInt("book_id"));
             cartItem.setCartId(rs.getInt("cart_id"));
             cartItem.setQuantity(rs.getInt("quantity"));
+            cartItem.setBook(BookDao.getBookById(rs.getInt("book_id")));
             cartItems.add(cartItem);
             System.out.println("Da lay dc 1 item");
         }

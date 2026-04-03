@@ -20,7 +20,11 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User)req.getSession().getAttribute("user");
-
+        if(user==null){
+            req.getSession().setAttribute("error","Cần đăng nhập để thực hiện tính năng này");
+            resp.sendRedirect("login");
+            return;
+        }
         try {
             Cart cart = CartDao.getCartByUserId(user.getUserId());
             ArrayList<CartItem> cartItems = CartItemDao.getAllCartItem(cart.getCartId());

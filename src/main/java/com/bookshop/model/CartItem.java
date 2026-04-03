@@ -10,13 +10,11 @@ public class CartItem {
     private int CartId;
     private int BookId;
     private int quantity;
-
+    private Book book;
     public int getCartItemId() {
         return CartItemId;
     }
-    public void setCartItemId(int CartItemId) {
-        this.CartItemId = CartItemId;
-    }
+    public void setCartItemId(int CartItemId) {this.CartItemId = CartItemId;}
 
     public int getCartId() {
         return CartId;
@@ -37,16 +35,11 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public double getPrice() throws SQLException {
-        return BookDao.getBookById(this.BookId).getPrice();
-    }
-    public String getImageUrl() throws SQLException {
-        return  BookDao.getBookById(this.BookId).getImageUrl();
-    }
-    public String getTitle()  throws SQLException {
-        return BookDao.getBookById(this.BookId).getTitle();
-    }
-    public String getAuthor()  throws SQLException {
-        return AuthorDao.getAuthorbyId(BookDao.getBookById(this.BookId).getAuthorId()).getAuthorName();
-    }
+    public void setBook(Book book) {this.book = book;}
+    public Book getBook() {return book;}
+
+    public double getPrice() throws SQLException {return book.getPrice();}
+    public String getImageUrl() throws SQLException {return  book.getImageUrl();}
+    public String getTitle()  throws SQLException {return book.getTitle();}
+    public String getAuthor()  throws SQLException {return AuthorDao.getAuthorbyId(book.getAuthorId()).getAuthorName();}
 }
