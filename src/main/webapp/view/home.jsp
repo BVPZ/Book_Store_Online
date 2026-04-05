@@ -34,7 +34,7 @@
             <div class="col-md-6">
                 <form action="search" method="GET">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm sách, tác giả..." style="border-color: #00a651; box-shadow: none;">
+                       <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm sách..." style="border-color: #00a651; box-shadow: none;">
                         <button class="btn search-btn" type="submit"><i class="bi bi-search"></i> Tìm kiếm</button>
                     </div>
                 </form>
@@ -103,90 +103,129 @@
 
     <section class="content-wrapper">
 
-       <div class="product-section">
-           <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-               <h2 class="section-title">SÁCH MỚI LÊN KỆ</h2>
-               <a href="#" class="view-more">Xem thêm <i class="bi bi-chevron-right"></i></a>
-           </div>
-           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-3">
+            <c:choose>
+                <c:when test="${not empty searchKeyword}">
+                    <div class="product-section">
+                        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                            <h2 class="section-title">KẾT QUẢ TÌM KIẾM CHO: "${searchKeyword}"</h2>
+                           <a href="home" class="btn btn-outline-danger fw-bold px-3 py-1 rounded-pill shadow-sm d-flex align-items-center">
+                               <i class="bi bi-x-circle fs-5 me-2"></i> Hủy tìm kiếm
+                           </a>
+                        </div>
 
-               <c:forEach var="book" items="${sessionScope.new_books}">
-                   <div class="col">
-                       <div class="product-card">
-                           <div class="product-img-wrap">
-                               <img src="${book.imageUrl}" class="product-img" alt="Book">
-                           </div>
-                           <div class="product-info">
-                               <a href="book-detail?id=${book.bookId}" class="product-title">
-                                       ${book.title}
-                               </a>
-                               <span class="product-price">
-                                   <fmt:setLocale value="vi_VN"/>
-                                   <fmt:formatNumber value="${book.price}" type="currency"/>
-                               </span>
-
-                           </div>
-                       </div>
-                   </div>
-               </c:forEach>
-           </div>
-       </div>
-
-       <div class="product-section">
-           <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-               <h2 class="section-title">SÁCH BÁN CHẠY</h2>
-               <a href="#" class="view-more">Xem thêm <i class="bi bi-chevron-right"></i></a>
-           </div>
-           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-3">
-               <c:forEach var="book" items="${sessionScope.best_seller_books}">
-                   <div class="col">
-                       <div class="product-card">
-                           <div class="product-img-wrap">
-                               <img src="${book.imageUrl}" class="product-img" alt="Book">
-                           </div>
-                           <div class="product-info">
-                               <a href="book-detail?id=${book.bookId}" class="product-title">
-                                       ${book.title}
-                               </a>
-                               <span class="product-price">
-                                   <fmt:setLocale value="vi_VN"/>
-                                   <fmt:formatNumber value="${book.price}" type="currency"/>
-                               </span>
-
-                           </div>
-                       </div>
-                   </div>
-               </c:forEach>
-           </div>
-       </div>
-
-        <div class="product-section all-books-section mt-5">
-            <h2 class="section-title mb-4" style="font-size: 1.2rem; font-weight: bold; text-transform: uppercase;">Tất cả sách</h2>
-
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                <c:forEach var="book" items="${sessionScope.all_books}">
-                    <div class="col">
-                        <div class="product-card">
-                            <div class="product-img-wrap">
-                                <img src="${book.imageUrl}" class="product-img" alt="Book">
+                        <c:if test="${empty searchResults}">
+                            <div class="alert alert-warning">
+                                Không tìm thấy cuốn sách nào chứa từ khóa "<strong>${searchKeyword}</strong>".
                             </div>
-                            <div class="product-info">
-                                <a href="book-detail?id=${book.bookId}" class="product-title">
-                                        ${book.title}
-                                </a>
-                                <span class="product-price">
-                                   <fmt:setLocale value="vi_VN"/>
-                                   <fmt:formatNumber value="${book.price}" type="currency"/>
-                               </span>
+                        </c:if>
 
+                        <c:if test="${not empty searchResults}">
+                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-3">
+                                <c:forEach var="book" items="${searchResults}">
+                                    <div class="col">
+                                        <div class="product-card">
+                                            <div class="product-img-wrap">
+                                                <img src="${book.imageUrl}" class="product-img" alt="Book">
+                                            </div>
+                                            <div class="product-info">
+                                                <a href="book-detail?id=${book.bookId}" class="product-title">
+                                                        ${book.title}
+                                                </a>
+                                                <span class="product-price">
+                                                   <fmt:setLocale value="vi_VN"/>
+                                                   <fmt:formatNumber value="${book.price}" type="currency"/>
+                                               </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c:forEach>
                             </div>
+                        </c:if>
+                    </div>
+                </c:when>
+
+                <c:otherwise>
+                    <div class="product-section">
+                        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                            <h2 class="section-title">SÁCH MỚI LÊN KỆ</h2>
+                            <a href="#" class="view-more">Xem thêm <i class="bi bi-chevron-right"></i></a>
+                        </div>
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-3">
+                            <c:forEach var="book" items="${sessionScope.new_books}">
+                                <div class="col">
+                                    <div class="product-card">
+                                        <div class="product-img-wrap">
+                                            <img src="${book.imageUrl}" class="product-img" alt="Book">
+                                        </div>
+                                        <div class="product-info">
+                                            <a href="book-detail?id=${book.bookId}" class="product-title">
+                                                    ${book.title}
+                                            </a>
+                                            <span class="product-price">
+                                               <fmt:setLocale value="vi_VN"/>
+                                               <fmt:formatNumber value="${book.price}" type="currency"/>
+                                           </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:forEach>
                         </div>
                     </div>
-                </c:forEach>
-            </div>
-        </div>
-    </section>
 
+                    <div class="product-section">
+                        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                            <h2 class="section-title">SÁCH BÁN CHẠY</h2>
+                            <a href="#" class="view-more">Xem thêm <i class="bi bi-chevron-right"></i></a>
+                        </div>
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-3">
+                            <c:forEach var="book" items="${sessionScope.best_seller_books}">
+                                <div class="col">
+                                    <div class="product-card">
+                                        <div class="product-img-wrap">
+                                            <img src="${book.imageUrl}" class="product-img" alt="Book">
+                                        </div>
+                                        <div class="product-info">
+                                            <a href="book-detail?id=${book.bookId}" class="product-title">
+                                                    ${book.title}
+                                            </a>
+                                            <span class="product-price">
+                                               <fmt:setLocale value="vi_VN"/>
+                                               <fmt:formatNumber value="${book.price}" type="currency"/>
+                                           </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </div>
+
+                    <div class="product-section all-books-section mt-5">
+                        <h2 class="section-title mb-4" style="font-size: 1.2rem; font-weight: bold; text-transform: uppercase;">Tất cả sách</h2>
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                            <c:forEach var="book" items="${sessionScope.all_books}">
+                                <div class="col">
+                                    <div class="product-card">
+                                        <div class="product-img-wrap">
+                                            <img src="${book.imageUrl}" class="product-img" alt="Book">
+                                        </div>
+                                        <div class="product-info">
+                                            <a href="book-detail?id=${book.bookId}" class="product-title">
+                                                    ${book.title}
+                                            </a>
+                                            <span class="product-price">
+                                               <fmt:setLocale value="vi_VN"/>
+                                               <fmt:formatNumber value="${book.price}" type="currency"/>
+                                           </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+
+        </section>
 
 </main>
 

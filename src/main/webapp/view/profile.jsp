@@ -35,7 +35,7 @@
             <div class="col-md-6">
                 <form action="search" method="GET">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm sách, tác giả..." style="border-color: #00a651; box-shadow: none;">
+                        <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm sách, tác giả..." style="border-color: #00a651; box-shadow: none;">
                         <button class="btn search-btn" type="submit"><i class="bi bi-search"></i> Tìm kiếm</button>
                     </div>
                 </form>

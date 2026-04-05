@@ -7,11 +7,48 @@
     <meta charset="UTF-8">
     <title>${book.title} - Nhà Sách Tri Thức</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/book_detail.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/homestyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/homestyle.css">
 
+    <style>
+        .main-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .product-detail-card {
+            width: 95% !important;
+            max-width: 1200px !important;
+            gap: 60px !important;
+            padding: 50px !important;
+        }
+
+        .back-container {
+            position: static !important;
+            display: inline-flex !important;
+            font-size: 16px !important;
+        }
+
+        .action-buttons {
+            display: flex !important;
+            gap: 15px !important;
+            width: 100% !important;
+        }
+        .action-buttons > button,
+        .action-buttons > form {
+            flex: 1 !important;
+        }
+        .action-buttons form button {
+            width: 100% !important;
+        }
+
+
+        .search-btn { background-color: var(--primary-green); color: white; padding: 0 20px; border: none; }
+        .search-btn:hover { background-color: #008a43; }
+    </style>
 </head>
 <body>
 
@@ -33,7 +70,7 @@
             <div class="col-md-6">
                 <form action="search" method="GET">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm sách, tác giả..." style="border-color: #00a651; box-shadow: none;">
+                        <input type="text" class="form-control" name="keyword" placeholder="Tìm kiếm sách..." style="border-color: #00a651; box-shadow: none;">
                         <button class="btn search-btn" type="submit"><i class="bi bi-search"></i> Tìm kiếm</button>
                     </div>
                 </form>
@@ -77,57 +114,67 @@
         </div>
     </div>
 </nav>
+
 <main class="main-layout">
-<div style="width: 100%; max-width: 1000px;">
-        <a href="${pageContext.request.contextPath}/home" class="back-container">
-            <i class="fas fa-arrow-left"></i> Quay lại
-        </a>
-    </div>
+   <div class="mb-3 text-start" style="width: 95%; max-width: 1200px;">
+           <a href="${pageContext.request.contextPath}/home" class="text-decoration-none text-secondary">
+               <i class="fas fa-arrow-left"></i> Quay lại
+           </a>
+       </div>
 
     <div class="product-detail-card">
-
         <div class="image-column">
             <img src="${book.imageUrl}" alt="${book.title}" class="product-image">
         </div>
 
         <div class="info-column">
-                    <div class="genre">
-                        <c:forEach var="g" items="${book.genres}">
-                            ${g}
-                        </c:forEach>
-                    </div>
+            <div class="genre">
+                <c:forEach var="g" items="${book.genres}">
+                    ${g}
+                </c:forEach>
+            </div>
 
-                    <h1 class="title">${book.title}</h1>
+            <h1 class="title">${book.title}</h1>
 
-                    <div class="author">Tác giả: ${book.authorId}</div>
+            <div class="author">Tác giả: ${book.authorId}</div>
 
-                    <div class="price">${book.getFormattedPrice()}</div>
+            <div style="color: #ffc107; font-size: 15px; margin-top: 10px; margin-bottom: 15px; display: flex; align-items: center;">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <span style="color: #6c757d; font-size: 14px; margin-left: 8px;">
+                    ${book.rating} (${book.reviewCount} đánh giá)
+                </span>
+            </div>
 
-                    <div class="desc-header">Mô tả sản phẩm</div>
-                    <div class="desc-text">${book.description}</div>
+            <div class="price">${book.getFormattedPrice()}</div>
+            <div class="desc-header">Mô tả sản phẩm</div>
+            <div class="desc-text">${book.description}</div>
 
-                    <div class="action-buttons">
-                        <button class="btn btn-buy-now">Mua ngay</button>
-                        <form action="addtocart" method="Post">
-                            <button class="btn btn-add-cart" type="submit">
-                                <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
-                            </button>
-                        </form>
+            <div class="action-buttons">
+                <button class="btn btn-buy-now">Mua ngay</button>
+                <form action="addtocart" method="Post">
+                    <button class="btn btn-add-cart" type="submit">
+                        <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
+                    </button>
+                </form>
+            </div>
 
-                    </div>
-                    <div class="features-container">
-                        <div class="feature-item">
-                            <i class="fas fa-box"></i> <span>Hàng chính hãng</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-truck"></i> <span>Giao hàng toàn quốc</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-shield-alt"></i> <span>Đổi trả 7 ngày</span>
-                        </div>
-                    </div>
+            <div class="features-container">
+                <div class="feature-item">
+                    <i class="fas fa-box"></i> <span>Hàng chính hãng</span>
                 </div>
-
+                <div class="feature-item">
+                    <i class="fas fa-truck"></i> <span>Giao hàng toàn quốc</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt"></i> <span>Đổi trả 7 ngày</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 </body>
