@@ -25,14 +25,14 @@ public class LoginServlet extends HttpServlet {
 
             if (user != null) {
                 session.setAttribute("user", user);
-//                if (user.getRole().equals("admin")) {
-//                    resp.sendRedirect("admin");
-//                    return;
-//                }
-                if ("admin".equals(user.getRole())) {
+                if (user.getRole().equals("admin")) {
                     resp.sendRedirect("admin");
                     return;
                 }
+//                if ("admin".equals(user.getRole())) {
+//                    resp.sendRedirect("admin");
+//                    return;
+//                }
                 resp.sendRedirect("home");
                 return;
             } else {

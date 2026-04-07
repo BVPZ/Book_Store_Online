@@ -9,36 +9,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CategoryDao {
-//    public static Category getCategoryById(int categoryId) {
-//        Category category = new Category();
-//        try (Connection conn = DBConnection.getConnection()) {
-//            String sql = "select * from categories where category_id = ?";
-//            PreparedStatement ps = conn.prepareStatement(sql);
-//            ps.setInt(1, categoryId);
-//            ResultSet rs = ps.executeQuery();
-//            rs.next();
-//            category.setCategoryId(categoryId);
-//            category.setCategoryName(rs.getString("category_name"));
-//            category.setCategoryDescription(rs.getString("description"));
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return category;
-//    }
-
     public static Category getCategoryById(int categoryId) {
         Category category = new Category();
         try (Connection conn = DBConnection.getConnection()) {
-            String sql = "SELECT * FROM categories WHERE categoryId = ?";
+            String sql = "select * from categories where category_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, categoryId);
             ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                category.setCategoryId(categoryId);
-                category.setCategoryName(rs.getString("categoryName"));
-                category.setCategoryDescription(rs.getString("categoryDescription"));
-            }
+            rs.next();
+            category.setCategoryId(categoryId);
+            category.setCategoryName(rs.getString("category_name"));
+            category.setCategoryDescription(rs.getString("description"));
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -14,161 +14,83 @@ public class BookDao {
     {
 
     }
-//    public static Book getBookById(int bookId) throws SQLException
-//    {
-//        Connection con = DBConnection.getConnection();
-//        String sql = "select * from books where book_id = ?";
-//        PreparedStatement ps = con.prepareStatement(sql);
-//        ps.setInt(1,bookId);
-//        ResultSet rs = ps.executeQuery();
-//        rs.next();
-//        Book book = new Book();
-//        book.setBookId(bookId);
-//        book.setTitle(rs.getString("title"));
-//        book.setAuthorId(rs.getInt("author_id"));
-//        book.setPrice(rs.getDouble("price"));
-//        book.setImageUrl(rs.getString("image"));
-//        book.setDescription(rs.getString("description"));
-//        book.setStock(rs.getInt("stock"));
-//        System.out.println("lay thong tin sach dua tren id thanh cong");
-//        return book;
-//    }
-//    public static ArrayList<Book> getNewBooks() throws SQLException
-//    {
-//        Connection con = DBConnection.getConnection();
-//        String sql = "select * from books where books.book_id >= 10 limit 4 ";
-//        PreparedStatement ps = con.prepareStatement(sql);
-//        ArrayList<Book> new_books = new  ArrayList<>();
-//        ResultSet rs = ps.executeQuery();
-//        while (rs.next()) {
-//            Book book = new Book();
-//            book.setBookId(rs.getInt("book_id"));
-//            book.setPrice(rs.getDouble("price"));
-//            book.setTitle(rs.getString("title"));
-//            book.setImageUrl(rs.getString("image"));
-//            new_books.add(book);
-//        }
-//        if (new_books.isEmpty()) System.out.println("lay sach moi ko thanh cong");
-//        else System.out.println("lay sach moi thanh cong");
-//        return new_books;
-//    }
-//    public static ArrayList<Book> getBestSellerBooks() throws SQLException
-//    {
-//        Connection con = DBConnection.getConnection();
-//        String sql = "select * from books where books.book_id >= 1 limit 4 ";
-//        PreparedStatement ps = con.prepareStatement(sql);
-//        ArrayList<Book> best_seller_books = new  ArrayList<>();
-//        ResultSet rs = ps.executeQuery();
-//        while (rs.next()) {
-//            Book book = new Book();
-//            book.setBookId(rs.getInt("book_id"));
-//            book.setPrice(rs.getDouble("price"));
-//            book.setTitle(rs.getString("title"));
-//            book.setImageUrl(rs.getString("image"));
-//            best_seller_books.add(book);
-//        }
-//        if(best_seller_books.isEmpty()) System.out.println("lay sach ban chay ko thanh cong");
-//        else System.out.println("lay sach ban chay thanh cong");
-//        return best_seller_books;
-//    }
-//    public static  ArrayList<Book> getAllBooks() throws SQLException
-//    {
-//        Connection con = DBConnection.getConnection();
-//        String sql = "select * from books limit 20 ";
-//        PreparedStatement ps = con.prepareStatement(sql);
-//        ArrayList<Book> all_books = new  ArrayList<>();
-//        ResultSet rs = ps.executeQuery();
-//        while (rs.next()) {
-//            Book book = new Book();
-//            book.setBookId(rs.getInt("book_id"));
-//            book.setPrice(rs.getDouble("price"));
-//            book.setTitle(rs.getString("title"));
-//            book.setImageUrl(rs.getString("image"));
-//            all_books.add(book);
-//
-//        }
-//
-//        if (all_books.isEmpty()) System.out.println("lay toan bo sach ko thanh cong");
-//        else System.out.println("Lay toan bo sach thanh cong");
-//        return  all_books;
-//    }
-
-    public static Book getBookById(int bookId) throws SQLException {
+    public static Book getBookById(int bookId) throws SQLException
+    {
         Connection con = DBConnection.getConnection();
-        String sql = "SELECT * FROM books WHERE bookId = ?";
+        String sql = "select * from books where book_id = ?";
         PreparedStatement ps = con.prepareStatement(sql);
-        ps.setInt(1, bookId);
+        ps.setInt(1,bookId);
         ResultSet rs = ps.executeQuery();
-
-        if (rs.next()) {
-            Book book = new Book();
-            book.setBookId(bookId);
-            book.setTitle(rs.getString("title"));
-            book.setAuthorId(rs.getInt("authorId"));
-            book.setRating(rs.getDouble("rating"));
-            book.setReviewCount(rs.getInt("reviewCount"));
-            book.setPrice(rs.getDouble("price"));
-            book.setImageUrl(rs.getString("imageUrl"));
-            book.setDescription(rs.getString("description"));
-            book.setStock(rs.getInt("stock"));
-
-            book.setGenres();
-
-            System.out.println("Lấy thông tin sách dựa trên id thành công");
-            return book;
-        }
-        return null;
-    }
-public static ArrayList<Book> getNewBooks() throws SQLException {
-    Connection con = DBConnection.getConnection();
-    String sql = "SELECT * FROM books ORDER BY bookId DESC LIMIT 4";
-    PreparedStatement ps = con.prepareStatement(sql);
-    ArrayList<Book> new_books = new ArrayList<>();
-    ResultSet rs = ps.executeQuery();
-    while (rs.next()) {
+        rs.next();
         Book book = new Book();
-        book.setBookId(rs.getInt("bookId"));
-        book.setPrice(rs.getDouble("price"));
+        book.setBookId(bookId);
         book.setTitle(rs.getString("title"));
-        // SỬA "image" thành "imageUrl" cho khớp với DB
-        book.setImageUrl(rs.getString("imageUrl"));
-        new_books.add(book);
+        book.setAuthorId(rs.getInt("author_id"));
+//        book.setRating(rs.getDouble("rating"));
+//        book.setReviewCount(rs.getInt("reviewCount"));
+        book.setPrice(rs.getDouble("price"));
+        book.setImageUrl(rs.getString("image"));
+        book.setDescription(rs.getString("description"));
+        book.setStock(rs.getInt("stock"));
+        System.out.println("lay thong tin sach dua tren id thanh cong");
+        return book;
     }
-    return new_books;
-}
-
-    public static ArrayList<Book> getBestSellerBooks() throws SQLException {
+    public static ArrayList<Book> getNewBooks() throws SQLException
+    {
         Connection con = DBConnection.getConnection();
-        String sql = "SELECT * FROM books ORDER BY reviewCount DESC LIMIT 4";
+        String sql = "select * from books where books.book_id >= 10 limit 4 ";
         PreparedStatement ps = con.prepareStatement(sql);
-        ArrayList<Book> best_seller_books = new ArrayList<>();
+        ArrayList<Book> new_books = new  ArrayList<>();
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             Book book = new Book();
-            book.setBookId(rs.getInt("bookId"));
+            book.setBookId(rs.getInt("book_id"));
             book.setPrice(rs.getDouble("price"));
             book.setTitle(rs.getString("title"));
-            book.setImageUrl(rs.getString("imageUrl"));
+            book.setImageUrl(rs.getString("image"));
+            new_books.add(book);
+        }
+        if (new_books.isEmpty()) System.out.println("lay sach moi ko thanh cong");
+        else System.out.println("lay sach moi thanh cong");
+        return new_books;
+    }
+    public static ArrayList<Book> getBestSellerBooks() throws SQLException
+    {
+        Connection con = DBConnection.getConnection();
+        String sql = "select * from books where books.book_id >= 1 limit 4 ";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ArrayList<Book> best_seller_books = new  ArrayList<>();
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Book book = new Book();
+            book.setBookId(rs.getInt("book_id"));
+            book.setPrice(rs.getDouble("price"));
+            book.setTitle(rs.getString("title"));
+            book.setImageUrl(rs.getString("image"));
             best_seller_books.add(book);
         }
+        if(best_seller_books.isEmpty()) System.out.println("lay sach ban chay ko thanh cong");
+        else System.out.println("lay sach ban chay thanh cong");
         return best_seller_books;
     }
-
-    public static ArrayList<Book> getAllBooks() throws SQLException {
+    public static  ArrayList<Book> getAllBooks() throws SQLException
+    {
         Connection con = DBConnection.getConnection();
-        String sql = "SELECT * FROM books LIMIT 20";
+        String sql = "select * from books limit 20 ";
         PreparedStatement ps = con.prepareStatement(sql);
-        ArrayList<Book> all_books = new ArrayList<>();
+        ArrayList<Book> all_books = new  ArrayList<>();
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             Book book = new Book();
-            book.setBookId(rs.getInt("bookId"));
+            book.setBookId(rs.getInt("book_id"));
             book.setPrice(rs.getDouble("price"));
             book.setTitle(rs.getString("title"));
-            book.setImageUrl(rs.getString("imageUrl"));
+            book.setImageUrl(rs.getString("image"));
             all_books.add(book);
         }
-        return all_books;
+        if (all_books.isEmpty()) System.out.println("lay toan bo sach ko thanh cong");
+        else System.out.println("Lay toan bo sach thanh cong");
+        return  all_books;
     }
     public static ArrayList<Book> searchBooks(String keyword) throws SQLException {
         Connection con = DBConnection.getConnection();
@@ -180,10 +102,10 @@ public static ArrayList<Book> getNewBooks() throws SQLException {
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             Book book = new Book();
-            book.setBookId(rs.getInt("bookId"));
+            book.setBookId(rs.getInt("book_id"));
             book.setPrice(rs.getDouble("price"));
             book.setTitle(rs.getString("title"));
-            book.setImageUrl(rs.getString("imageUrl"));
+            book.setImageUrl(rs.getString("image"));
             search_results.add(book);
         }
         return search_results;

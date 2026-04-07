@@ -12,21 +12,21 @@ public class Book {
     private double price;
     private int stock;
     private String description;
-    private String imageUrl;
+    private String image;
     private double rating;
     private int reviewCount;
     public Book() {
 
     }
 
-    public Book(String title, int authorId, ArrayList<String> genre, double price, String description, String imageUrl, double rating, int reviewCount) {
+    public Book(String title, int authorId, ArrayList<String> genre, double price, String description, String image, double rating, int reviewCount) {
         this();
         this.title = title;
         this.authorId = authorId;
         this.genres = genre;
         this.price = price;
         this.description = description;
-        this.imageUrl = imageUrl;
+        this.image = image;
         this.rating = rating;
         this.reviewCount = reviewCount;
     }
@@ -52,8 +52,8 @@ public class Book {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public String getImageUrl() { return image; }
+    public void setImageUrl(String imageUrl) { this.image = imageUrl; }
 
     public double getRating() { return rating; }
     public void setRating(double rating) { this.rating = rating; }
