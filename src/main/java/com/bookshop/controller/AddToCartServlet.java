@@ -24,16 +24,20 @@ public class AddToCartServlet extends HttpServlet {
         if (user == null) {
             session.setAttribute("error","Cần đăng nhập để thực hiện tính năng này" );
             request.getRequestDispatcher("login").forward(request, response);
+            String previous = request.getHeader("Referer");
+            session.setAttribute("previous", previous);
             return;
         }
+        Book book =(Book) session.getAttribute("book");
         try{
-            Book book =(Book) session.getAttribute("book");
+
             Cart cart = CartDao.getCartByUserId(user.getUserId());
             CartItemDao.AddItem(cart.getCartId(),book.getBookId());
         }catch (Exception e){
             e.printStackTrace();
         }
-        request.getRequestDispatcher("cart").forward(request,response);
+        session.setAttribute("success","message");
+        response.sendRedirect("book-detail?id="+book.getBookId());
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

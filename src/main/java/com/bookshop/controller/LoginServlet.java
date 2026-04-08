@@ -33,13 +33,22 @@ public class LoginServlet extends HttpServlet {
 //                    resp.sendRedirect("admin");
 //                    return;
 //                }
-                resp.sendRedirect("home");
-                return;
+                if (user.getRole().equals("user")) {
+                    if (session.getAttribute("previous")!=null) {
+                        resp.sendRedirect((String) session.getAttribute("previous"));
+                        return;
+                    }
+                    resp.sendRedirect("home");
+                    return;
+                }
+
+
             } else {
                 // login sai
                 if (session.getAttribute("error") == null) session.setAttribute("error", "Sai tài khoản hoặc mật khẩu");
                 req.getRequestDispatcher("view/login.jsp").forward(req, resp);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             resp.sendRedirect(req.getContextPath() + "/login");
