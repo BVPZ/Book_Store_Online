@@ -13,8 +13,9 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/cart_style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/homestyle.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/cart_style.css">
+
 </head>
 <body>
 
@@ -127,7 +128,7 @@
                         <!-- quantity -->
                         <div class="qty-box">
                             <button class="qty-btn minus">-</button>
-                            <input type="text" value="1" class="qty-input">
+                            <input type="text" value="${cartItem.quantity}" class="qty-input">
                             <button class="qty-btn plus">+</button>
                         </div>
                         <!-- delete -->

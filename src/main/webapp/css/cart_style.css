@@ -82,3 +82,6 @@
     font-size: 80px;
     color: #ccc;
 }
+body{
+    overflow-y: auto;
+}

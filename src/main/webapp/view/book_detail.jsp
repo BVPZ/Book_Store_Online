@@ -6,8 +6,9 @@
 <head>
     <meta charset="UTF-8">
     <title>${book.title} - Nhà Sách Tri Thức</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/book_detail.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/homestyle.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/book_detail.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -175,6 +176,20 @@
             </div>
         </div>
     </div>
+    <div id="toast" class="toast">
+        Thêm vào giỏ hàng thành công!
+    </div>
+    <script src="js/book-detail.js"></script>
+    <script>
+        <% String msg = (String) session.getAttribute("message"); %>
+        <% if ("success".equals(msg)) { %>
+        showToast();
+        <% } %>
+    </script>
+
+    <%
+        session.removeAttribute("message");
+    %>
 </main>
 
 </body>
