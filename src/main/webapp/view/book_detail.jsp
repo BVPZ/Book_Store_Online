@@ -135,9 +135,7 @@
                 </c:forEach>
             </div>
 
-            <h1 class="title">${book.title}</h1>
-
-            <div class="author">Tác giả: ${book.authorId}</div>
+            <div class="author">Tác giả: <a href="author?id=${book.authorId}" style="text-decoration:none; color:#00a651;">${book.authorName}</a></div>
 
             <div style="color: #ffc107; font-size: 15px; margin-top: 10px; margin-bottom: 15px; display: flex; align-items: center;">
                 <i class="fas fa-star"></i>

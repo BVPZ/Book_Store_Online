@@ -1,8 +1,8 @@
 package com.bookshop.dao;
 import java.sql.PreparedStatement;
 
-import com.bookshop.model.User;
-import com.bookshop.util.DBConnection;
+import com.bookshop.model.*;
+import com.bookshop.util.*;
 import com.mysql.cj.Session;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;

@@ -1,6 +1,7 @@
 package com.bookshop.model;
 
 
+import com.bookshop.dao.AuthorDao;
 import com.bookshop.dao.BookCategoryDao;
 import java.util.*;
 
@@ -64,5 +65,8 @@ public class Book {
     public String getFormattedPrice() {
         java.text.NumberFormat formatter = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("vi", "VN"));
         return formatter.format(this.price).replace("₫", "đ");
+    }
+    public String getAuthorName(){
+        return AuthorDao.getAuthorbyId(this.authorId).getAuthorName();
     }
 }
