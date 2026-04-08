@@ -1,23 +1,58 @@
 package com.bookshop.util;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 
 public class DBConnection {
 
-     private static final String URL ="jdbc:mysql://mysql-3419af58-bvpz2005-3c17.i.aivencloud.com:11071/defaultdb?useSSL=true&serverTimezone=UTC&characterEncoding=UTF-8";
-     private static final String USER = "avnadmin";
-     private static final String PASSWORD = "AVNS_B6wMTYBSUV2OkPj2MP9";
-    public static Connection getConnection() {
+    private static HikariDataSource dataSource;
+
+    static {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("Kết nối thành công!");
-            return conn;
+            HikariConfig config = new HikariConfig();
+
+            config.setJdbcUrl("jdbc:mysql://mysql-3419af58-bvpz2005-3c17.i.aivencloud.com:11071/defaultdb");
+            config.setUsername("avnadmin");
+            config.setPassword("AVNS_B6wMTYBSUV2OkPj2MP9");
+            config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+
+            // cực quan trọng cho cloud DB
+            config.addDataSourceProperty("sslMode", "REQUIRED");
+
+            // fix connection chết
+            config.setConnectionTestQuery("SELECT 1");
+            config.setValidationTimeout(5000);
+
+            // pool
+            config.setMaximumPoolSize(10);
+            config.setMinimumIdle(2);
+
+            // giảm lifetime để tránh bị DB kill
+            config.setMaxLifetime(600000); // 10 phút (quan trọng)
+            config.setIdleTimeout(300000); // 5 phút
+
+            // debug leak
+            config.setLeakDetectionThreshold(20000);
+
+            dataSource = new HikariDataSource(config);
+
+            System.out.println("Pool OK");
+
         } catch (Exception e) {
-            System.out.println("Kết nối thất bại!");
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException(" Init DB failed", e);
         }
+    }
+
+
+    public static Connection getConnection()  {
+        try{
+            return dataSource.getConnection();
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
+
     }
 }

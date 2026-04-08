@@ -20,7 +20,7 @@ public class CategoryDao {
             category.setCategoryId(categoryId);
             category.setCategoryName(rs.getString("category_name"));
             category.setCategoryDescription(rs.getString("description"));
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return category;

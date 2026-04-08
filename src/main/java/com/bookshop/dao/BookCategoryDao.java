@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class BookCategoryDao {
-    public static ArrayList<String> getAllGenresByBookId(int bookId) {
+    public static ArrayList<String> getAllGenresByBookId(int bookId)  {
         ArrayList<String> genres = new ArrayList<>();
         try(Connection con = DBConnection.getConnection()) {
             String sql = "select * from book_categories where book_id = ?";
@@ -19,7 +19,7 @@ public class BookCategoryDao {
             while (rs.next()) {
                 genres.add(CategoryDao.getCategoryById(rs.getInt("category_id")).getCategoryName());
             }
-        }catch (SQLException e){
+        }catch (Exception e){
             e.printStackTrace();
         }
         System.out.println("Lay the loai sach thanh cong");
