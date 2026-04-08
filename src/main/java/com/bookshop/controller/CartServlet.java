@@ -31,7 +31,7 @@ public class CartServlet extends HttpServlet {
             req.setAttribute("cartItems",cartItems);
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         req.getRequestDispatcher("/view/cart.jsp").forward(req,resp);

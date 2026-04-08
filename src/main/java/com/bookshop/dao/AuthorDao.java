@@ -11,8 +11,8 @@ import java.sql.SQLException;
 public class AuthorDao {
     public static Author getAuthorbyId(int authorId) {
         Author author = new Author();
-        try{
-            Connection con = DBConnection.getConnection();
+        try(Connection con = DBConnection.getConnection()){
+
             String sql = "select * from authors where author_id = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1,authorId);
@@ -22,7 +22,7 @@ public class AuthorDao {
             author.setAuthorName(rs.getString("author_name"));
             author.setBio(rs.getString("bio"));
             System.out.println("lay thong tin tac gia thanh cong");
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return author;

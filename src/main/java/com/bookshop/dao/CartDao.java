@@ -10,17 +10,17 @@ import java.sql.SQLException;
 
 public class CartDao {
     public static Cart getCartByUserId(int userId) throws SQLException, ClassNotFoundException {
-        Connection conn = DBConnection.getConnection();
-        String sql = "select * from cart where user_id = ? ";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1,userId);
-        ResultSet rs = ps.executeQuery();
-        Cart cart = new Cart();
-        if(rs.next()) {
-        cart.setUserId(userId);
-        cart.setCartId(rs.getInt("cart_id"));
-        System.out.println("lay thong tin gio hang thanh cong");
-        }
-        return cart;
-    }
+        try(Connection conn = DBConnection.getConnection();){
+            String sql = "select * from cart where user_id = ? ";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1,userId);
+            ResultSet rs = ps.executeQuery();
+            Cart cart = new Cart();
+            if(rs.next()) {
+            cart.setUserId(userId);
+            cart.setCartId(rs.getInt("cart_id"));
+            System.out.println("lay thong tin gio hang thanh cong");
+            }
+            return cart;
+    }}
 }
