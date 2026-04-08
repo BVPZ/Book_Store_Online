@@ -12,8 +12,21 @@ import java.util.ArrayList;
 public class CartItemDao {
     public static void AddItem(int cart_id, int book_id) throws SQLException, ClassNotFoundException {
         Connection conn = DBConnection.getConnection();
-        String sql = "insert into cart_items (book_id,cart_id,quantity) values (?,?,1)";
+        String sql = "select * from cart_items where cart_id = ? and book_id = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1,cart_id);
+        ps.setInt(2,book_id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            sql = "update cart_items set quantity = quantity + 1 where cart_id = ? and book_id = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1,cart_id);
+            ps.setInt(2,book_id);
+            ps.executeUpdate();
+            return;
+        }
+        sql = "insert into cart_items (book_id,cart_id,quantity) values (?,?,1)";
+        ps = conn.prepareStatement(sql);
         ps.setInt(1,book_id);
         ps.setInt(2,cart_id);
         ps.executeUpdate();

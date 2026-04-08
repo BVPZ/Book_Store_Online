@@ -16,10 +16,11 @@ public class CartDao {
         ps.setInt(1,userId);
         ResultSet rs = ps.executeQuery();
         Cart cart = new Cart();
-        rs.next();
+        if(rs.next()) {
         cart.setUserId(userId);
         cart.setCartId(rs.getInt("cart_id"));
         System.out.println("lay thong tin gio hang thanh cong");
+        }
         return cart;
     }
 }

@@ -26,8 +26,7 @@ public class UserDao {
 
             if (rs.next()) {
                 User user = new User();
-//                user.setUserId(rs.getInt("userId"));
-//                user.setFullName(rs.getString("fullName"));
+                user.setUserId(rs.getInt("user_id"));
                 user.setUsername(rs.getString("username"));
                 user.setFullName(rs.getString("full_name"));
                 user.setEmail(rs.getString("email"));
