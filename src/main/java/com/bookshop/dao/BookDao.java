@@ -144,4 +144,31 @@ public class BookDao {
         }
         return author_books;
     }
+
+    //locSachTheoTheLoai
+    public static ArrayList<Book> getBooksByCategoryId(int categoryId) throws SQLException {
+        ArrayList<Book> list = new ArrayList<>(); // 1. Tạo danh sách trống
+        String sql = "SELECT b.* FROM books b " +
+                "JOIN book_categories bc ON b.book_id = bc.book_id " +
+                "WHERE bc.category_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, categoryId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Book book = new Book();
+                book.setBookId(rs.getInt("book_id"));
+                book.setTitle(rs.getString("title"));
+                book.setPrice(rs.getDouble("price"));
+                book.setImageUrl(rs.getString("image"));
+                list.add(book); // 2. Thêm sách vào danh sách
+            }
+        }
+        return list; // 3. QUAN TRỌNG: Trả danh sách này về để hiển thị lên web!
+    }
 }
+
+
