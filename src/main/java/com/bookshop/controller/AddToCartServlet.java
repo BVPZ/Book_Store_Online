@@ -4,6 +4,7 @@ import com.bookshop.dao.CartDao;
 import com.bookshop.dao.CartItemDao;
 import com.bookshop.model.Book;
 import com.bookshop.model.Cart;
+import com.bookshop.model.CartItem;
 import com.bookshop.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 @WebServlet("/addtocart")
 public class AddToCartServlet extends HttpServlet {
@@ -21,22 +23,24 @@ public class AddToCartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        if (user == null) {
-            session.setAttribute("error","Cần đăng nhập để thực hiện tính năng này" );
-            request.getRequestDispatcher("login").forward(request, response);
-            String previous = request.getHeader("Referer");
-            session.setAttribute("previous", previous);
-            return;
-        }
         Book book =(Book) session.getAttribute("book");
-        try{
+        if (user == null) {
+            ArrayList<CartItem> cartItems = (ArrayList<CartItem>) session.getAttribute("cartItems");
+            CartItem  cartItem = new CartItem();
+            cartItem.setBook(book);
+            cartItem.setQuantity(1);
+            cartItems.add(cartItem);
+            session.setAttribute("cartItems",cartItems);
 
-            Cart cart = CartDao.getCartByUserId(user.getUserId());
-            CartItemDao.AddItem(cart.getCartId(),book.getBookId());
-        }catch (Exception e){
-            e.printStackTrace();
+        }else{
+            try{
+                Cart cart = CartDao.getCartByUserId(user.getUserId());
+                CartItemDao.AddItem(cart.getCartId(),book.getBookId());
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
-        session.setAttribute("success","message");
+        session.setAttribute("message","success");
         response.sendRedirect("book-detail?id="+book.getBookId());
     }
     @Override

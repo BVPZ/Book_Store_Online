@@ -129,6 +129,7 @@
         </div>
 
         <div class="info-column">
+            <div class="title" style="font-size:x-large">${book.title}</div>
             <div class="genre">
                 <c:forEach var="g" items="${book.genres} " varStatus="status">
                     ${g} <c:if test="${!status.last}">, </c:if>
@@ -179,7 +180,16 @@
     <div id="toast" class="toast">
         Thêm vào giỏ hàng thành công!
     </div>
-    <script src="js/book-detail.js"></script>
+    <script>
+        function showToast() {
+            const toast = document.getElementById("toast");
+            toast.classList.add("show");
+
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+    </script>
     <script>
         <% String msg = (String) session.getAttribute("message"); %>
         <% if ("success".equals(msg)) { %>
