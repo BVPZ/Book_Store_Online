@@ -98,93 +98,92 @@
 
     <!-- GIỎ HÀNG -->
     <c:if test="${not empty cartItems}">
-        <div class="row">
+        <form action="checkout" method="post">
+            <div class="row">
 
-            <div class="col-lg-8">
+                <div class="col-lg-8">
 
-                <div class="cart-header d-flex justify-content-between align-items-center">
-                    <h4>Giỏ hàng của bạn (${cartItems.size()} sản phẩm)</h4>
+                    <div class="cart-header d-flex justify-content-between align-items-center">
+                        <h4>Giỏ hàng của bạn có (${cartItems.size()} sản phẩm)</h4>
 
-                    <label>
-                        <input type="checkbox" id="checkAll"> Chọn tất cả
-                    </label>
-                </div>
+                        <label>
+                            <input type="checkbox" id="checkAll"> Chọn tất cả
+                        </label>
+                    </div>
 
-                <c:forEach var="cartItem" items="${cartItems}">
-                    <div class="cart-item d-flex align-items-center">
+                    <c:forEach var="cartItem" items="${cartItems}">
+                        <div class="cart-item d-flex align-items-center">
 
-                        <input type="checkbox" class="item-check me-3"
-                               data-price="${cartItem.price}">
+                            <input type="checkbox" class="item-check me-3"
+                                   data-price="${cartItem.price}" name = "selectedItems" value="${cartItem.bookId},${cartItem.quantity},${cartItem.cartItemId}">
 
-                        <img src="${cartItem.imageUrl}" class="cart-img">
+                            <img src="${cartItem.imageUrl}" class="cart-img">
 
-                        <div class="flex-grow-1 ms-3">
-                            <h5>${cartItem.title}</h5>
-                            <small class="text-muted">${cartItem.author}</small>
-                            <div class="price">
-                                    ${cartItem.price}đ
+                            <div class="flex-grow-1 ms-3">
+                                <h5>${cartItem.title}</h5>
+                                <small class="text-muted">${cartItem.author}</small>
+                                <div class="price">
+                                        ${cartItem.price}đ
+                                </div>
                             </div>
+                            <!-- quantity -->
+                            <div class="qty-box">
+                                <button class="qty-btn minus">-</button>
+                                <input type="text" value="${cartItem.quantity}" class="qty-input">
+                                <button class="qty-btn plus">+</button>
+                            </div>
+                            <!-- delete -->
+                            <a href="remove-from-cart?id=${cartItem.cartItemId}" class="delete-btn">
+                                <i class="bi bi-trash"></i>
+                            </a>
                         </div>
-                        <!-- quantity -->
-                        <div class="qty-box">
-                            <button class="qty-btn minus">-</button>
-                            <input type="text" value="${cartItem.quantity}" class="qty-input">
-                            <button class="qty-btn plus">+</button>
-                        </div>
-                        <!-- delete -->
-                        <a href="remove-from-cart?id=${cartItem.cartItemId}" class="delete-btn">
-                            <i class="bi bi-trash"></i>
-                        </a>
-                    </div>
-                </c:forEach>
-
-            </div>
-            <!-- RIGHT -->
-            <div class="col-lg-4">
-                <div class="summary-box">
-
-                    <h5>Tóm tắt đơn hàng</h5>
-
-                    <div class="row-line">
-                        <span>Đã chọn</span>
-                        <span id="selectedCount">0 sản phẩm</span>
-                    </div>
-
-                    <div class="row-line">
-                        <span>Tạm tính</span>
-                        <span id="subtotal">0đ</span>
-                    </div>
-
-                    <div class="row-line text-success">
-                        <span>Phí vận chuyển</span>
-                        <span>Miễn phí</span>
-                    </div>
-
-                    <hr>
-
-                    <div class="total">
-                        <span>Tổng cộng</span>
-                        <span id="totalPrice">0đ</span>
-                    </div>
-
-                    <button class="btn btn-success w-100 mt-3">
-                        Đặt hàng
-                    </button>
-
-                    <div class="text-danger text-center mt-3">
-                        Xóa toàn bộ giỏ hàng
-                    </div>
-
-                    <div class="policy">
-                        ✓ Miễn phí vận chuyển toàn quốc <br>
-                        ✓ Đổi trả trong 7 ngày <br>
-                        ✓ Thanh toán khi nhận hàng
-                    </div>
+                    </c:forEach>
 
                 </div>
-            </div>
+                <!-- RIGHT -->
+                <div class="col-lg-4">
+                    <div class="summary-box">
 
-        </div>
+                        <h5>Tóm tắt đơn hàng</h5>
+
+                        <div class="row-line">
+                            <span>Đã chọn</span>
+                            <span id="selectedCount">0 sản phẩm</span>
+                        </div>
+
+                        <div class="row-line">
+                            <span>Tạm tính</span>
+                            <span id="subtotal">0đ</span>
+                        </div>
+
+                        <div class="row-line text-success">
+                            <span>Phí vận chuyển</span>
+                            <span>Miễn phí</span>
+                        </div>
+
+                        <hr>
+
+                        <div class="total">
+                            <span>Tổng cộng</span>
+                            <span id="totalPrice">0đ</span>
+                        </div>
+
+                        <input type="submit" class="btn btn-success w-100 mt-3" value="Đặt hàng">
+                        <div class="text-danger text-center mt-3">
+                            Xóa toàn bộ giỏ hàng
+                        </div>
+
+                        <div class="policy">
+                            ✓ Miễn phí vận chuyển toàn quốc <br>
+                            ✓ Đổi trả trong 7 ngày <br>
+                            ✓ Thanh toán khi nhận hàng
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </form>
     </c:if>
 
 </main>

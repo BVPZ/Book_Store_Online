@@ -68,7 +68,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <a href="#" class="nav-link-custom fw-bold"><i class="bi bi-list me-2"></i> DANH MỤC SÁCH</a>
-                <a href="#" class="nav-link-custom border-start ms-2 ps-3">Sản phẩm đã xem</a>
+                <a href="${pageContext.request.contextPath}/recently-viewed" class="nav-link-custom border-start ms-2 ps-3">Sản phẩm đã xem</a>
             </div>
             <div class="d-flex gap-4">
                 <span class="nav-promo"><i class="bi bi-truck me-1"></i> Ship COD Trên Toàn Quốc</span>
@@ -95,7 +95,7 @@
                         <input type="text" name="txtCity" placeholder="Tỉnh/Thành phố *" required>
                     </div>
                     <textarea name="txtNote" placeholder="Ghi chú đơn hàng (tùy chọn)" rows="3"></textarea>
-                    <input type="hidden" name="bookId" value="${sessionScope.book.bookId}">
+
                 </section>
 
                 <section class="section-box">
@@ -167,27 +167,28 @@
             <div class="checkout-right">
                 <h2 class="section-title">Đơn hàng của bạn</h2>
                 <div class="order-summary-list">
-                    <c:if test="${not empty sessionScope.book}">
+                    <c:forEach var="cartItem" items="${cartItemsCheckout}">
                         <div class="book-item-mini d-flex align-items-center gap-3 mb-3">
                             <div class="position-relative">
-                                <img src="${sessionScope.book.imageUrl}" alt="Book" style="width: 55px; height: 75px; object-fit: cover;" class="rounded">
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">1</span>
+                                <img src="${cartItem.imageUrl}" alt="Book" style="width: 55px; height: 75px; object-fit: cover;" class="rounded">
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">${cartItem.quantity}</span>
                             </div>
                             <div>
-                                <h3 style="font-size: 14px; margin-bottom: 2px;">${sessionScope.book.title}</h3>
+                                <h3 style="font-size: 14px; margin-bottom: 2px;">${cartItem.title}</h3>
                                 <span class="text-success fw-bold">
                                     <fmt:setLocale value="vi_VN"/>
-                                    <fmt:formatNumber value="${sessionScope.book.price}" type="currency"/>
+                                    <fmt:formatNumber value="${cartItem.price}" type="currency"/>
                                 </span>
+                                <h4 style="font-size: small; color: #6b7280" >Số lượng: ${cartItem.quantity}</h4>
                             </div>
                         </div>
-                    </c:if>
+                    </c:forEach>
                 </div>
 
                 <div class="price-details mt-4 pt-3 border-top">
                     <div class="d-flex justify-content-between mb-2" style="font-size: 14px;">
                         <span>Tạm tính</span>
-                        <span><fmt:formatNumber value="${sessionScope.book.price}" type="currency"/></span>
+                        <span><fmt:formatNumber value="${total}" type="currency"/></span>
                     </div>
                     <div class="d-flex justify-content-between mb-2" style="font-size: 14px;">
                         <span>Phí vận chuyển</span>
@@ -196,7 +197,7 @@
                     <div class="d-flex justify-content-between mt-3 pt-3 border-top">
                         <strong class="fs-5">Tổng cộng</strong>
                         <strong class="total-amount fs-5 text-success">
-                             <fmt:formatNumber value="${sessionScope.book.price}" type="currency"/>
+                             <fmt:formatNumber value="${total}" type="currency"/>
                         </strong>
                     </div>
                     <button type="submit" form="checkoutForm" class="btn btn-success w-100 mt-4 py-3 fw-bold">ĐẶT HÀNG NGAY</button>
