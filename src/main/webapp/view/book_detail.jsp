@@ -153,7 +153,9 @@
             <div class="desc-text">${book.description}</div>
 
             <div class="action-buttons">
+                <a href="${pageContext.request.contextPath}/checkout?id=${book.bookId}">
                 <button class="btn btn-buy-now">Mua ngay</button>
+                </a>
                 <form action="addtocart" method="Post">
                     <button class="btn btn-add-cart" type="submit">
                         <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
