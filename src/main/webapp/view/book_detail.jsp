@@ -106,7 +106,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <a href="#" class="nav-link-custom fw-bold"><i class="bi bi-list me-2"></i> DANH MỤC SÁCH</a>
-                <a href="#" class="nav-link-custom border-start ms-2 ps-3">Sản phẩm đã xem</a>
+               <a href="${pageContext.request.contextPath}/recently-viewed" class="nav-link-custom border-start ms-2 ps-3">Sản phẩm đã xem</a>
             </div>
             <div class="d-flex gap-4">
                 <span class="nav-promo"><i class="bi bi-truck me-1"></i> Ship COD Trên Toàn Quốc</span>
