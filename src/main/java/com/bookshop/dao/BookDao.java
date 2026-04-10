@@ -33,6 +33,7 @@ public class BookDao {
         book.setImageUrl(rs.getString("image"));
         book.setDescription(rs.getString("description"));
         book.setStock(rs.getInt("stock"));
+        book.setGenres();
         System.out.println("lay thong tin sach dua tren id thanh cong");} catch (Exception e) {
             throw new RuntimeException(e);
         }

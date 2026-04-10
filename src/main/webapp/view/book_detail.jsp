@@ -130,8 +130,8 @@
 
         <div class="info-column">
             <div class="genre">
-                <c:forEach var="g" items="${book.genres}">
-                    ${g}
+                <c:forEach var="g" items="${book.genres} " varStatus="status">
+                    ${g} <c:if test="${!status.last}">, </c:if>
                 </c:forEach>
             </div>
 
