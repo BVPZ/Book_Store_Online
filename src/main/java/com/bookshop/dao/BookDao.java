@@ -14,7 +14,7 @@ public class BookDao {
     {
 
     }
-    public static Book getBookById(int bookId) throws SQLException
+    public static Book getBookById(int bookId)
     {
         Book book = new Book();
         try(Connection con = DBConnection.getConnection();){
@@ -34,7 +34,8 @@ public class BookDao {
         book.setDescription(rs.getString("description"));
         book.setStock(rs.getInt("stock"));
         book.setGenres();
-        System.out.println("lay thong tin sach dua tren id thanh cong");} catch (Exception e) {
+        System.out.println("lay thong tin sach dua tren id thanh cong");}
+        catch (Exception e) {
             throw new RuntimeException(e);
         }
         return book;

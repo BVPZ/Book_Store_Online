@@ -55,4 +55,26 @@ public class CartItemDao {
             return cartItems;
         }
     }
+    public static CartItem getCartItemByCartItemId(int cartItemId) {
+        CartItem cartItem = new CartItem();
+        try (Connection conn = DBConnection.getConnection();) {
+            String sql = "select * from cart_items where cart_item_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, cartItemId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+
+                cartItem.setCartItemId(rs.getInt("cart_item_id"));
+                cartItem.setBookId(rs.getInt("book_id"));
+                cartItem.setCartId(rs.getInt("cart_id"));
+                cartItem.setQuantity(rs.getInt("quantity"));
+                cartItem.setBook(BookDao.getBookById(rs.getInt("book_id")));
+
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return  cartItem;
+    }
 }

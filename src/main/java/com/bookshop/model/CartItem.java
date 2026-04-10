@@ -24,7 +24,7 @@ public class CartItem {
     }
 
     public int getBookId() {
-        return BookId;
+        return this.book.getBookId();
     }
     public void setBookId(int BookId) {this.BookId = BookId;}
 

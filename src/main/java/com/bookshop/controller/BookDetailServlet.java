@@ -32,7 +32,7 @@ public class BookDetailServlet extends HttpServlet {
             } else {
                 response.getWriter().println("<h1>Khong tim thay sach nay!</h1>");
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
