@@ -82,7 +82,7 @@ public class BookDao {
         }
 
     }
-    public static  ArrayList<Book> getAllBooks() throws SQLException,Exception
+    public static  ArrayList<Book> getAllBooks()
     {
         try(Connection con = DBConnection.getConnection();){
             String sql = "select * from books limit 20 ";
@@ -100,6 +100,8 @@ public class BookDao {
             if (all_books.isEmpty()) System.out.println("lay toan bo sach ko thanh cong");
             else System.out.println("Lay toan bo sach thanh cong");
             return  all_books;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
     public static ArrayList<Book> searchBooks(String keyword) throws SQLException,Exception {

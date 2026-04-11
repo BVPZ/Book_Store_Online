@@ -29,10 +29,7 @@ public class LoginServlet extends HttpServlet {
                     resp.sendRedirect("admin");
                     return;
                 }
-//                if ("admin".equals(user.getRole())) {
-//                    resp.sendRedirect("admin");
-//                    return;
-//                }
+
                 if (user.getRole().equals("user")) {
                     if (session.getAttribute("previous")!=null) {
                         resp.sendRedirect((String) session.getAttribute("previous"));
