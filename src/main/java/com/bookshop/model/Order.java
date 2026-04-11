@@ -1,4 +1,6 @@
 package com.bookshop.model;
+import java.util.List;
+import com.bookshop.model.OrderDetail;
 
 public class Order {
     private String orderId;
@@ -36,4 +38,8 @@ public class Order {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    private List<OrderDetail> orderDetails;
+    public List<OrderDetail> getOrderDetails() { return orderDetails; }
+    public void setOrderDetails(List<OrderDetail> orderDetails) { this.orderDetails = orderDetails; }
 }

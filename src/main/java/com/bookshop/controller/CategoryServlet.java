@@ -32,9 +32,6 @@ public class CategoryServlet extends HttpServlet {
                 // Lưu ý quan trọng: Ở file home.jsp bạn đang dùng ${sessionScope.all_books}
                 // Nhưng khi lọc, ta dùng requestScope để dữ liệu mới đè lên dữ liệu cũ
                 request.setAttribute("all_books", list);
-
-                // 4. Forward về đúng file chứa giao diện sách
-                // Dựa trên ảnh folder của bạn, mình đoán là /view/home.jsp
                 request.getRequestDispatcher("/view/home.jsp").forward(request, response);
 
             } catch (SQLException | NumberFormatException e) {

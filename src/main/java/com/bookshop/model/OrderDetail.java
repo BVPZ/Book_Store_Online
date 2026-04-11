@@ -36,4 +36,9 @@ public class OrderDetail {
     public void setPrice(String price) {
         this.price = price;
     }
+
+
+    private Book book;
+    public Book getBook() { return book;}
+    public void setBook(Book book) { this.book = book; }
 }

@@ -16,6 +16,10 @@ public class Book {
     private String image;
     private double rating;
     private int reviewCount;
+    private String authorName;
+
+
+
     public Book() {
 
     }
@@ -66,7 +70,7 @@ public class Book {
         java.text.NumberFormat formatter = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("vi", "VN"));
         return formatter.format(this.price).replace("₫", "đ");
     }
-    public String getAuthorName(){
-        return AuthorDao.getAuthorbyId(this.authorId).getAuthorName();
-    }
+
+    public String getAuthorName() { return authorName;}
+    public void setAuthorName(String authorName) {this.authorName = authorName;}
 }
