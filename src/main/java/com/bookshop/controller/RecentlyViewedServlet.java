@@ -28,14 +28,7 @@ public class RecentlyViewedServlet extends HttpServlet {
                 for (Cookie c : cookies) {
                     if ("recent_viewed".equals(c.getName()) && !c.getValue().isEmpty()) {
                         String[] bookIds = c.getValue().split("-");
-                        for (String idStr : bookIds) {
-                            try {
-                                Book b = BookDao.getBookById(Integer.parseInt(idStr));
-                                if (b != null) recentBooks.add(b);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
+                        recentBooks = BookDao.getBooksByIds(bookIds);
                         break;
                     }
                 }

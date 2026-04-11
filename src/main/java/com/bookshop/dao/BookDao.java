@@ -173,6 +173,41 @@ public class BookDao {
         }
         return list; // 3. QUAN TRỌNG: Trả danh sách này về để hiển thị lên web!
     }
+
+    public static ArrayList<Book> getBooksByIds(String[] ids) {
+        ArrayList<Book> list = new ArrayList<>();
+        if (ids == null || ids.length == 0) return list;
+        StringBuilder placeholders = new StringBuilder();
+        for (int i = 0; i < ids.length; i++) {
+            placeholders.append("?");
+            if (i < ids.length - 1) placeholders.append(",");
+        }
+        String sql = "SELECT * FROM books WHERE book_id IN (" + placeholders + ") " +
+                "ORDER BY FIELD(book_id, " + placeholders + ")";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            for (int i = 0; i < ids.length; i++) {
+                ps.setInt(i + 1, Integer.parseInt(ids[i]));
+            }
+            for (int i = 0; i < ids.length; i++) {
+                ps.setInt(ids.length + i + 1, Integer.parseInt(ids[i]));
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Book book = new Book();
+                    book.setBookId(rs.getInt("book_id"));
+                    book.setTitle(rs.getString("title"));
+                    book.setPrice(rs.getDouble("price"));
+                    book.setImageUrl(rs.getString("image"));
+                    list.add(book);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }
 
 

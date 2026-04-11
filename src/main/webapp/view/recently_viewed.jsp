@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/homestyle.css">
     <style>
+
         .history-header {
             display: flex;
             justify-content: space-between;
@@ -46,6 +47,18 @@
         .btn-clear:hover {
             background: #dc3545;
             color: white;
+        }
+
+        html, body {
+            height: auto !important;
+            min-height: 100vh !important;
+            overflow-y: auto !important;
+        }
+
+        main.container {
+            height: auto !important;
+            overflow: visible !important;
+            padding-bottom: 50px;
         }
     </style>
 </head>
