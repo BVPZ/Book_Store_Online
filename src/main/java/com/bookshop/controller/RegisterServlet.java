@@ -28,8 +28,7 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
         else{
-            try {
-                Connection con = DBConnection.getConnection();
+            try (Connection con = DBConnection.getConnection();){
                 String checkSql = "SELECT * FROM users WHERE username = ?";
                 PreparedStatement ps = con.prepareStatement(checkSql);
                 ps.setString(1, username);

@@ -128,12 +128,12 @@
                             </div>
                             <!-- quantity -->
                             <div class="qty-box">
-                                <button class="qty-btn minus">-</button>
+                                <button type="button" class="qty-btn minus">-</button>
                                 <input type="text" value="${cartItem.quantity}" class="qty-input">
-                                <button class="qty-btn plus">+</button>
+                                <button type="button" class="qty-btn plus">+</button>
                             </div>
                             <!-- delete -->
-                            <a href="remove-from-cart?id=${cartItem.cartItemId}" class="delete-btn">
+                            <a href="remove-cartitem?id=${cartItem.cartItemId},${cartItem.bookId}" class="delete-btn">
                                 <i class="bi bi-trash"></i>
                             </a>
                         </div>
@@ -185,7 +185,29 @@
             </div>
         </form>
     </c:if>
-
+    <div id="toast" class="toast">
+        Xóa thành công khỏi giỏ hàng
+    </div>
 </main>
+<script>
+    function showToast() {
+        const toast = document.getElementById("toast");
+        toast.classList.add("show");
+
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 3000);
+    }
+</script>
+<script>
+    <% String msg = (String) session.getAttribute("message"); %>
+    <% if ("success".equals(msg)) { %>
+    showToast();
+    <% } %>
+</script>
+
+<%
+    session.removeAttribute("message");
+%>
 <script src="js/cart.js"></script>
 </body>

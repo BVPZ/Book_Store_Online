@@ -25,8 +25,10 @@ public class HomeServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ArrayList<CartItem> cartItems = new ArrayList<>();
-        session.setAttribute("cartItems",cartItems);
+        if (session.getAttribute("cartItems")==null){
+            ArrayList<CartItem> cartItems = new ArrayList<>();
+            session.setAttribute("cartItems",cartItems);
+        }
         req.getRequestDispatcher("/view/home.jsp").forward(req, resp);
     }
 

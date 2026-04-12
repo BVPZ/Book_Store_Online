@@ -38,8 +38,8 @@ public class CartItem {
     public void setBook(Book book) {this.book = book;}
     public Book getBook() {return book;}
 
-    public double getPrice() throws SQLException {return book.getPrice();}
-    public String getImageUrl() throws SQLException {return  book.getImageUrl();}
-    public String getTitle()  throws SQLException {return book.getTitle();}
-    public String getAuthor()  throws SQLException {return AuthorDao.getAuthorbyId(book.getAuthorId()).getAuthorName();}
+    public double getPrice()  {return book.getPrice();}
+    public String getImageUrl()  {return  book.getImageUrl();}
+    public String getTitle()   {return book.getTitle();}
+    public String getAuthor()  {return AuthorDao.getAuthorbyId(book.getAuthorId()).getAuthorName();}
 }

@@ -63,18 +63,28 @@ public class CartItemDao {
             ps.setInt(1, cartItemId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-
                 cartItem.setCartItemId(rs.getInt("cart_item_id"));
                 cartItem.setBookId(rs.getInt("book_id"));
                 cartItem.setCartId(rs.getInt("cart_id"));
                 cartItem.setQuantity(rs.getInt("quantity"));
                 cartItem.setBook(BookDao.getBookById(rs.getInt("book_id")));
-
             }
 
         }catch (Exception e) {
             e.printStackTrace();
         }
         return  cartItem;
+    }
+    public static void deleteCartItemByCartItemId(int cartItemId) {
+        try(Connection conn = DBConnection.getConnection()){
+            String sql = "delete from cart_items where cart_item_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, cartItemId);
+            ps.executeUpdate();
+            ps.close();
+            return;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

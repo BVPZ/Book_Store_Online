@@ -24,14 +24,28 @@ public class AddToCartServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         Book book =(Book) session.getAttribute("book");
+
         if (user == null) {
             ArrayList<CartItem> cartItems = (ArrayList<CartItem>) session.getAttribute("cartItems");
-            CartItem  cartItem = new CartItem();
+            if (cartItems.isEmpty()) {
+                System.out.println("CartItems is empty");
+            }else {
+                for (CartItem cartItem : cartItems) {
+                    if (cartItem.getBookId() == book.getBookId()) {
+                        cartItem.setQuantity(cartItem.getQuantity() + 1);
+                        session.setAttribute("message", "success");
+                        session.setAttribute("cartItems", cartItems);
+                        response.sendRedirect("book-detail?id=" + book.getBookId());
+                        return;
+                    }
+                }
+            }
+            CartItem cartItem = new CartItem();
             cartItem.setBook(book);
             cartItem.setQuantity(1);
             cartItems.add(cartItem);
             session.setAttribute("cartItems",cartItems);
-
+            System.out.println("CartItems added, Có " + cartItems.size() + "sản phẩm");
         }else{
             try{
                 Cart cart = CartDao.getCartByUserId(user.getUserId());
