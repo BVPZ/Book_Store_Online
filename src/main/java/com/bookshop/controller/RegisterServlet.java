@@ -46,10 +46,19 @@ public class RegisterServlet extends HttpServlet {
                 pst.setString(2, password);
                 pst.setString(3, email);
                 pst.setString(4, fullname);
-                pst.executeUpdate();
+                int success = pst.executeUpdate();
                 response.sendRedirect("login");
                 session.setAttribute("success", "Đăng ký thành công, bạn đã có thể đăng nhập");
                 pst.close();
+                if (success > 0) {
+                    prepareSQL = "INSERT into cart(user_id) select user_id from users where username = ?";
+                    pst = con.prepareStatement(prepareSQL);
+                    pst.setString(1, username);
+                    int rs1 = pst.executeUpdate();
+                    if (rs1>0) {
+                        System.out.println("Them nguoi dung va gio hang thanh cong");
+                    }
+                }
             }catch (Exception e){
                 e.printStackTrace();
             }
