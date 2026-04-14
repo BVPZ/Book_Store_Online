@@ -232,9 +232,29 @@
                                </div>
 
                                <div class="d-flex gap-2">
-                                   <button class="btn btn-success btn-sm px-3"><i class="fas fa-star me-1"></i> Đánh giá sản phẩm</button>
-                                   <button class="btn btn-outline-secondary btn-sm px-3">Liên hệ người bán</button>
-                                   <button class="btn btn-outline-secondary btn-sm px-3">Mua lại</button>
+                                   <c:choose>
+                                       <%-- 1. Trạng thái: ĐÃ GIAO (Completed) --%>
+                                       <c:when test="${order.orderStatus == 'Completed'}">
+                                           <button class="btn btn-success btn-sm px-3">
+                                               <i class="fas fa-star me-1"></i> Đánh giá sản phẩm
+                                           </button>
+                                           <button class="btn btn-outline-secondary btn-sm px-3">Mua lại</button>
+                                       </c:when>
+
+                                       <%-- 2. Trạng thái: ĐÃ HỦY (Cancelled) --%>
+                                       <c:when test="${order.orderStatus == 'Cancelled'}">
+                                           <button class="btn btn-outline-secondary btn-sm px-3">Mua lại</button>
+                                       </c:when>
+
+                                       <%-- 3. Trạng thái: ĐANG XỬ LÝ (Processing) --%>
+                                       <c:when test="${order.orderStatus == 'Processing'}">
+                                           <span class="text-muted small italic">Đang chuẩn bị hàng...</span>
+                                       </c:when>
+
+                                       <%-- 4. Các trạng thái khác (Chờ xác nhận, Đang giao) --%>
+                                       <c:otherwise>
+                                           </c:otherwise>
+                                   </c:choose>
                                </div>
                            </div>
                        </div>
