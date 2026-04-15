@@ -87,4 +87,20 @@ public class CartItemDao {
             e.printStackTrace();
         }
     }
+    public static boolean updateCartItemQuantity(int cartItemId, int quantity) {
+        String sql = "update cart_items set quantity = ? where cart_item_id = ?";
+        try(Connection conn = DBConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql);){
+            ps.setInt(1, quantity);
+            ps.setInt(2, cartItemId);
+            int rs = ps.executeUpdate();
+            if(rs > 0){
+                System.out.println("Cap nhat so luong trong gio hang");
+                return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

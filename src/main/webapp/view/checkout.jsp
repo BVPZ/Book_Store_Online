@@ -81,7 +81,8 @@
 <div class="container mt-4 mb-5">
     <div class="row g-4">
         <div class="col-lg-8">
-            <form action="processCheckout" method="POST" id="checkoutForm">
+            <form action="order" method="POST" id="checkoutForm">
+                <input type="hidden" name="total" value="${total}">
                 <section class="section-box mb-4">
                     <h2 class="section-title">Thông tin giao hàng</h2>
                     <div class="input-row">

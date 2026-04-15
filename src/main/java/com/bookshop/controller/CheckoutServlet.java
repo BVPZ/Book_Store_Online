@@ -57,17 +57,20 @@ public class CheckoutServlet extends HttpServlet {
             request.getSession().setAttribute("message", "Cần chọn 1 sản phẩm");
             response.sendRedirect("cart");
         }
-        ArrayList<CartItem> cartItemsCheckout = new ArrayList<CartItem>();
+        ArrayList<CartItem> cartItemsCheckout = new ArrayList<>();
         HttpSession session = request.getSession();
         if (session.getAttribute("user") == null) {
+            ArrayList<CartItem> cartItems = (ArrayList<CartItem>) session.getAttribute("cartItems");
             for (String selectedId : selectedIds) {
                 selectedId = selectedId.trim();
                 String[] parts = selectedId.split(",");
-                CartItem cartItem = new CartItem();
-                cartItem.setBook(BookDao.getBookById(Integer.parseInt(parts[0])));
-                cartItem.setBookId(Integer.parseInt(parts[0]));
-                cartItem.setQuantity(Integer.parseInt(parts[1]));
-                cartItemsCheckout.add(cartItem);
+                int bookId = Integer.parseInt(parts[0]);
+                for (CartItem cartItem : cartItems) {
+                    if (cartItem.getBookId() == bookId) {
+                        cartItemsCheckout.add(cartItem);
+                        break;
+                    }
+                }
             }
         }else{
             for (String selectedId : selectedIds) {

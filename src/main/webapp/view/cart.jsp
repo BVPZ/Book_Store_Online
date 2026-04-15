@@ -115,6 +115,8 @@
                         <div class="cart-item d-flex align-items-center">
 
                             <input type="checkbox" class="item-check me-3"
+                                   data-cart-book-id="${cartItem.bookId}"
+                                   data-cart-id="${cartItem.cartItemId}"
                                    data-price="${cartItem.price}" name = "selectedItems" value="${cartItem.bookId},${cartItem.quantity},${cartItem.cartItemId}">
 
                             <img src="${cartItem.imageUrl}" class="cart-img">
@@ -126,7 +128,7 @@
                                         ${cartItem.price}đ
                                 </div>
                                 <div class ="stock" >
-                                        ${cartItem.getBook().stock}
+                                        Hàng tồn kho: ${cartItem.getBook().stock}
                                 </div>
                             </div>
                             <!-- quantity -->
@@ -171,7 +173,7 @@
                             <span id="totalPrice">0đ</span>
                         </div>
 
-                        <input type="submit" class="btn btn-success w-100 mt-3" value="Đặt hàng">
+                        <input type="submit" id="checkoutBtn" class="btn btn-success w-100 mt-3" value="Đặt hàng" disabled>
                         <div class="text-danger text-center mt-3">
                             Xóa toàn bộ giỏ hàng
                         </div>

@@ -1,0 +1,46 @@
+.payment-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+
+.payment-box {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+/*  ảnh QR */
+.payment-img {
+    max-width: 300px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/*  nút đẹp */
+.payment-btn {
+    background: #00a651;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+/* hover */
+.payment-btn:hover {
+    background: #008f45;
+    transform: scale(1.05);
+}
+body {
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+body {
+    background: linear-gradient(135deg, #f0fdf4, #e0f7fa);
+}
