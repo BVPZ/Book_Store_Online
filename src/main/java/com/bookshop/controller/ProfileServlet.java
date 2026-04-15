@@ -1,6 +1,7 @@
 package com.bookshop.controller;
 
 import com.bookshop.model.User;
+import com.bookshop.dao.OrderDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -21,6 +22,12 @@ public class ProfileServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
+
+        int orderCount = OrderDao.countOrdersByUserId(user.getUserId());
+        int booksPurchased = OrderDao.countPurchasedBooksByUserId(user.getUserId());
+        
+        request.setAttribute("orderCount", orderCount);
+        request.setAttribute("booksPurchased", booksPurchased);
 
         request.getRequestDispatcher("view/profile.jsp").forward(request, response);
     }

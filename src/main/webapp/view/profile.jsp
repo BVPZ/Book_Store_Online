@@ -192,13 +192,13 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <div class="stat-card bg-green">
-                        <div class="stat-value">12</div>
+                        <div class="stat-value"><%= request.getAttribute("orderCount") != null ? request.getAttribute("orderCount") : "0" %></div>
                         <div>Đơn hàng</div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="stat-card bg-blue">
-                        <div class="stat-value">28</div>
+                        <div class="stat-value"><%= request.getAttribute("booksPurchased") != null ? request.getAttribute("booksPurchased") : "0" %></div>
                         <div>Sách đã mua</div>
                     </div>
                 </div>

@@ -13,6 +13,36 @@ import java.util.List;
 
 public class OrderDao {
 
+    public static int countOrdersByUserId(int userId) {
+        String sql = "SELECT COUNT(*) FROM orders WHERE user_id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int countPurchasedBooksByUserId(int userId) {
+        String sql = "SELECT SUM(od.quantity) FROM order_details od JOIN orders o ON od.order_id = o.order_id WHERE o.user_id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     /**
      * Lấy danh sách đơn hàng của một người dùng và nạp luôn chi tiết từng món hàng.
      */
