@@ -1,5 +1,8 @@
 package com.bookshop.controller;
 
+import com.bookshop.dao.CartDao;
+import com.bookshop.dao.UserDao;
+import com.bookshop.model.User;
 import com.bookshop.util.DBConnection;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -28,40 +31,23 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
         else{
-            try (Connection con = DBConnection.getConnection();){
-                String checkSql = "SELECT * FROM users WHERE username = ?";
-                PreparedStatement ps = con.prepareStatement(checkSql);
-                ps.setString(1, username);
-                ResultSet rs = ps.executeQuery();
-                if(rs.next()) {
-                    session.setAttribute("error", "Usename đã được sử dụng");
-                    response.sendRedirect("register");
-                    rs.close();
-                    ps.close();
-                    return;
-                }
-                String prepareSQL = "INSERT INTO users (username, password, email,full_name) VALUES (?, ?, ?,?)";
-                PreparedStatement pst = con.prepareStatement(prepareSQL);
-                pst.setString(1, username);
-                pst.setString(2, password);
-                pst.setString(3, email);
-                pst.setString(4, fullname);
-                int success = pst.executeUpdate();
-                response.sendRedirect("login");
-                session.setAttribute("success", "Đăng ký thành công, bạn đã có thể đăng nhập");
-                pst.close();
-                if (success > 0) {
-                    prepareSQL = "INSERT into cart(user_id) select user_id from users where username = ?";
-                    pst = con.prepareStatement(prepareSQL);
-                    pst.setString(1, username);
-                    int rs1 = pst.executeUpdate();
-                    if (rs1>0) {
-                        System.out.println("Them nguoi dung va gio hang thanh cong");
-                    }
-                }
-            }catch (Exception e){
-                e.printStackTrace();
+            if(!UserDao.isUsernameExists(username)) {
+                session.setAttribute("error", "Usename đã được sử dụng");
+                response.sendRedirect("register");
+                return;
             }
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setEmail(email);
+            user.setFullName(fullname);
+            user.setPhone("");
+            user.setAddress("");
+            user.setRole("user");
+            UserDao.addUser(user);
+            CartDao.addCartByUserName(username);
+            response.sendRedirect("login");
+            session.setAttribute("success", "Đăng ký thành công, bạn có thể đăng nhập");
         }
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
