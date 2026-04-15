@@ -31,7 +31,7 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
         else{
-            if(!UserDao.isUsernameExists(username)) {
+            if(UserDao.isUsernameExists(username)) {
                 session.setAttribute("error", "Usename đã được sử dụng");
                 response.sendRedirect("register");
                 return;
