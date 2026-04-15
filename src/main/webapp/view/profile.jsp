@@ -94,73 +94,171 @@
         </div>
 
         <div class="sidebar-nav-menu">
-            <a href="#" class="nav-menu-item active">Thông tin cá nhân</a>
+            <a href="#" class="nav-menu-item active" id="nav-profile-info">Thông tin cá nhân</a>
             <a href="#" class="nav-menu-item">Đơn hàng của tôi</a>
-            <a href="#" class="nav-menu-item">Sách yêu thích</a>
-            <a href="#" class="nav-menu-item">Cài đặt</a>
+            <a href="#" class="nav-menu-item" id="nav-change-password">Đổi mật khẩu</a>
             <hr>
             <a href="logout" class="nav-menu-item text-danger">Đăng xuất</a>
         </div>
     </aside>
 
     <div class="main-profile-content">
-        <div class="info-details-card">
+        <div class="info-details-card" id="profile-card">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h5 class="fw-bold m-0">Thông tin cá nhân</h5>
-                <button class="btn-edit-profile">Chỉnh sửa</button>
+                <button class="btn-edit-profile" id="btn-edit">Chỉnh sửa</button>
             </div>
 
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <label class="info-label">Họ và tên</label>
-                    <div class="info-display-box">
-                        <%= (user != null && user.getFullName() != null) ? user.getFullName() : "Chưa cập nhật" %>
+            <div id="view-mode">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="info-label">Họ và tên</label>
+                        <div class="info-display-box">
+                            <%= (user != null && user.getFullName() != null) ? user.getFullName() : "Chưa cập nhật" %>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <label class="info-label">Email</label>
-                    <div class="info-display-box">
-                        <%= (user != null && user.getEmail() != null) ? user.getEmail() : "Chưa cập nhật" %>
+                    <div class="col-md-6">
+                        <label class="info-label">Email</label>
+                        <div class="info-display-box">
+                            <%= (user != null && user.getEmail() != null) ? user.getEmail() : "Chưa cập nhật" %>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <label class="info-label">Số điện thoại</label>
-                    <div class="info-display-box">
-                        <%= (user != null && user.getPhone() != null) ? user.getPhone() : "Chưa cập nhật" %>
+                    <div class="col-md-6">
+                        <label class="info-label">Số điện thoại</label>
+                        <div class="info-display-box">
+                            <%= (user != null && user.getPhone() != null) ? user.getPhone() : "Chưa cập nhật" %>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <label class="info-label">Địa chỉ</label>
-                    <div class="info-display-box">
-                        <%= (user != null && user.getAddress() != null) ? user.getAddress() : "Chưa cập nhật" %>
+                    <div class="col-md-6">
+                        <label class="info-label">Địa chỉ</label>
+                        <div class="info-display-box">
+                            <%= (user != null && user.getAddress() != null) ? user.getAddress() : "Chưa cập nhật" %>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <form id="edit-mode" action="updateProfile" method="POST" style="display: none;">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="info-label">Họ và tên</label>
+                        <input type="text" name="fullName" class="form-control" value="<%= (user != null && user.getFullName() != null) ? user.getFullName() : "" %>">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="info-label">Email</label>
+                        <input type="email" name="email" class="form-control" value="<%= (user != null && user.getEmail() != null) ? user.getEmail() : "" %>">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="info-label">Số điện thoại</label>
+                        <input type="text" name="phone" class="form-control" value="<%= (user != null && user.getPhone() != null) ? user.getPhone() : "" %>">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="info-label">Địa chỉ</label>
+                        <input type="text" name="address" class="form-control" value="<%= (user != null && user.getAddress() != null) ? user.getAddress() : "" %>">
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="button" class="btn btn-secondary me-2" id="btn-cancel-edit">Huỷ</button>
+                    <button type="submit" class="btn btn-success">Lưu thay đổi</button>
+                </div>
+            </form>
         </div>
 
-        <h5 class="mt-4 fw-bold mb-3">Thống kê</h5>
-        <div class="row g-3">
-            <div class="col-md-4">
-                <div class="stat-card bg-green">
-                    <div class="stat-value">12</div>
-                    <div>Đơn hàng</div>
-                </div>
+        <div class="info-details-card" id="change-password-card" style="display: none;">
+            <div class="mb-4">
+                <h5 class="fw-bold m-0">Đổi mật khẩu</h5>
             </div>
-            <div class="col-md-4">
-                <div class="stat-card bg-blue">
-                    <div class="stat-value">28</div>
-                    <div>Sách đã mua</div>
+            <form action="changePassword" method="POST">
+                <div class="mb-3">
+                    <label class="info-label">Mật khẩu hiện tại</label>
+                    <input type="password" name="oldPassword" class="form-control" required>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stat-card bg-purple">
-                    <div class="stat-value">15</div>
-                    <div>Yêu thích</div>
+                <div class="mb-3">
+                    <label class="info-label">Mật khẩu mới</label>
+                    <input type="password" name="newPassword" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="info-label">Nhập lại mật khẩu mới</label>
+                    <input type="password" name="confirmPassword" class="form-control" required>
+                </div>
+                <div class="d-flex mt-4">
+                    <button type="submit" class="btn btn-success">Lưu thay đổi</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="stats-section">
+            <h5 class="mt-4 fw-bold mb-3">Thống kê</h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="stat-card bg-green">
+                        <div class="stat-value"><%= request.getAttribute("orderCount") != null ? request.getAttribute("orderCount") : "0" %></div>
+                        <div>Đơn hàng</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="stat-card bg-blue">
+                        <div class="stat-value"><%= request.getAttribute("booksPurchased") != null ? request.getAttribute("booksPurchased") : "0" %></div>
+                        <div>Sách đã mua</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </main>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const btnEdit = document.getElementById("btn-edit");
+        const btnCancelEdit = document.getElementById("btn-cancel-edit");
+        const viewMode = document.getElementById("view-mode");
+        const editMode = document.getElementById("edit-mode");
+
+        const navProfileInfo = document.getElementById("nav-profile-info");
+        const navChangePassword = document.getElementById("nav-change-password");
+
+        const profileCard = document.getElementById("profile-card");
+        const statsSection = document.getElementById("stats-section");
+        const changePasswordCard = document.getElementById("change-password-card");
+
+        if (btnEdit) {
+            btnEdit.addEventListener("click", function() {
+                viewMode.style.display = "none";
+                editMode.style.display = "block";
+                btnEdit.style.display = "none";
+            });
+        }
+
+        if (btnCancelEdit) {
+            btnCancelEdit.addEventListener("click", function() {
+                editMode.style.display = "none";
+                viewMode.style.display = "block";
+                btnEdit.style.display = "block";
+            });
+        }
+
+        if (navProfileInfo && navChangePassword) {
+            navProfileInfo.addEventListener("click", function(e) {
+                e.preventDefault();
+                navProfileInfo.classList.add("active");
+                navChangePassword.classList.remove("active");
+
+                profileCard.style.display = "block";
+                if (statsSection) statsSection.style.display = "block";
+                changePasswordCard.style.display = "none";
+            });
+
+            navChangePassword.addEventListener("click", function(e) {
+                e.preventDefault();
+                navChangePassword.classList.add("active");
+                navProfileInfo.classList.remove("active");
+
+                profileCard.style.display = "none";
+                if (statsSection) statsSection.style.display = "none";
+                changePasswordCard.style.display = "block";
+            });
+        }
+    });
+</script>
 </body>
 </html>
