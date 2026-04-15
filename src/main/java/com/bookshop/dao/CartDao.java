@@ -35,4 +35,20 @@ public class CartDao {
             e.printStackTrace();
         }
     }
+    public static boolean deleteCartByUserId(int userId){
+        String sql = "delete from cart where user_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql);){
+            ps.setInt(1,userId);
+            int rs = ps.executeUpdate();
+            if(rs>0) {
+                System.out.println("Delete cart of user "+userId);
+                return true;
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

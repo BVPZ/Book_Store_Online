@@ -97,6 +97,7 @@
                     <th>
                         <button class="btn-add" onclick="openAddModal()">Thêm người dùng</button>
                     </th>
+                    <th>Xóa người dùng</th>
                 </tr>
 
                 <c:forEach var="u" items="${users}">
@@ -110,6 +111,13 @@
                                     onclick="openEditModal('${u.userId}', '${u.username}', '${u.fullName}', '${u.email}', '${u.address}' , '${u.phone}')">
                                 Chỉnh sửa
                             </button>
+                        </td>
+                        <td>
+                            <a href="delete-user?id=${u.userId}">
+                                <button type="button" class="btn-delete" style="border: solid ;background-color: red">
+                                    Xóa
+                                </button>
+                            </a>
                         </td>
                     </tr>
                 </c:forEach>

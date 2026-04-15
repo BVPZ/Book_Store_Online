@@ -45,7 +45,7 @@ public class UserDao {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
             ResultSet rs = ps.executeQuery();
-
+            rs.next(); //skip admin
             while (rs.next()) {
                 User user = new User();
                 user.setUserId(rs.getInt("user_id"));
@@ -101,16 +101,22 @@ public class UserDao {
             e.printStackTrace();
         }
     }
-    public static void deleteUser(int user_id) {
+    public static boolean deleteUser(int user_id) {
         String sql = "delete from users where user_id = ?";
         try(Connection conn = DBConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)){
+            CartDao.deleteCartByUserId(user_id);
             ps.setInt(1, user_id);
-            ps.executeUpdate();
-            System.out.println("Deleted use:" + user_id);
+            int rs = ps.executeUpdate();
+            if(rs>0){
+                System.out.println("Deleted use:" + user_id);
+                return true;
+            }
+
         }catch (Exception e){
             e.printStackTrace();
         }
+        return false;
     }
     public static boolean isUsernameExists(String username) {
         String sql = "select * from users where username = ?";
