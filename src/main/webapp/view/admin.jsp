@@ -8,55 +8,10 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/homestyle.css">
-    <style>
-        body {
-            background: #f5f7fb;
-            overflow: auto;
-
-        }
-
-        .topbar {
-            background: white;
-            padding: 15px 30px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .nav-tabs-custom {
-            background: #eee;
-            padding: 10px;
-            border-radius: 30px;
-            display: flex;
-            justify-content: space-around;
-        }
-
-        .nav-item-custom {
-            padding: 8px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-
-        .nav-item-custom.active {
-            background: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .card-box {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-        }
-        .chart-big {
-            height: 350px;
-        }
-
-        .chart-small {
-            height: 180px;
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin_style.css">
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="topbar d-flex justify-content-between">
     <div class="col-md-3 d-flex align-items-center">
         <div class="bg-success text-white rounded p-2 me-2">
@@ -140,9 +95,7 @@
                 <tr>
                     <th>ID</th><th>UserName</th><th>FullName</th><th>Email</th>
                     <th>
-                        <a href="adduser" class="btn btn-sm btn-primary">
-                            Thêm người dùng
-                        </a>
+                        <button class="btn-add" onclick="openAddModal()">Thêm người dùng</button>
                     </th>
                 </tr>
 
@@ -153,9 +106,10 @@
                         <td>${u.fullName}</td>
                         <td>${u.email}</td>
                         <td>
-                            <a href="edit-user?id=${u.userId}" class="btn btn-sm btn-primary">
-                            Chỉnh sửa
-                            </a>
+                            <button type="button" class="btn btn-sm btn-primary"
+                                    onclick="openEditModal('${u.userId}', '${u.username}', '${u.fullName}', '${u.email}', '${u.address}' , '${u.phone}')">
+                                Chỉnh sửa
+                            </button>
                         </td>
                     </tr>
                 </c:forEach>
@@ -168,10 +122,8 @@
     <div id="books" class="tab-content" style="display:none">
         <div class="card-box">
             <h5>Quản lý sách</h5>
-
             <c:forEach var="b" items="${books}">
                 <div class="d-flex align-items-center border-bottom py-2 justify-content-between">
-
                     <!-- Bên trái -->
                     <div class="d-flex align-items-center">
                         <img src="${b.imageUrl}" width="50">
@@ -188,7 +140,6 @@
                     </div>
                 </div>
             </c:forEach>
-
         </div>
     </div>
 
@@ -196,12 +147,10 @@
     <div id="orders" class="tab-content" style="display:none">
         <div class="card-box">
             <h5>Quản lý đơn hàng</h5>
-
             <table class="table">
                 <tr>
                     <th>Mã</th><th>Khách</th><th>Tổng</th>
                 </tr>
-
                 <c:forEach var="o" items="${orders}">
                     <tr>
                         <td>${o.id}</td>
@@ -209,97 +158,70 @@
                         <td>${o.total}</td>
                     </tr>
                 </c:forEach>
-
             </table>
         </div>
     </div>
 
 </div>
+<div id="userModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">Thông tin người dùng</h2>
+        <form action="edit-user" method="post">
+            <input type="hidden" id="action" name="action" value="add">
+            <input type="hidden" id="userId" name="id">
+            <div id="authFields" style="display: none;">
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" id="userName" name="userName">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="password" name="password">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>FullName:</label>
+                <input type="text" id="fullName" name="fullName">
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="email" name="email">
+            </div>
+            <div class="form-group">
+                <label>Phone number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber">
+            </div>
+            <div class="form-group">
+                <label>Address:</label>
+                <input type="text" id="address" name="address">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn-save">Xác nhận</button>
+                <button type="button" onclick="closeModal()">Hủy</button>
+            </div>
+        </form>
+    </div>
+</div>
+<c:if test="${not empty status}">
+    <script>alert('${status}')</script>
+    <c:remove var="status" scope="session"/>
+</c:if>
+<c:if test="${not empty showTab}">
+    <script>
+        window.onload = function() {
+            const tab = "${showTab}";
+            const tabBtn = document.querySelector(`[onclick*="${showTab}"]`);
+            if(tabBtn){
+                showTab(tab, { target: tabBtn });
+            }
+        }
+    </script>
+    <c:remove var="showTab" scope="session"/>
+</c:if>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-<script>
-    function showTab(tab) {
-        document.querySelectorAll(".tab-content").forEach(el => el.style.display = "none");
-        document.getElementById(tab).style.display = "block";
-
-        document.querySelectorAll(".nav-item-custom").forEach(el => el.classList.remove("active"));
-        event.target.classList.add("active");
-    }
-    const ctx1 = document.getElementById('revenueChart');
-
-    new Chart(ctx1, {
-        type: 'bar',
-        data: {
-            labels: ['T1', 'T2', 'T3', 'T4'],
-            datasets: [{
-                label: 'Doanh thu',
-                data: [12000000, 15000000, 18000000, 10000000]
-            }]
-        },
-        options: {
-            maintainAspectRatio: false
-        }
-    });
-    const ctx2 = document.getElementById('orderChart');
-
-    new Chart(ctx2, {
-        type: 'line',
-        data: {
-            labels: ['T1', 'T2', 'T3', 'T4'],
-            datasets: [{
-                label: 'Đơn hàng',
-                data: [150, 180, 240, 130]
-            }]
-        },
-        options: {
-            maintainAspectRatio: false
-        }
-    });
-
-    const ctx = document.getElementById('categoryChart');
-
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Văn học', 'Kinh doanh', 'Khoa học', 'Giả tưởng', 'Khác'],
-            datasets: [{
-                data: [35, 25, 20, 15, 5],
-                backgroundColor: [
-                    '#10b981',
-                    '#3b82f6',
-                    '#f59e0b',
-                    '#8b5cf6',
-                    '#9ca3af'
-                ]
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false // ẩn legend nếu bạn muốn giống hình
-                },
-                datalabels: {
-                    color: function(context) {
-                        return context.dataset.backgroundColor[context.dataIndex];
-                    },
-                    formatter: function(value, context) {
-                        let label = context.chart.data.labels[context.dataIndex];
-                        return label + ': ' + value + '%';
-                    },
-                    font: {
-                        weight: 'bold',
-                        size: 14
-                    },
-                    anchor: 'end',
-                    align: 'end',
-                    offset: 10
-                }
-            }
-        },
-        plugins: [ChartDataLabels]
-    });
-</script>
+<script src="${pageContext.request.contextPath}/js/admin.js"></script>
 
 </body>
 </html>

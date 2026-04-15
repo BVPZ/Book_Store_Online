@@ -23,4 +23,16 @@ public class CartDao {
             }
             return cart;
     }}
+    public static void addCartByUserName(String userName) {
+        String sql = "insert into cart(user_id) select user_id from users where username = ? ";
+        try(Connection conn = DBConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql);){
+            ps.setString(1,userName);
+            int rs = ps.executeUpdate();
+            if(rs>0) System.out.println("Them gio hang thanh cong cho user"+userName);
+            else System.out.println("Them gio hang that bai");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }
