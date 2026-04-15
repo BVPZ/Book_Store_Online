@@ -51,7 +51,7 @@ public class AuthorDetailServlet extends HttpServlet {
             } else {
                 response.getWriter().println("<h1>Khong tim thay tac gia nay!</h1>");
             }
-        } catch (NumberFormatException | SQLException e) {
+        } catch (NumberFormatException e){
             e.printStackTrace();
             response.getWriter().println("<h1>Loi xu ly du lieu</h1>");
         }

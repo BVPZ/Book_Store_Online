@@ -71,6 +71,6 @@ public class Book {
         return formatter.format(this.price).replace("₫", "đ");
     }
 
-    public String getAuthorName() { return authorName;}
+    public String getAuthorName() { return AuthorDao.getAuthorbyId(this.authorId).getAuthorName();}
     public void setAuthorName(String authorName) {this.authorName = authorName;}
 }

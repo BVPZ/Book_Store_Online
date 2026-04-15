@@ -125,11 +125,14 @@
                                 <div class="price">
                                         ${cartItem.price}đ
                                 </div>
+                                <div class ="stock" >
+                                        ${cartItem.getBook().stock}
+                                </div>
                             </div>
                             <!-- quantity -->
                             <div class="qty-box">
                                 <button type="button" class="qty-btn minus">-</button>
-                                <input type="text" value="${cartItem.quantity}" class="qty-input">
+                                <input type="text" value="${cartItem.quantity}" class="qty-input" readonly min=1 max=${cartItem.getBook().stock}>
                                 <button type="button" class="qty-btn plus">+</button>
                             </div>
                             <!-- delete -->
@@ -209,5 +212,5 @@
 <%
     session.removeAttribute("message");
 %>
-<script src="js/cart.js"></script>
+<script src="${pageContext.request.contextPath}/js/cart.js"></script>
 </body>

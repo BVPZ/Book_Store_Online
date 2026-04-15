@@ -124,27 +124,29 @@ public class BookDao {
         }
     }
 
-    public static ArrayList<Book> getBooksByAuthorId(int authorId) throws SQLException {
-        Connection con = DBConnection.getConnection();
-        String sql = "SELECT * FROM books WHERE author_id = ?";
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setInt(1, authorId);
-
+    public static ArrayList<Book> getBooksByAuthorId(int authorId)  {
         ArrayList<Book> author_books = new ArrayList<>();
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Book book = new Book();
-            book.setBookId(rs.getInt("book_id"));
-            book.setPrice(rs.getDouble("price"));
-            book.setTitle(rs.getString("title"));
-            book.setImageUrl(rs.getString("image"));
-            book.setDescription(rs.getString("description"));
-            book.setAuthorId(rs.getInt("author_id"));
-            // Mock rating and review count because they don't exist in the database
-            book.setRating(4.5);
-            book.setReviewCount((int) (Math.random() * 1000 + 100)); 
-            
-            author_books.add(book);
+        String sql = "SELECT * FROM books WHERE author_id = ?";
+        try(Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);){
+            ps.setInt(1, authorId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Book book = new Book();
+                book.setBookId(rs.getInt("book_id"));
+                book.setPrice(rs.getDouble("price"));
+                book.setTitle(rs.getString("title"));
+                book.setImageUrl(rs.getString("image"));
+                book.setDescription(rs.getString("description"));
+                book.setAuthorId(rs.getInt("author_id"));
+                // Mock rating and review count because they don't exist in the database
+                book.setRating(4.5);
+                book.setReviewCount((int) (Math.random() * 1000 + 100));
+
+                author_books.add(book);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
         return author_books;
     }

@@ -36,15 +36,29 @@ checkAll.addEventListener('change', function() {
 document.querySelectorAll('.plus').forEach(btn => {
     btn.onclick = () => {
         let input = btn.parentElement.querySelector('.qty-input');
-        input.value++;
+        let stock = parseInt(input.getAttribute("max"));
+        let value = parseInt(input.value);
+
+        if(value >= stock){
+            alert("Số lượng sản phẩm vượt quá số hàng còn lại");
+            return;
+        }
+
+        input.value = value + 1;
+        console.log(stock);
+        console.log(value);
         updateCart();
     };
 });
-
 document.querySelectorAll('.minus').forEach(btn => {
     btn.onclick = () => {
         let input = btn.parentElement.querySelector('.qty-input');
-        if (input.value > 1) input.value--;
+        let value = parseInt(input.value);
+
+        if (value > 1){
+            input.value = value - 1;
+        }
+
         updateCart();
     };
 });
