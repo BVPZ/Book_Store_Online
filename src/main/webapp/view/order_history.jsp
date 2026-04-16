@@ -37,13 +37,6 @@
         .status-Processing, .status-Pending { background: #fff8e1; color: #fbc02d; }
         .status-Cancelled { background: #ffebee; color: #c62828; }
 
-        /* 1. Mở khóa thanh cuộn dọc */
-        html, body {
-            height: auto !important;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
-        }
-
         /* 2. Giúp thanh lọc bên trái đứng yên khi cuộn trang (Sticky) */
         .sidebar-filter {
             position: sticky;
@@ -364,6 +357,8 @@
         });
     });
 </script>
+
+<jsp:include page="footer.jsp" />
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

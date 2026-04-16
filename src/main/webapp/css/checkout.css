@@ -22,10 +22,10 @@
     background: #555;
 }
 
-html, body {
-    height: auto !important;
-    overflow-y: auto !important;
+html {
     scroll-behavior: smooth;
+}
+body {
     font-family: 'Segoe UI', Arial, sans-serif;
     background-color: var(--bg);
 }

@@ -49,11 +49,6 @@
             color: white;
         }
 
-        html, body {
-            height: auto !important;
-            min-height: 100vh !important;
-            overflow-y: auto !important;
-        }
 
         main.container {
             height: auto !important;
@@ -187,6 +182,8 @@ style="border-color: #00a651; box-shadow: none;">
     </c:choose>
 </main>
 
+
+<jsp:include page="footer.jsp" />
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

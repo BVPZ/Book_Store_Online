@@ -214,5 +214,8 @@
 <%
     session.removeAttribute("message");
 %>
+
+<jsp:include page="footer.jsp" />
 <script src="${pageContext.request.contextPath}/js/cart.js"></script>
 </body>
+</html>

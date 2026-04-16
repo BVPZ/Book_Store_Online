@@ -5,7 +5,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>${book.title} - Nhà Sách Tri Thức</title>
+    <title>Trạng thái đơn hàng - Nhà Sách Tri Thức</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/homestyle.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/book_detail.css">
 
@@ -113,15 +113,163 @@
         </div>
     </div>
 </nav>
-<div>
-    Đặt hàng thành công
-    <a href="home">
-        <button>Trở về trang chủ</button>
-    </a>
-    <a href="order-history">
-        <button>Xem đơn đặt hàng</button>
-    </a>
+<main class="success-page-wrapper">
+    <div class="success-card">
+        <div class="icon-wrapper">
+            <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <h1 class="success-title">Đặt Hàng Thành Công!</h1>
+        <p class="success-desc">Cảm ơn bạn đã tin tưởng và mua sắm tại Nhà Sách Tri Thức. Đơn hàng của bạn đang được xử lý và sẽ sớm được giao đến bạn.</p>
+        
+        <div class="btn-group-custom mt-4">
+            <a href="order-history" class="btn-custom btn-home text-decoration-none">
+                <i class="bi bi-list-ul"></i> Xem đơn hàng
+            </a>
+            <a href="home" class="btn-custom btn-order text-decoration-none">
+                <i class="bi bi-house-door"></i> Trở về trang chủ
+            </a>
+        </div>
+    </div>
+</main>
 
-</div>
+<style>
+    .success-page-wrapper {
+        min-height: calc(100vh - 160px); /* Adjust based on header */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        background-color: #f4f7f6;
+    }
+
+    .success-card {
+        background: white;
+        border-radius: 20px;
+        padding: 50px 40px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        animation: slideUpFade 0.6s ease-out forwards;
+    }
+
+    .success-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: linear-gradient(90deg, #00a651, #00d26a);
+    }
+
+    .icon-wrapper {
+        width: 90px;
+        height: 90px;
+        background: rgba(0, 166, 81, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 30px;
+        position: relative;
+    }
+
+    .icon-wrapper .bi-check-circle-fill {
+        font-size: 45px;
+        color: #00a651;
+        z-index: 2;
+        animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s both;
+    }
+
+    .icon-wrapper::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        box-shadow: 0 0 0 15px rgba(0, 166, 81, 0.05);
+        animation: pulseRing 1.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    .success-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #2b3445;
+        margin-bottom: 15px;
+        letter-spacing: -0.5px;
+    }
+
+    .success-desc {
+        color: #7d879c;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 40px;
+    }
+
+    .btn-group-custom {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .btn-custom {
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-home {
+        background: #f3f5f9;
+        color: #2b3445;
+        border: none;
+    }
+
+    .btn-home:hover {
+        background: #e3e8f0;
+        transform: translateY(-2px);
+    }
+
+    .btn-order {
+        background: linear-gradient(135deg, #00a651 0%, #008a43 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 166, 81, 0.3);
+    }
+
+    .btn-order:hover {
+        background: linear-gradient(135deg, #008a43 0%, #007035 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 166, 81, 0.4);
+        color: white;
+    }
+
+    @keyframes slideUpFade {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleIn {
+        from { opacity: 0; transform: scale(0.5); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes pulseRing {
+        0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(0, 166, 81, 0.2); }
+        70% { transform: scale(1.3); box-shadow: 0 0 0 20px rgba(0, 166, 81, 0); }
+        100% { transform: scale(1.3); box-shadow: 0 0 0 0 rgba(0, 166, 81, 0); }
+    }
+</style>
+
+<jsp:include page="footer.jsp" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

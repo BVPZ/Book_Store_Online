@@ -46,11 +46,12 @@ const ctx1 = document.getElementById('revenueChart');
 new Chart(ctx1, {
         type: 'bar',
         data: {
-            labels: ['T1', 'T2', 'T3', 'T4'],
+            labels: window.dashboardData.revenueLabels.length > 0 ? window.dashboardData.revenueLabels : ['Chưa có dữ liệu'],
             datasets: [
                 {
                     label: 'Doanh thu',
-                    data: [12000000, 15000000, 18000000, 10000000]
+                    data: window.dashboardData.revenues.length > 0 ? window.dashboardData.revenues : [0], // DYNAMIC DATA
+                    backgroundColor: '#8bc34a'
                 }
             ]
         },
@@ -58,16 +59,21 @@ new Chart(ctx1, {
             maintainAspectRatio: false
         }
     });
+
 const ctx2 = document.getElementById('orderChart');
 
 new Chart(ctx2, {
     type: 'line',
     data: {
-    labels: ['T1', 'T2', 'T3', 'T4'],
+    labels: window.dashboardData.orderLabels.length > 0 ? window.dashboardData.orderLabels : ['Chưa có dữ liệu'],
     datasets: [{
-    label: 'Đơn hàng',
-    data: [150, 180, 240, 130]
-}]
+        label: 'Đơn hàng',
+        data: window.dashboardData.orders.length > 0 ? window.dashboardData.orders : [0], // DYNAMIC DATA
+        borderColor: '#03a9f4',
+        backgroundColor: 'rgba(3, 169, 244, 0.2)',
+        fill: true,
+        tension: 0.3
+    }]
 },
     options: {
     maintainAspectRatio: false
@@ -79,40 +85,44 @@ const ctx = document.getElementById('categoryChart');
 new Chart(ctx, {
     type: 'pie',
     data: {
-    labels: ['Văn học', 'Kinh doanh', 'Khoa học', 'Giả tưởng', 'Khác'],
+    labels: window.dashboardData.catLabels.length > 0 ? window.dashboardData.catLabels : ['Chưa có dữ liệu'],
     datasets: [{
-    data: [35, 25, 20, 15, 5],
-    backgroundColor: [
-    '#10b981',
-    '#3b82f6',
-    '#f59e0b',
-    '#8b5cf6',
-    '#9ca3af'
-    ]
-}]
+        data: window.dashboardData.catValues.length > 0 ? window.dashboardData.catValues : [1],
+        backgroundColor: [
+        '#10b981',
+        '#3b82f6',
+        '#f59e0b',
+        '#8b5cf6',
+        '#9ca3af'
+        ]
+    }]
 },
     options: {
     maintainAspectRatio: false,
     plugins: {
     legend: {
-    display: false // ẩn legend nếu bạn muốn giống hình
-},
+        display: false // ẩn legend nếu bạn muốn giống hình
+    },
     datalabels: {
-    color: function(context) {
-    return context.dataset.backgroundColor[context.dataIndex];
-},
-    formatter: function(value, context) {
-    let label = context.chart.data.labels[context.dataIndex];
-    return label + ': ' + value + '%';
-},
-    font: {
-    weight: 'bold',
-    size: 14
-},
-    anchor: 'end',
-    align: 'end',
-    offset: 10
-}
+        color: function(context) {
+            return context.dataset.backgroundColor[context.dataIndex];
+        },
+        formatter: function(value, context) {
+            let label = context.chart.data.labels[context.dataIndex];
+            if (label === 'Chưa có dữ liệu') return '0%';
+            // Tính phần trăm
+            let sum = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+            let percentage = sum > 0 ? ((value * 100) / sum).toFixed(1) + '%' : '0%';
+            return label + ': ' + percentage;
+        },
+        font: {
+            weight: 'bold',
+            size: 14
+        },
+        anchor: 'end',
+        align: 'end',
+        offset: 10
+    }
 }
 },
     plugins: [ChartDataLabels]

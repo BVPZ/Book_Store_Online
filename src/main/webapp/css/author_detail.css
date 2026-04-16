@@ -174,13 +174,5 @@
     color: #00a651;
 }
 
-/* Override global no-scroll rule from homestyle.css */
-html, body {
-    height: auto !important;
-    overflow-y: auto !important;
-}
 
-body {
-    display: block !important;
-}
 

@@ -46,28 +46,28 @@
             <div class="col-md-3">
                 <div class="card-box">
                     <h6>Doanh thu</h6>
-                    <h3 class="text-success">202M</h3>
+                    <h3 class="text-success">${cardTotalRevenue != null ? cardTotalRevenue : '0'}</h3>
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="card-box">
                     <h6>Đơn hàng</h6>
-                    <h3 class="text-primary">704</h3>
+                    <h3 class="text-primary">${cardTotalOrders != null ? cardTotalOrders : '0'}</h3>
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="card-box">
                     <h6>Người dùng</h6>
-                    <h3 class="text-purple">12</h3>
+                    <h3 class="text-purple">${cardTotalUsers != null ? cardTotalUsers : '0'}</h3>
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="card-box">
                     <h6>Sản phẩm</h6>
-                    <h3 class="text-warning">60</h3>
+                    <h3 class="text-warning">${cardTotalBooks != null ? cardTotalBooks : '0'}</h3>
                 </div>
             </div>
         </div>
@@ -233,7 +233,17 @@
 </c:if>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-<script src="${pageContext.request.contextPath}/js/admin.js"></script>
+<script>
+    window.dashboardData = {
+        revenueLabels: ${not empty revenueLabels ? revenueLabels : '[]'},
+        revenues: ${not empty revenueData ? revenueData : '[]'},
+        orderLabels: ${not empty orderLabels ? orderLabels : '[]'},
+        orders: ${not empty orderData ? orderData : '[]'},
+        catLabels: ${not empty catLabels ? catLabels : '[]'},
+        catValues: ${not empty catValues ? catValues : '[]'}
+    };
+</script>
+<script src="${pageContext.request.contextPath}/js/admin.js?v=<%= System.currentTimeMillis() %>"></script>
 
 </body>
 </html>
