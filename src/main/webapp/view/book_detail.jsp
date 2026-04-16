@@ -45,8 +45,6 @@
         .action-buttons form button {
             width: 100% !important;
         }
-
-
         .search-btn { background-color: var(--primary-green); color: white; padding: 0 20px; border: none; }
         .search-btn:hover { background-color: #008a43; }
     </style>
@@ -137,7 +135,7 @@
             </div>
 
             <div class="author">Tác giả: <a href="author?id=${book.authorId}" style="text-decoration:none; color:#00a651;">${book.authorName}</a></div>
-
+            <!--
             <div style="color: #ffc107; font-size: 15px; margin-top: 10px; margin-bottom: 15px; display: flex; align-items: center;">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -148,7 +146,8 @@
                     ${book.rating} (${book.reviewCount} đánh giá)
                 </span>
             </div>
-
+            -->
+            <div class="desc-text">Hàng còn lại: ${book.description}</div>
             <div class="price">${book.getFormattedPrice()}</div>
             <div class="desc-header">Mô tả sản phẩm</div>
             <div class="desc-text">${book.description}</div>

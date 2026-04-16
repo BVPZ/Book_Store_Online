@@ -1,39 +1,39 @@
 package com.bookshop.model;
 
 public class OrderDetail {
-    private String orderDetailId;
-    private String orderId;
-    private String bookId;
-    private String quantity;
-    private String price;
-    public String getOrderDetailId() {
+    private int orderDetailId;
+    private int orderId;
+    private int bookId;
+    private int quantity;
+    private double price;
+    public int getOrderDetailId() {
         return orderDetailId;
     }
-    public void setOrderDetailId(String orderDetailId) {
+    public void setOrderDetailId(int orderDetailId) {
         this.orderDetailId = orderDetailId;
     }
-    public String getOrderId() {
+    public int getOrderId() {
         return orderId;
     }
-    public void setOrderId(String orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
-    public String getBookId() {
+    public int getBookId() {
         return bookId;
     }
-    public void setBookId(String bookId) {
+    public void setBookId(int bookId) {
         this.bookId = bookId;
     }
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

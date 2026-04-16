@@ -81,21 +81,21 @@
 <div class="container mt-4 mb-5">
     <div class="row g-4">
         <div class="col-lg-8">
-            <form action="order" method="POST" id="checkoutForm">
+            <form action="process-checkout" method="POST" id="checkoutForm">
                 <input type="hidden" name="total" value="${total}">
                 <section class="section-box mb-4">
                     <h2 class="section-title">Thông tin giao hàng</h2>
                     <div class="input-row">
-                        <input type="text" name="txtFullname" placeholder="Họ và tên *" required>
-                        <input type="text" name="txtPhone" placeholder="Số điện thoại *" required>
+                        <input type="text" name="fullName" placeholder="Họ và tên *" required>
+                        <input type="text" name="phone" placeholder="Số điện thoại *" required>
                     </div>
-                    <input type="email" name="txtEmail" placeholder="Email" class="full-width">
-                    <input type="text" name="txtAddress" placeholder="Địa chỉ *" class="full-width" required>
+                    <input type="email" name="email" placeholder="Email" class="full-width">
+                    <input type="text" name="address" placeholder="Địa chỉ *" class="full-width" required>
                     <div class="input-row">
-                        <input type="text" name="txtDistrict" placeholder="Quận/Huyện *" required>
-                        <input type="text" name="txtCity" placeholder="Tỉnh/Thành phố *" required>
+                        <input type="text" name="district" placeholder="Quận/Huyện *" required>
+                        <input type="text" name="city" placeholder="Tỉnh/Thành phố *" required>
                     </div>
-                    <textarea name="txtNote" placeholder="Ghi chú đơn hàng (tùy chọn)" rows="3"></textarea>
+                    <textarea name="note" placeholder="Ghi chú đơn hàng (tùy chọn)" rows="3"></textarea>
 
                 </section>
 
@@ -115,7 +115,7 @@
                                 </div>
                             </div>
                         </label>
-
+                        <!-- ZALOPAY với MOMO phát triển sau
                         <label class="payment-item-box">
                             <div class="payment-item-inner">
                                 <input type="radio" name="paymentMethod" value="MOMO">
@@ -141,7 +141,7 @@
                                 </div>
                             </div>
                         </label>
-
+                        -->
                         <label class="payment-item-box">
                             <div class="payment-item-inner">
                                 <input type="radio" name="paymentMethod" value="QRCODE">
@@ -195,9 +195,14 @@
                         <span>Phí vận chuyển</span>
                         <span class="text-muted">Miễn phí</span>
                     </div>
+                    <div class="d-flex justify-content-between mb-2" style="font-size: 14px;">
+                        <span>Giảm giá</span>
+                        <span><fmt:formatNumber value="0" type="currency"/></span>
+                    </div>
                     <div class="d-flex justify-content-between mt-3 pt-3 border-top">
                         <strong class="fs-5">Tổng cộng</strong>
                         <strong class="total-amount fs-5 text-success">
+                            <input form ="checkoutForm" type ="hidden" name="final_price"  value="value="${total}"">
                              <fmt:formatNumber value="${total}" type="currency"/>
                         </strong>
                     </div>

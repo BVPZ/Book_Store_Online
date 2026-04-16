@@ -157,13 +157,17 @@
             <h5>Quản lý đơn hàng</h5>
             <table class="table">
                 <tr>
-                    <th>Mã</th><th>Khách</th><th>Tổng</th>
+                    <th>Mã đơn hàng</th><th>Thời gian</th>
+                    <th>Tổng</th><th>Thông tin</th> <th>Trạng thái</th>
                 </tr>
                 <c:forEach var="o" items="${orders}">
                     <tr>
-                        <td>${o.id}</td>
-                        <td>${o.customerName}</td>
-                        <td>${o.total}</td>
+                        <td>${o.orderId}</td>
+                        <td>${o.orderDate}</td>
+                        <td>${o.totalPrice}</td>
+                        <td><button>Thông tin đơn hàng</button></td>
+                        <td>${o.orderStatus}</td>
+
                     </tr>
                 </c:forEach>
             </table>

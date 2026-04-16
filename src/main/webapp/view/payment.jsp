@@ -79,10 +79,10 @@
         </div>
     </div>
 </nav>
-<form action="payment" method="post">
+<form action="order-status" method="post">
     <div class="payment-container">
         <input type="hidden" name="methodPayment" value="${methodPayment}">
-
+        <input type="hidden" name="final_price" value="${finalPrice}"
         <div class="payment-box">
             <img src="${paymentUrl}" class="payment-img">
 

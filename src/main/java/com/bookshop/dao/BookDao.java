@@ -170,10 +170,10 @@ public class BookDao {
                 book.setTitle(rs.getString("title"));
                 book.setPrice(rs.getDouble("price"));
                 book.setImageUrl(rs.getString("image"));
-                list.add(book); // 2. Thêm sách vào danh sách
+                list.add(book);
             }
         }
-        return list; // 3. QUAN TRỌNG: Trả danh sách này về để hiển thị lên web!
+        return list;
     }
 
     public static ArrayList<Book> getBooksByIds(String[] ids) {

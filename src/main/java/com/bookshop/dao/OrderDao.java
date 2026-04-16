@@ -1,6 +1,7 @@
 package com.bookshop.dao;
 
 import com.bookshop.model.Book;
+import com.bookshop.model.CartItem;
 import com.bookshop.model.Order;
 import com.bookshop.model.OrderDetail;
 import com.bookshop.util.DBConnection;
@@ -8,6 +9,7 @@ import com.bookshop.util.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,7 +107,7 @@ public class OrderDao {
      * Hàm phụ: Lấy chi tiết sản phẩm của một đơn hàng (Join với bảng Books để lấy ảnh và tiêu đề).
      */
     // Hàm lấy chi tiết sản phẩm (JOIN 3 bảng: order_details, books, authors)
-    public static List<OrderDetail> getDetailsByOrderId(String orderId) {
+    public static List<OrderDetail> getDetailsByOrderId(int orderId) {
         List<OrderDetail> details = new ArrayList<>();
         String sql = "SELECT od.*, b.title, b.image, a.author_name " +
                 "FROM order_details od " +
@@ -114,13 +116,13 @@ public class OrderDao {
                 "WHERE od.order_id = ?";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, orderId);
+            ps.setInt(1, orderId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 OrderDetail od = new OrderDetail();
-                od.setQuantity(String.valueOf(rs.getObject("quantity")));
+                od.setQuantity(rs.getInt("quantity"));
                 double rawPrice = rs.getDouble("price");
-                od.setPrice(String.valueOf((long) rawPrice));
+                od.setPrice(rawPrice);
 
                 // Tạo object Book chứa thông tin để hiển thị
                 Book b = new Book();
@@ -135,18 +137,125 @@ public class OrderDao {
         return details;
     }
 
-
-
     /**
      * Hàm hỗ trợ ánh xạ dữ liệu từ ResultSet sang Object Order để tránh lặp code.
      */
     private static Order mapResultSetToOrder(ResultSet rs) throws Exception {
         Order order = new Order();
-        order.setOrderId(rs.getString("order_id"));
+        order.setOrderId(rs.getInt("order_id"));
         order.setOrderDate(rs.getString("order_date"));
         order.setOrderStatus(rs.getString("status"));
-        order.setTotalPrice(rs.getString("total_price"));
-        order.setUserId(rs.getString("user_id"));
+        order.setTotalPrice(rs.getDouble("total_price"));
+        order.setUserId(rs.getInt("user_id"));
         return order;
     }
+    public static void insertOrder(Order order, ArrayList<CartItem> items) {
+
+        String sql = "INSERT INTO orders (user_id, order_date, total_price, status, information_delivery) VALUES (?, NOW(), ?, ?, ?)";
+
+        Connection conn = null;
+
+        try{
+            conn = DBConnection.getConnection();
+            conn.setAutoCommit(false);
+
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            if(order.getUserId() != 0){
+                ps.setInt(1, order.getUserId());
+            }else{
+                ps.setNull(1, java.sql.Types.INTEGER);
+            }
+            ps.setDouble(2, order.getTotalPrice());
+            ps.setString(3, order.getOrderStatus());
+            ps.setString(4, order.getInformationDelivery());
+
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            int orderId = 0;
+
+            if(rs.next()){
+                orderId = rs.getInt(1);
+            }
+
+            if(orderId == 0){
+                throw new RuntimeException("Không lấy được orderId");
+            }
+
+            // 🔥 xử lý từng item
+            for (CartItem item : items) {
+
+                // trừ stock
+                String updateStock = "UPDATE books SET stock = stock - ? WHERE book_id = ? AND stock >= ?";
+
+                try(PreparedStatement psStock = conn.prepareStatement(updateStock)){
+                    psStock.setInt(1, item.getQuantity());
+                    psStock.setInt(2, item.getBookId());
+                    psStock.setInt(3, item.getQuantity());
+
+                    int rows = psStock.executeUpdate();
+
+                    if(rows == 0){
+                        throw new RuntimeException("Sản phẩm hết hàng");
+                    }
+                }
+
+                // insert order_detail
+                String sqlDetail = "INSERT INTO order_details(order_id, book_id, quantity, price) VALUES (?, ?, ?, ?)";
+
+                try(PreparedStatement ps2 = conn.prepareStatement(sqlDetail)){
+                    ps2.setInt(1, orderId);
+                    ps2.setInt(2, item.getBookId());
+                    ps2.setInt(3, item.getQuantity());
+                    ps2.setDouble(4, item.getPrice());
+
+                    ps2.executeUpdate();
+                }
+            }
+
+            conn.commit();
+
+        }catch (Exception e){
+            try{
+                if(conn != null) conn.rollback();
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        }finally {
+            try{
+                if(conn != null) conn.close();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+    public static ArrayList<Order> getAllOrders() {
+        ArrayList<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM orders";
+        try(Connection conn = DBConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql);){
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = new Order();
+                order.setOrderId(rs.getInt("order_id"));
+                order.setOrderDate(rs.getString("order_date"));
+                order.setOrderStatus(rs.getString("status"));
+                order.setTotalPrice(rs.getDouble("total_price"));
+                order.setUserId(rs.getInt("user_id"));
+                orders.add(order);
+            }
+            if(orders.isEmpty()){
+                System.out.println("Ko co don hang nao dc lay");
+            }else{
+                System.out.println("Lay thanh cong "+ orders.size() + " don hang");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+
 }

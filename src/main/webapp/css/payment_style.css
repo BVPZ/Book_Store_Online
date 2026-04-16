@@ -44,3 +44,17 @@ body {
 body {
     background: linear-gradient(135deg, #f0fdf4, #e0f7fa);
 }
+.payment-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.payment-img {
+    max-width: 300px;
+    margin-bottom: 20px;
+}
+
+.payment-btn {
+    margin-top: 10px;
+}

@@ -32,7 +32,9 @@ public class CheckoutServlet extends HttpServlet {
                 ArrayList<CartItem> cartItemsCheckout = new ArrayList<CartItem>();
                 cartItemsCheckout.add(cartItem);
                 request.setAttribute("cartItemsCheckout", cartItemsCheckout);
+                session.setAttribute("cartItemsCheckout", cartItemsCheckout);
                 request.setAttribute("total",Total(cartItemsCheckout));
+                session.setAttribute("finalPrice",Total(cartItemsCheckout));
                 request.getRequestDispatcher("/view/checkout.jsp").forward(request, response);
                 return;
             } catch (NumberFormatException e) {
@@ -82,6 +84,7 @@ public class CheckoutServlet extends HttpServlet {
 
 
         request.setAttribute("cartItemsCheckout", cartItemsCheckout);
+        session.setAttribute("cartItemsCheckout", cartItemsCheckout);
         request.setAttribute("total",Total(cartItemsCheckout));
         request.getRequestDispatcher("/view/checkout.jsp").forward(request, response);
         return;

@@ -1,8 +1,11 @@
 package com.bookshop.controller;
 
 import com.bookshop.dao.BookDao;
+import com.bookshop.dao.OrderDao;
 import com.bookshop.dao.UserDao;
 import com.bookshop.model.Book;
+import com.bookshop.model.Order;
+import com.bookshop.model.OrderDetail;
 import com.bookshop.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -30,7 +33,11 @@ public class AdminServlet extends HttpServlet {
         request.setAttribute("users", users);
         ArrayList<Book> books = BookDao.getAllBooks();
         request.setAttribute("books", books);
-        request.getRequestDispatcher("view/admin.jsp").forward(request, response);
-
+        ArrayList<Order> orders = OrderDao.getAllOrders();
+        for(Order o : orders){
+            System.out.println("ID: " + o.getOrderStatus());
+        }
+        request.setAttribute("orders", orders);
+        request.getRequestDispatcher("/view/admin.jsp").forward(request, response);
     }
 }
