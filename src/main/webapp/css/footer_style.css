@@ -1,0 +1,119 @@
+.site-footer {
+    background-color: #0b1120; /* Dark navy background */
+    color: #e2e8f0;
+    padding: 30px 0 15px; /* Giảm padding để footer nhỏ lại */
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative !important; /* Đảm bảo footer không bị cố định */
+    bottom: auto !important;
+    width: 100%;
+    margin-top: auto;
+}
+
+.footer-col {
+    margin-bottom: 15px; /* Giảm margin */
+}
+
+.footer-heading {
+    color: #ffffff;
+    font-size: 1rem; /* Giảm font chữ tiêu đề */
+    font-weight: 700;
+    margin-bottom: 15px; /* Giảm khoảng cách */
+    position: relative;
+}
+
+.footer-contact-list, .footer-link-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-contact-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px; /* Giảm khoảng cách giữa các mục */
+    font-size: 0.9rem; /* Giảm font chữ */
+    color: #94a3b8;
+}
+
+.icon-green {
+    color: #10b981; /* Emerald green */
+    font-size: 1.1rem;
+}
+
+.footer-link-list li {
+    margin-bottom: 8px; /* Giảm khoảng cách */
+}
+
+.footer-link-list a {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.9rem; /* Giảm font chữ */
+    transition: all 0.3s ease;
+}
+
+.footer-link-list a:hover {
+    color: #10b981;
+    padding-left: 5px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.social-icon {
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.social-icon:hover {
+    background: #10b981;
+    transform: translateY(-3px);
+    color: #fff;
+}
+
+.footer-social-text {
+    font-size: 0.8rem; /* Giảm font text */
+    line-height: 1.5;
+    color: #64748b;
+    margin-top: 10px; /* Giảm margin */
+}
+
+.footer-bottom {
+    margin-top: 20px; /* Giảm khoảng cách */
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    color: #64748b;
+    font-size: 0.8rem;
+}
+
+.heart-icon {
+    color: #ef4444;
+    display: inline-block;
+}
+
+@media (max-width: 768px) {
+    .site-footer {
+        padding: 40px 0 20px;
+    }
+    .footer-col {
+        text-align: center;
+    }
+    .footer-contact-list li {
+        justify-content: center;
+    }
+    .social-icons {
+        justify-content: center;
+    }
+}
