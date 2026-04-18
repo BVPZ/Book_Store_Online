@@ -31,12 +31,13 @@ public class ProcessCheckoutServlet extends HttpServlet {
             switch (paymentMethod) {
                 case "COD":
                     response.sendRedirect("order-status");
+                    session.setAttribute("paymentMethod", "COD");
                     return;
 
                 case "QRCODE":
                     String paymentUrl = "https://img.vietqr.io/image/MB-220052008-compact2.png?amount="+String.valueOf(totalPrice);
                     request.setAttribute("paymentUrl", paymentUrl);
-                    request.setAttribute("paymentMethod", "QRCODE");
+                    session.setAttribute("paymentMethod", "VIET-QR");
                     break;
             }
         }else{
@@ -45,7 +46,8 @@ public class ProcessCheckoutServlet extends HttpServlet {
 
             switch (paymentMethod) {
                 case "COD":
-                    response.sendRedirect("order-status");
+                    response.sendRedirect("order-status?paymentMethod=COD");
+                    session.setAttribute("paymentMethod", "COD");
                     return;
 
                 case "QRCODE":

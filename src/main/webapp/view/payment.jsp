@@ -81,6 +81,7 @@
 </nav>
 <form action="order-status" method="get">
     <div class="payment-container">
+        <input type="hidden" name = "paymentMethod" value = "VIET-QR">
         <input type="hidden" name="methodPayment" value="${methodPayment}">
         <input type="hidden" name="final_price" value="${finalPrice}">
         <div class="payment-box">
