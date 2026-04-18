@@ -147,7 +147,7 @@
                 </span>
             </div>
             -->
-            <div class="desc-text">Hàng còn lại: ${book.description}</div>
+            <div class="desc-text">Hàng còn lại: ${book.stock}</div>
             <div class="price">${book.getFormattedPrice()}</div>
             <div class="desc-header">Mô tả sản phẩm</div>
             <div class="desc-text">${book.description}</div>
