@@ -210,6 +210,17 @@ public class BookDao {
         }
         return list;
     }
+    public static void increaseQuantity(Connection conn, int bookId, int quantity) {
+        String sql =  "UPDATE books SET stock = stock + ? WHERE book_id = ?";
+        try(PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, quantity);
+            ps.setInt(2, bookId);
+            int rs = ps.executeUpdate();
+            if(rs>0) System.out.println("update success bookId"+ bookId+  " quantity to" +quantity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 

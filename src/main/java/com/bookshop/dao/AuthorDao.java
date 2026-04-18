@@ -17,11 +17,13 @@ public class AuthorDao {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1,authorId);
             ResultSet rs = ps.executeQuery();
-            rs.next();
-            author.setAuthorId(authorId);
-            author.setAuthorName(rs.getString("author_name"));
-            author.setBio(rs.getString("bio"));
-            System.out.println("lay thong tin tac gia thanh cong");
+            if (rs.next()) {
+                author.setAuthorId(authorId);
+                author.setAuthorName(rs.getString("author_name"));
+                author.setBio(rs.getString("bio"));
+                System.out.println("lay thong tin tac gia thanh cong");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

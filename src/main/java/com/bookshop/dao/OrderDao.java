@@ -107,15 +107,15 @@ public class OrderDao {
      * Hàm phụ: Lấy chi tiết sản phẩm của một đơn hàng (Join với bảng Books để lấy ảnh và tiêu đề).
      */
     // Hàm lấy chi tiết sản phẩm (JOIN 3 bảng: order_details, books, authors)
-    public static List<OrderDetail> getDetailsByOrderId(int orderId) {
-        List<OrderDetail> details = new ArrayList<>();
+    public static ArrayList<OrderDetail> getDetailsByOrderId(int orderId) {
+        ArrayList<OrderDetail> details = new ArrayList<>();
         String sql = "SELECT od.*, b.title, b.image, a.author_name " +
                 "FROM order_details od " +
                 "JOIN books b ON od.book_id = b.book_id " +
                 "LEFT JOIN authors a ON b.author_id = a.author_id " +
                 "WHERE od.order_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+            PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, orderId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -123,7 +123,9 @@ public class OrderDao {
                 od.setQuantity(rs.getInt("quantity"));
                 double rawPrice = rs.getDouble("price");
                 od.setPrice(rawPrice);
-
+                od.setBookId(rs.getInt("book_id"));
+                od.setOrderId(rs.getInt("order_id"));
+                od.setOrderDetailId(rs.getInt("order_detail_id"));
                 // Tạo object Book chứa thông tin để hiển thị
                 Book b = new Book();
                 b.setTitle(rs.getString("title"));
@@ -149,7 +151,7 @@ public class OrderDao {
         order.setUserId(rs.getInt("user_id"));
         return order;
     }
-    public static void insertOrder(Order order, ArrayList<CartItem> items) {
+    public static void insertOrder(Order order, ArrayList<CartItem> items, String paymentMethod) {
 
         String sql = "INSERT INTO orders (user_id, order_date, total_price, status, information_delivery) VALUES (?, NOW(), ?, ?, ?)";
 
@@ -158,60 +160,51 @@ public class OrderDao {
         try{
             conn = DBConnection.getConnection();
             conn.setAutoCommit(false);
-
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-            if(order.getUserId() != 0){
-                ps.setInt(1, order.getUserId());
-            }else{
-                ps.setNull(1, java.sql.Types.INTEGER);
-            }
+            if(order.getUserId() != 0){ps.setInt(1, order.getUserId());}
+            else{ps.setNull(1, java.sql.Types.INTEGER);}
             ps.setDouble(2, order.getTotalPrice());
             ps.setString(3, order.getOrderStatus());
             ps.setString(4, order.getInformationDelivery());
-
             ps.executeUpdate();
-
             ResultSet rs = ps.getGeneratedKeys();
             int orderId = 0;
-
             if(rs.next()){
                 orderId = rs.getInt(1);
             }
-
             if(orderId == 0){
                 throw new RuntimeException("Không lấy được orderId");
             }
-
-            // 🔥 xử lý từng item
+            // xử lý từng item
             for (CartItem item : items) {
-
                 // trừ stock
                 String updateStock = "UPDATE books SET stock = stock - ? WHERE book_id = ? AND stock >= ?";
-
                 try(PreparedStatement psStock = conn.prepareStatement(updateStock)){
                     psStock.setInt(1, item.getQuantity());
                     psStock.setInt(2, item.getBookId());
                     psStock.setInt(3, item.getQuantity());
-
                     int rows = psStock.executeUpdate();
-
                     if(rows == 0){
                         throw new RuntimeException("Sản phẩm hết hàng");
                     }
                 }
-
                 // insert order_detail
                 String sqlDetail = "INSERT INTO order_details(order_id, book_id, quantity, price) VALUES (?, ?, ?, ?)";
-
                 try(PreparedStatement ps2 = conn.prepareStatement(sqlDetail)){
                     ps2.setInt(1, orderId);
                     ps2.setInt(2, item.getBookId());
                     ps2.setInt(3, item.getQuantity());
                     ps2.setDouble(4, item.getPrice());
-
                     ps2.executeUpdate();
                 }
+                // insert payment
+                String sql3 = "Insert into payments(order_id,payment_method) values(?,?)";
+                try(PreparedStatement ps3 = conn.prepareStatement(sql3))
+                    {
+                    ps3.setInt(1, orderId);
+                    ps3.setString(2, paymentMethod);
+                    ps3.executeUpdate();
+                    }
             }
 
             conn.commit();
@@ -256,6 +249,37 @@ public class OrderDao {
         }
         return orders;
     }
-
-
+    public static boolean updateStatus(Connection conn,int orderId, String newStatus){
+        String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
+        try(PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, newStatus);
+            ps.setInt(2, orderId);
+            int rs = ps.executeUpdate();
+            if(rs>0) return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public static Order getOrderById(int orderId){
+        String sql = "SELECT * FROM orders WHERE order_id = ?";
+        try(Connection conn = DBConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Order order = new Order();
+                order.setOrderId(rs.getInt("order_id"));
+                order.setOrderDate(rs.getString("order_date"));
+                order.setOrderStatus(rs.getString("status"));
+                order.setTotalPrice(rs.getDouble("total_price"));
+                order.setInformationDelivery(rs.getString("information_delivery"));
+                order.setUserId(rs.getInt("user_id"));
+                return order;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
