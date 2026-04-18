@@ -127,3 +127,31 @@ new Chart(ctx, {
 },
     plugins: [ChartDataLabels]
 });
+function handleStatusChange(select) {
+    let oldValue = select.getAttribute("data-old");
+    let newValue = select.value;
+
+    // Nếu chọn HỦY → hỏi confirm
+    if (newValue === "Cancelled") {
+        let ok = confirm("Bạn chắc chắn muốn hủy đơn hàng?");
+
+        if (!ok) {
+            // trả lại giá trị cũ
+            select.value = oldValue;
+            return;
+        }
+    }
+
+    // update lại giá trị cũ
+    select.setAttribute("data-old", newValue);
+
+    // đổi màu ngay (optional)
+    select.className = "status-select " + (
+        newValue === "Pending" ? "yellow" :
+            newValue === "Processing" ? "light-green" :
+                newValue === "Completed" ? "dark-green" : "red"
+    );
+
+    // submit form
+    select.form.submit();
+}

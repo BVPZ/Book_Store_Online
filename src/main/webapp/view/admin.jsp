@@ -165,9 +165,32 @@
                         <td>${o.orderId}</td>
                         <td>${o.orderDate}</td>
                         <td>${o.totalPrice}</td>
-                        <td><button>Thông tin đơn hàng</button></td>
-                        <td>${o.orderStatus}</td>
 
+                        <td><a href = "order-detail?orderId=${o.orderId}"><button type="button">Thông tin đơn hàng</button></a></td>
+                        <td>
+                            <form action="update-orderStatus" method="post">
+
+                                <!-- hidden orderId -->
+                                <input type="hidden" name="orderId" value="${o.orderId}" />
+                                <input type="hidden" name="action" value="adminAction">
+                                <select name="status"
+                                        class="status-select
+                        ${o.orderStatus == 'Pending' ? 'yellow' : ''}
+                        ${o.orderStatus == 'Processing' ? 'light-green' : ''}
+                        ${o.orderStatus == 'Completed' ? 'dark-green' : ''}
+                        ${o.orderStatus == 'Cancelled' ? 'red' : ''}"
+
+                                    ${o.orderStatus == 'Cancelled' ? 'disabled' : ''}
+                                        onchange="handleStatusChange(this)">
+                                    <option value="Pending" ${o.orderStatus == 'Pending' ? 'selected' : ''}>Chờ xác nhận</option>
+                                    <option value="Processing" ${o.orderStatus == 'Processing' ? 'selected' : ''}>Đang xử lý</option>
+                                    <option value="Completed" ${o.orderStatus == 'Completed' ? 'selected' : ''}>Hoàn thành</option>
+                                    <option value="Cancelled" ${o.orderStatus == 'Cancelled' ? 'selected' : ''}>Hủy</option>
+
+                                </select>
+
+                            </form>
+                        </td>
                     </tr>
                 </c:forEach>
             </table>
@@ -243,6 +266,7 @@
         catValues: ${not empty catValues ? catValues : '[]'}
     };
 </script>
+
 <script src="${pageContext.request.contextPath}/js/admin.js?v=<%= System.currentTimeMillis() %>"></script>
 
 </body>

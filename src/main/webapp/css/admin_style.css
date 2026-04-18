@@ -110,3 +110,32 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
+.status-select {
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Pending */
+.yellow {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+/* Processing */
+.light-green {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Completed */
+.dark-green {
+    background-color: #28a745;
+    color: white;
+}
+
+/* Cancelled */
+.red {
+    background-color: #dc3545;
+    color: white;
+}
