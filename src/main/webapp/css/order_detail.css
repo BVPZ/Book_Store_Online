@@ -1,0 +1,82 @@
+/* ===== Tổng thể ===== */
+body {
+    background-color: #f5f7fa;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* ===== Card ===== */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+.card-header {
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+}
+
+/* ===== Thông tin đơn ===== */
+.card-body p {
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+/* ===== Table ===== */
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table th {
+    background-color: #f1f3f5;
+    font-weight: 600;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* ===== Ảnh sách ===== */
+.table img {
+    border-radius: 6px;
+    transition: transform 0.2s ease;
+}
+
+.table img:hover {
+    transform: scale(1.05);
+}
+
+/* ===== Badge giá ===== */
+.price {
+    font-weight: bold;
+    color: #dc3545;
+}
+
+/* ===== Topbar cải tiến ===== */
+.topbar {
+    background: linear-gradient(90deg, #198754, #157347);
+    color: white;
+    padding: 10px 20px;
+    align-items: center;
+}
+
+.topbar a {
+    text-decoration: none;
+}
+
+/* ===== Button ===== */
+.btn-secondary {
+    border-radius: 20px;
+    padding: 5px 15px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .table img {
+        width: 60px;
+        height: 80px;
+    }
+}
