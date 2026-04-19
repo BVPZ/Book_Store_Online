@@ -207,48 +207,110 @@
                                            </p>
                                        </div>
 
-                                       <div class="text-end">
-                                           <div class="text-muted small mb-1">x${detail.quantity}</div>
-                                           <div class="fw-bold text-success" style="font-size: 1.1rem;">
-                                               <fmt:setLocale value="vi_VN"/>
-                                               <%-- QUAN TRỌNG: Thêm integerOnly="true" để loại bỏ phần .00 gây hiểu lầm --%>
-                                               <fmt:parseNumber var="priceNum" value="${detail.price}" type="number" integerOnly="true" />
-                                               <fmt:formatNumber value="${priceNum}" type="currency"/>
-                                           </div>
-                                       </div>
+                                      <div class="text-end">
+                                          <div class="text-muted small mb-1">x${detail.quantity}</div>
+
+                                          <div class="fw-bold text-success" style="font-size: 1.1rem;">
+                                              <fmt:setLocale value="vi_VN"/>
+                                              <%--
+                                                  Sửa tại đây: Không dùng parseNumber vì nó hiểu nhầm dấu chấm thập phân là dấu phân cách hàng nghìn.
+                                                  Dùng trực tiếp formatNumber với maxFractionDigits="0" để bỏ phần .00
+                                              --%>
+                                              <fmt:formatNumber value="${detail.price}" type="currency" maxFractionDigits="0"/>
+                                          </div>
+                                      </div>
                                    </div>
                                </c:forEach>
 
-                               <h6 class="fw-bold mb-2 mt-4">Địa chỉ nhận hàng</h6>
-                               <div class="bg-light p-3 rounded mb-4 text-muted border">
-                                   123 Đường ABC, Quận 1, TP.HCM
-                               </div>
+        <h6 class="fw-bold mb-2 mt-4">Thông tin giao hàng</h6>
+        <div class="bg-light p-3 rounded mb-4 text-muted border">
+            <div style="line-height: 1.8;">
+                <%
+                    // Lấy chuỗi từ object order
+                    String info = (String) pageContext.findAttribute("order").getClass().getMethod("getInformationDelivery").invoke(pageContext.findAttribute("order"));
+                    if (info != null) {
+                        // Tách các mục dựa trên khoảng trắng lớn hoặc dấu hiệu nhận biết tiêu đề
+                        // Ở đây mình tách theo tên các trường bạn có
+                        String[] fields = {"Họ và tên:", "Số điện thoại:", "Email:", "Địa chỉ:", "Quận/Huyện:", "Tỉnh/Thành phố:", "Ghi chú:"};
 
-                               <div class="d-flex gap-2">
-                                   <c:choose>
-                                       <%-- 1. Trạng thái: ĐÃ GIAO (Completed) --%>
-                                       <c:when test="${order.orderStatus == 'Completed'}">
-                                           <button class="btn btn-success btn-sm px-3">
-                                               <i class="fas fa-star me-1"></i> Đánh giá sản phẩm
-                                           </button>
-                                           <button class="btn btn-outline-secondary btn-sm px-3">Mua lại</button>
-                                       </c:when>
+                        for (int i = 0; i < fields.length; i++) {
+                            int start = info.indexOf(fields[i]);
+                            if (start != -1) {
+                                int end = (i < fields.length - 1) ? info.indexOf(fields[i+1]) : info.length();
+                                if (end == -1) end = info.length();
 
-                                       <%-- 2. Trạng thái: ĐÃ HỦY (Cancelled) --%>
-                                       <c:when test="${order.orderStatus == 'Cancelled'}">
-                                           <button class="btn btn-outline-secondary btn-sm px-3">Mua lại</button>
-                                       </c:when>
+                                String content = info.substring(start + fields[i].length(), end).trim();
 
-                                       <%-- 3. Trạng thái: ĐANG XỬ LÝ (Processing) --%>
-                                       <c:when test="${order.orderStatus == 'Processing'}">
-                                           <span class="text-muted small italic">Đang chuẩn bị hàng...</span>
-                                       </c:when>
+                                // CHỈ IN RA NẾU CÓ DỮ LIỆU
+                                if (!content.isEmpty() && !content.equals("null") && !content.equals("không")) {
+                                    if (fields[i].equals("Quận/Huyện:") || fields[i].equals("Tỉnh/Thành phố:")) {
+                                        out.print(", " + fields[i] + " " + content);
+                                    } else {
+                                        if (!fields[i].equals("Họ và tên:")) out.print("<br/>");
+                                        out.print("<strong>" + fields[i] + "</strong> " + content);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                %>
+            </div>
+        </div>
+                             <div class="d-flex gap-2">
+                                 <c:choose>
+                                 <%-- TRƯỜNG HỢP 1: CHỜ XÁC NHẬN (Pending) --%>
+                                 <c:when test="${order.orderStatus == 'Pending'}">
+                                     <form action="update-orderStatus" method="POST" onsubmit="return confirm('Bạn có muốn hủy đơn hàng này không?');" class="d-inline">
+                                         <%-- Truyền ngầm các dữ liệu mà Servlet cần --%>
+                                         <input type="hidden" name="orderId" value="${order.orderId}">
+                                         <input type="hidden" name="status" value="Cancelled">
+                                         <input type="hidden" name="action" value="userAction">
 
-                                       <%-- 4. Các trạng thái khác (Chờ xác nhận, Đang giao) --%>
-                                       <c:otherwise>
-                                           </c:otherwise>
-                                   </c:choose>
-                               </div>
+                                         <button type="submit" class="btn btn-danger btn-sm px-3">
+                                             <i class="fas fa-trash-alt me-1"></i> Hủy đơn hàng
+                                         </button>
+                                     </form>
+                                 </c:when>
+
+                                 <%-- TRƯỜNG HỢP 2: ĐANG XỬ LÝ (Processing) --%>
+                                 <c:when test="${order.orderStatus == 'Processing'}">
+                                     <form action="update-orderStatus" method="POST" onsubmit="return confirm('Bạn có muốn hủy đơn hàng này không?');" class="d-inline">
+                                         <input type="hidden" name="orderId" value="${order.orderId}">
+                                         <input type="hidden" name="status" value="Cancelled">
+                                         <input type="hidden" name="action" value="userAction">
+
+                                         <button type="submit" class="btn btn-danger btn-sm px-3">
+                                             <i class="fas fa-trash-alt me-1"></i> Hủy đơn hàng
+                                         </button>
+                                     </form>
+                                 </c:when>
+                                     <%-- TRƯỜNG HỢP 3: ĐANG GIAO (Shipping) --%>
+                                     <%-- Thường trạng thái này không cho hủy nữa để tránh shipper đi rồi mới hủy --%>
+                                     <c:when test="${order.orderStatus == 'Shipping'}">
+                                         <span class="text-primary small fw-bold align-self-center">
+                                             <i class="fas fa-shipping-fast me-1"></i> Đang giao hàng
+                                         </span>
+                                     </c:when>
+
+                                     <%-- TRƯỜNG HỢP 4: ĐÃ GIAO (Completed) --%>
+                                     <c:when test="${order.orderStatus == 'Completed'}">
+                                         <button class="btn btn-success btn-sm px-3">
+                                             <i class="fas fa-star me-1"></i> Đánh giá sản phẩm
+                                         </button>
+                                         <button class="btn btn-outline-secondary btn-sm px-3">Mua lại</button>
+                                     </c:when>
+
+                                     <%-- TRƯỜNG HỢP 5: ĐÃ HỦY (Cancelled) --%>
+                                     <c:when test="${order.orderStatus == 'Cancelled'}">
+                                         <button class="btn btn-outline-secondary btn-sm px-3">Mua lại</button>
+                                     </c:when>
+
+                                     <%-- TRƯỜNG HỢP DỰ PHÒNG (Nếu có lỗi hoặc trạng thái lạ) --%>
+                                     <c:otherwise>
+                                         <span class="text-muted small italic">Liên hệ hỗ trợ</span>
+                                     </c:otherwise>
+                                 </c:choose>
+                             </div>
                            </div>
                        </div>
                    </c:forEach>

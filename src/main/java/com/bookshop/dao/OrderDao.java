@@ -48,25 +48,30 @@ public class OrderDao {
     /**
      * Lấy danh sách đơn hàng của một người dùng và nạp luôn chi tiết từng món hàng.
      */
-    public static ArrayList<Order> getOrdersByUserId(String userId) {
-        ArrayList<Order> list = new ArrayList<>();
-        String sql = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC";
+    public static ArrayList<OrderDetail> getDetailsByOrderId(Connection conn, int orderId) {
+        ArrayList<OrderDetail> list = new ArrayList<>();
+        // JOIN thêm bảng books để lấy title và image
+        String sql = "SELECT od.*, b.title, b.image FROM order_details od " +
+                "JOIN books b ON od.book_id = b.book_id WHERE od.order_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    OrderDetail od = new OrderDetail();
+                    od.setBookId(rs.getInt("book_id"));
+                    od.setQuantity(rs.getInt("quantity"));
+                    od.setPrice(rs.getDouble("price"));
 
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                    // Nạp thông tin sách để JSP hiển thị được ảnh/tên
+                    Book b = new Book();
+                    b.setTitle(rs.getString("title"));
+                    b.setImageUrl(rs.getString("image"));
+                    od.setBook(b);
 
-            ps.setString(1, userId);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Order order = mapResultSetToOrder(rs);
-                // QUAN TRỌNG: Nạp danh sách sản phẩm vào đối tượng Order
-                order.setOrderDetails(getDetailsByOrderId(order.getOrderId()));
-                list.add(order);
+                    list.add(od);
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
         return list;
     }
 
@@ -149,6 +154,7 @@ public class OrderDao {
         order.setOrderStatus(rs.getString("status"));
         order.setTotalPrice(rs.getDouble("total_price"));
         order.setUserId(rs.getInt("user_id"));
+        order.setInformationDelivery(rs.getString("information_delivery"));
         return order;
     }
     public static void insertOrder(Order order, ArrayList<CartItem> items, String paymentMethod) {
@@ -226,40 +232,65 @@ public class OrderDao {
     }
     public static ArrayList<Order> getAllOrders() {
         ArrayList<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM orders";
+        String sql = "SELECT * FROM orders ORDER BY order_date DESC"; // Nên có Order By
         try(Connection conn = DBConnection.getConnection();
-        PreparedStatement ps = conn.prepareStatement(sql);){
+            PreparedStatement ps = conn.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Order order = new Order();
-                order.setOrderId(rs.getInt("order_id"));
-                order.setOrderDate(rs.getString("order_date"));
-                order.setOrderStatus(rs.getString("status"));
-                order.setTotalPrice(rs.getDouble("total_price"));
-                order.setUserId(rs.getInt("user_id"));
+                // Dùng hàm map đã viết sẵn để lấy đủ ID, Date, Status, Price và ĐỊA CHỈ
+                Order order = mapResultSetToOrder(rs);
                 orders.add(order);
             }
-            if(orders.isEmpty()){
-                System.out.println("Ko co don hang nao dc lay");
-            }else{
-                System.out.println("Lay thanh cong "+ orders.size() + " don hang");
-            }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return orders;
     }
-    public static boolean updateStatus(Connection conn,int orderId, String newStatus){
-        String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
-        try(PreparedStatement ps = conn.prepareStatement(sql)){
-            ps.setString(1, newStatus);
-            ps.setInt(2, orderId);
-            int rs = ps.executeUpdate();
-            if(rs>0) return true;
-        }catch (Exception e){
+    public static boolean updateStatus(Connection conn, int orderId, String newStatus) {
+        String sqlUpdateOrder = "UPDATE orders SET status = ? WHERE order_id = ?";
+        String sqlRestoreStock = "UPDATE books SET stock = stock + ? WHERE book_id = ?";
+
+        PreparedStatement psOrder = null;
+        PreparedStatement psStock = null;
+
+        try {
+            // 1. Cập nhật trạng thái đơn hàng
+            psOrder = conn.prepareStatement(sqlUpdateOrder);
+            psOrder.setString(1, newStatus);
+            psOrder.setInt(2, orderId);
+            int updatedRows = psOrder.executeUpdate();
+
+            // 2. Nếu cập nhật trạng thái thành công và trạng thái mới là "Canceled" (Hủy)
+            if (updatedRows > 0 && "Canceled".equalsIgnoreCase(newStatus)) {
+                // Lấy danh sách sản phẩm của đơn hàng này
+                // Sử dụng hàm getDetailsByOrderId bạn đã viết ở dòng 53
+                ArrayList<OrderDetail> details = getDetailsByOrderId(conn, orderId);
+
+                if (details != null && !details.isEmpty()) {
+                    psStock = conn.prepareStatement(sqlRestoreStock);
+                    for (OrderDetail detail : details) {
+                        psStock.setInt(1, detail.getQuantity());
+                        psStock.setInt(2, detail.getBookId());
+                        psStock.addBatch(); // Dùng Batch để thực hiện nhiều lệnh một lúc
+                    }
+                    psStock.executeBatch();
+                }
+            }
+
+            return updatedRows > 0;
+
+        } catch (Exception e) {
             e.printStackTrace();
+            return false;
+        } finally {
+            // Chỉ đóng PreparedStatement, KHÔNG đóng conn ở đây
+            try {
+                if (psOrder != null) psOrder.close();
+                if (psStock != null) psStock.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
-        return false;
     }
     public static Order getOrderById(int orderId){
         String sql = "SELECT * FROM orders WHERE order_id = ?";
@@ -282,4 +313,24 @@ public class OrderDao {
         }
         return null;
     }
+
+    public static ArrayList<Order> getOrdersByUserId(String userId) {
+        ArrayList<Order> list = new ArrayList<>();
+        String sql = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = mapResultSetToOrder(rs);
+                // Nạp luôn chi tiết để hiển thị ảnh sản phẩm ở trang lịch sử
+                order.setOrderDetails(getDetailsByOrderId(order.getOrderId()));
+                list.add(order);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }

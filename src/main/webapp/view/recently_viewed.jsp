@@ -84,7 +84,7 @@ style="border-color: #00a651; box-shadow: none;">
                 </form>
             </div>
             <div class="col-md-3 d-flex justify-content-end">
-                <a href="#" class="icon-btn"><i class="bi bi-box-seam"></i>Tra cứu đơn hàng</a>
+                <a href="${pageContext.request.contextPath}/order-history" class="icon-btn"><i class="bi bi-box-seam"></i>Tra cứu đơn hàng</a>
                 <a href="cart" class="icon-btn"><i class="bi bi-cart2"></i>Giỏ hàng</a>
 
                 <%

@@ -41,7 +41,7 @@ public class UpdateStatusOrderServlet extends HttpServlet {
             request.getSession().setAttribute("status", "Cập nhật trạng thái đơn hàng thành công");
             response.sendRedirect("admin");
         }else if("userAction".equals(action)){
-            response.sendRedirect("orders-history");
+            response.sendRedirect("order-history");
         }
     }
 }
