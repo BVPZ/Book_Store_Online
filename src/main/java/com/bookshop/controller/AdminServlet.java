@@ -1,12 +1,7 @@
 package com.bookshop.controller;
 
-import com.bookshop.dao.BookDao;
-import com.bookshop.dao.OrderDao;
-import com.bookshop.dao.UserDao;
-import com.bookshop.model.Book;
-import com.bookshop.model.Order;
-import com.bookshop.model.OrderDetail;
-import com.bookshop.model.User;
+import com.bookshop.dao.*;
+import com.bookshop.model.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,7 +13,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import com.bookshop.dao.AdminDao;
 import java.text.DecimalFormat;
 
 @WebServlet("/admin")
@@ -35,9 +29,22 @@ public class AdminServlet extends HttpServlet {
         }
         ArrayList<User> users = UserDao.getAllUsers();
         request.setAttribute("users", users);
-        ArrayList<Book> books = BookDao.getAllBooks();
+        ArrayList<Book> books = new ArrayList<>();
+        try {
+            String searchQuery = request.getParameter("searchQuery");
+            if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+                //searchBooks
+                books = BookDao.searchBooks(searchQuery.trim());
+            } else {
+                //Lấy tất cả
+                books = BookDao.getAllBooks();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         request.setAttribute("books", books);
         ArrayList<Order> orders = OrderDao.getAllOrders();
+
         double totalRevenue = 0;
         for(Order o : orders){
             if("Completed".equalsIgnoreCase(o.getOrderStatus()) || "Đã giao".equalsIgnoreCase(o.getOrderStatus())){
@@ -45,6 +52,16 @@ public class AdminServlet extends HttpServlet {
             }
         }
         request.setAttribute("orders", orders);
+
+        try {
+            ArrayList<Author> allAuthors = AuthorDao.getAllAuthors();
+            request.setAttribute("allAuthors", allAuthors);
+
+            ArrayList<Category> allGenres = CategoryDao.getAllCategories();
+            request.setAttribute("allGenres", allGenres);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
         // 1. Calculate basic metrics
         request.setAttribute("cardTotalUsers", users.size());
@@ -118,6 +135,11 @@ public class AdminServlet extends HttpServlet {
         request.setAttribute("orderData", orderValues.toString());
         request.setAttribute("catLabels", catLabels.toString());
         request.setAttribute("catValues", catValues.toString());
+
+        String showTab = request.getParameter("showTab");
+        if (showTab != null) {
+            request.setAttribute("showTab", showTab);
+        }
 
         request.getRequestDispatcher("/view/admin.jsp").forward(request, response);
     }

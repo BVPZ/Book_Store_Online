@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,10 +34,10 @@
 
     <!-- TAB -->
     <div class="nav-tabs-custom mb-4">
-        <div class="nav-item-custom active" onclick="showTab('dashboard')">Dashboard</div>
-        <div class="nav-item-custom" onclick="showTab('users')">Người dùng</div>
-        <div class="nav-item-custom" onclick="showTab('books')">Sách</div>
-        <div class="nav-item-custom" onclick="showTab('orders')">Đơn hàng</div>
+        <div class="nav-item-custom active" onclick="showTab('dashboard', this)">Dashboard</div>
+        <div class="nav-item-custom" onclick="showTab('users', this)">Người dùng</div>
+        <div class="nav-item-custom" onclick="showTab('books', this)">Sách</div>
+        <div class="nav-item-custom" onclick="showTab('orders', this)">Đơn hàng</div>
     </div>
 
     <!-- DASHBOARD -->
@@ -107,10 +107,12 @@
                         <td>${u.fullName}</td>
                         <td>${u.email}</td>
                         <td>
-                            <button type="button" class="btn btn-sm btn-primary"
-                                    onclick="openEditModal('${u.userId}', '${u.username}', '${u.fullName}', '${u.email}', '${u.address}' , '${u.phone}')">
-                                Chỉnh sửa
-                            </button>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-primary"
+                                        onclick="openEditModal('${u.userId}', '${u.username}', '${u.fullName}', '${u.email}', '${u.address}' , '${u.phone}')">
+                                    Chỉnh sửa
+                                </button>
+                            </td>
                         </td>
                         <td>
                             <a href="delete-user?id=${u.userId}">
@@ -127,29 +129,107 @@
     </div>
 
     <!-- BOOKS -->
-    <div id="books" class="tab-content" style="display:none">
-        <div class="card-box">
-            <h5>Quản lý sách</h5>
-            <c:forEach var="b" items="${books}">
-                <div class="d-flex align-items-center border-bottom py-2 justify-content-between">
-                    <!-- Bên trái -->
-                    <div class="d-flex align-items-center">
-                        <img src="${b.imageUrl}" width="50">
-                        <div class="ms-3">
-                            <b>${b.title}</b><br>
-                                ${b.price}
-                        </div>
-                    </div>
-                    <!-- Nút bên phải -->
-                    <div>
-                        <a href="edit-book?id=${b.bookId}" class="btn btn-sm btn-primary">
-                            Chỉnh sửa
-                        </a>
-                    </div>
-                </div>
-            </c:forEach>
-        </div>
-    </div>
+   <div id="books" class="tab-content" style="display:none">
+           <c:catch var="bookError">
+               <div class="card-box">
+                   <div class="d-flex justify-content-between align-items-center mb-4">
+                       <h4 class="m-0 font-weight-bold">Quản lý sách</h4>
+                      <div class="d-flex gap-2 flex-wrap justify-content-end">
+                         <form action="${pageContext.request.contextPath}/admin" method="get" class="m-0">
+                                 <input type="hidden" name="showTab" value="books">
+
+                                 <div class="input-group" style="width: 250px;">
+                                     <button type="submit" class="input-group-text bg-light border-0" style="cursor: pointer;">
+                                         <i class="bi bi-search"></i>
+                                     </button>
+                                     <input type="text" name="searchQuery" value="${param.searchQuery}" class="form-control bg-light border-0" placeholder="Tìm kiếm sách...">
+                                 </div>
+                         </form>
+
+                          <button class="btn btn-outline-primary text-nowrap d-flex align-items-center gap-2" onclick="openAddAuthorModal()">
+                              <i class="bi bi-person-plus"></i> Thêm tác giả
+                          </button>
+
+                          <button class="btn btn-outline-info text-nowrap d-flex align-items-center gap-2" onclick="openAddCategoryModal()">
+                              <i class="bi bi-tags"></i> Thêm thể loại
+                          </button>
+
+                          <button class="btn btn-success text-nowrap d-flex align-items-center gap-2" onclick="openAddBookModal()">
+                              <i class="bi bi-plus-lg"></i> Thêm sách
+                          </button>
+                      </div>
+                   </div>
+
+                   <div class="table-responsive">
+                       <table class="table table-hover align-middle">
+                           <thead class="table-light">
+                               <tr>
+                                   <th>Hình ảnh</th>
+                                   <th>Tên sách</th>
+                                   <th>Tác giả</th>
+                                   <th>Danh mục</th>
+                                   <th>Giá</th>
+                                   <th>Đánh giá</th>
+                                   <th class="text-center">Thao tác</th>
+                               </tr>
+                           </thead>
+                           <tbody>
+                               <c:forEach var="b" items="${books}">
+                                   <tr>
+                                       <td>
+                                           <c:choose>
+                                               <%-- Link mạng bắt đầu bằng chữ http --%>
+                                               <c:when test="${fn:startsWith(b.imageUrl, 'http')}">
+                                                   <img src="${b.imageUrl}" alt="Book" class="rounded shadow-sm" style="width: 40px; height: 60px; object-fit: cover;">
+                                               </c:when>
+
+                                               <%-- Nếu là ảnh tự upload --%>
+                                               <c:otherwise>
+                                                   <img src="${pageContext.request.contextPath}/${b.imageUrl}" alt="Book" class="rounded shadow-sm" style="width: 40px; height: 60px; object-fit: cover;">
+                                               </c:otherwise>
+                                           </c:choose>
+                                       </td>
+                                       <td class="fw-bold text-dark">${b.title}</td>
+                                       <td class="text-muted">${b.authorName}</td>
+                                       <td>
+                                           <span class="badge bg-light text-secondary border">
+                                               ${not empty b.genres ? b.genres[0] : 'Chưa phân loại'}
+                                           </span>
+                                       </td>
+                                       <td class="fw-bold">${b.price}₫</td>
+                                       <td>
+                                           <span class="text-warning"><i class="bi bi-star-fill"></i> ${b.rating}</span>
+                                           <span class="text-muted small">(${b.reviewCount})</span>
+                                       </td>
+                                       <td class="text-center">
+                                           <div class="d-flex justify-content-center gap-2">
+
+                                               <button class="btn btn-sm btn-light text-primary" title="Sửa"
+                                                       onclick="openEditBookModal('${b.bookId}', `${b.title}`, `${b.authorName}`, `${not empty b.genres ? b.genres[0] : ''}`, `${b.price}`, `${b.stock}`, `${b.description}`, `${b.imageUrl}`)">
+                                                   <i class="bi bi-pencil-square"></i>
+                                               </button>
+
+                                               <a href="${pageContext.request.contextPath}/delete-book?id=${b.bookId}" class="btn btn-sm btn-light text-danger" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa sách này?')">
+                                                   <i class="bi bi-trash"></i>
+                                               </a>
+                                           </div>
+                                       </td>
+                                   </tr>
+                               </c:forEach>
+                           </tbody>
+                       </table>
+                   </div>
+               </div>
+           </c:catch>
+
+           <c:if test="${not empty bookError}">
+               <div class="alert alert-danger mt-3">
+                   <strong>Hệ thống phát hiện lỗi Java (Exception):</strong> ${bookError.message}
+                   <hr>
+                   <p class="mb-0"><i>Gợi ý: Hãy kiểm tra file <b>Book.java</b>, khả năng cao bạn đang thiếu hàm Getter cho một biến nào đó (như getStock, getDescription, getImage...)</i></p>
+               </div>
+           </c:if>
+       </div>
 
     <!-- ORDERS -->
     <div id="orders" class="tab-content" style="display:none">
@@ -238,19 +318,132 @@
         </form>
     </div>
 </div>
+
+<div id="bookModal" class="modal" style="display: none; background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050; align-items: center; justify-content: center;">
+    <div class="modal-content bg-white p-4 rounded shadow-lg" style="width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto;">
+
+        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+            <h4 id="bookModalTitle" class="m-0 font-weight-bold">Thêm sách mới</h4>
+            <span class="close-btn fs-4 text-secondary" style="cursor: pointer;" onclick="closeBookModal()">&times;</span>
+        </div>
+
+       <form action="${pageContext.request.contextPath}/save-book" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="bookAction" name="action" value="add">
+            <input type="hidden" id="bookId" name="bookId">
+
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label class="form-label fw-bold">Tên sách:</label>
+                    <input type="text" class="form-control" id="bookTitle" name="title" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Tác giả:</label>
+                    <input list="authorList" class="form-control" id="bookAuthor" name="authorName" placeholder="Chọn hoặc nhập mới..." required>
+                    <datalist id="authorList">
+                        <c:forEach var="author" items="${allAuthors}">
+                            <option value="${author.authorName}"></option>
+                        </c:forEach>
+                    </datalist>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Danh mục (Thể loại):</label>
+                    <input list="genreList" class="form-control" id="bookGenre" name="genre" placeholder="Chọn hoặc nhập mới..." required>
+                    <datalist id="genreList">
+                        <c:forEach var="genre" items="${allGenres}">
+                            <option value="${genre.categoryName}"></option>
+                        </c:forEach>
+                    </datalist>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Giá (VNĐ):</label>
+                    <input type="number" class="form-control" id="bookPrice" name="price" required min="0" step="1000">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Số lượng (Stock):</label>
+                    <input type="number" class="form-control" id="bookStock" name="stock" required min="0">
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label class="form-label fw-bold">Mô tả sách:</label>
+                    <textarea class="form-control" id="bookDescription" name="description" rows="3"></textarea>
+                </div>
+
+                <div class="col-md-12 mb-4">
+                    <label class="form-label fw-bold">Hình ảnh sách:</label>
+                    <input type="file" class="form-control" id="bookImage" name="imageFile" accept="image/*">
+                    <small class="text-muted" id="imageHint">Để trống nếu không muốn thay đổi ảnh (khi sửa).</small>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-2 pt-3 border-top">
+                <button type="button" class="btn btn-secondary" onclick="closeBookModal()">Hủy</button>
+                <button type="submit" class="btn btn-success px-4">Lưu thông tin</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="authorModal" class="modal" style="display: none; background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1060; align-items: center; justify-content: center;">
+    <div class="modal-content bg-white p-4 rounded shadow-lg" style="width: 100%; max-width: 400px;">
+        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+            <h5 class="m-0 font-weight-bold">Thêm tác giả mới</h5>
+            <span class="close-btn fs-4 text-secondary" style="cursor: pointer;" onclick="closeAuthorModal()">&times;</span>
+        </div>
+       <form action="${pageContext.request.contextPath}/save-author" method="post">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Tên tác giả:</label>
+                <input type="text" class="form-control" name="authorName" placeholder="Nhập tên tác giả..." required>
+            </div>
+            <div class="d-flex justify-content-end gap-2 mt-2 pt-3 border-top">
+                <button type="button" class="btn btn-secondary" onclick="closeAuthorModal()">Hủy</button>
+                <button type="submit" class="btn btn-primary px-4">Lưu tác giả</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="categoryModal" class="modal" style="display: none; background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1060; align-items: center; justify-content: center;">
+    <div class="modal-content bg-white p-4 rounded shadow-lg" style="width: 100%; max-width: 400px;">
+        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+            <h5 class="m-0 font-weight-bold">Thêm thể loại mới</h5>
+            <span class="close-btn fs-4 text-secondary" style="cursor: pointer;" onclick="closeCategoryModal()">&times;</span>
+        </div>
+       <form action="${pageContext.request.contextPath}/save-category" method="post">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Tên thể loại:</label>
+                <input type="text" class="form-control" name="categoryName" placeholder="Nhập tên thể loại..." required>
+            </div>
+            <div class="d-flex justify-content-end gap-2 mt-2 pt-3 border-top">
+                <button type="button" class="btn btn-secondary" onclick="closeCategoryModal()">Hủy</button>
+                <button type="submit" class="btn btn-info text-white px-4">Lưu thể loại</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <c:if test="${not empty status}">
     <script>alert('${status}')</script>
     <c:remove var="status" scope="session"/>
 </c:if>
-<c:if test="${not empty showTab}">
+
+<c:if test="${not empty showTab or not empty param.showTab}">
     <script>
-        window.onload = function() {
-            const tab = "${showTab}";
-            const tabBtn = document.querySelector(`[onclick*="${showTab}"]`);
-            if(tabBtn){
-                showTab(tab, { target: tabBtn });
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. Lấy tên tab (ví dụ: 'books')
+            const tabId = "${not empty showTab ? showTab : param.showTab}";
+
+            // 2. Tìm thẻ div chứa tab đó
+            const tabBtn = document.querySelector(".nav-item-custom[onclick*='" + tabId + "']");
+
+            // 3. Gọi thẳng hàm showTab của bạn thay vì giả lập click
+            if (tabBtn && typeof showTab === "function") {
+                showTab(tabId, tabBtn);
             }
-        }
+        });
     </script>
     <c:remove var="showTab" scope="session"/>
 </c:if>
