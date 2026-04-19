@@ -169,7 +169,7 @@
                                    <th>Tác giả</th>
                                    <th>Danh mục</th>
                                    <th>Giá</th>
-                                   <th>Đánh giá</th>
+                                   <!-- <th>Đánh giá</th> -->
                                    <th class="text-center">Thao tác</th>
                                </tr>
                            </thead>
@@ -197,10 +197,12 @@
                                            </span>
                                        </td>
                                        <td class="fw-bold">${b.price}₫</td>
+                                       <!--
                                        <td>
                                            <span class="text-warning"><i class="bi bi-star-fill"></i> ${b.rating}</span>
                                            <span class="text-muted small">(${b.reviewCount})</span>
                                        </td>
+                                       -->
                                        <td class="text-center">
                                            <div class="d-flex justify-content-center gap-2">
 
