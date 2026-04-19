@@ -34,7 +34,7 @@
 <!-- ===== CONTENT ===== -->
 <div class="container mt-4">
 
-    <!-- 📦 Thông tin đơn hàng -->
+    <!--  Thông tin đơn hàng -->
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">
             Thông tin đơn hàng
@@ -47,7 +47,7 @@
         </div>
     </div>
 
-    <!-- 💳 Thanh toán -->
+    <!--  Thanh toán -->
     <div class="card mb-4">
         <div class="card-header bg-success text-white">
             Thanh toán
@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <!-- 📚 Danh sách sản phẩm -->
+    <!--  Danh sách sản phẩm -->
     <div class="card">
         <div class="card-header bg-dark text-white">
             Chi tiết sản phẩm
@@ -70,7 +70,7 @@
                     <th>Ảnh</th>
                     <th>Tên sách</th>
                     <th>Số lượng</th>
-                    <th>Giá</th>
+                    <th>Giá bán</th>
                 </tr>
                 </thead>
 

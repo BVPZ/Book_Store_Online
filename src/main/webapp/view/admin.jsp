@@ -94,10 +94,11 @@
             <table class="table">
                 <tr>
                     <th>ID</th><th>UserName</th><th>FullName</th><th>Email</th>
-                    <th>
-                        <button class="btn-add" onclick="openAddModal()">Thêm người dùng</button>
-                    </th>
+
                     <th>Xóa người dùng</th>
+                   <th>
+                       <button class="btn-add" onclick="openAddModal()">Thêm người dùng</button>
+                   </th>
                 </tr>
 
                 <c:forEach var="u" items="${users}">

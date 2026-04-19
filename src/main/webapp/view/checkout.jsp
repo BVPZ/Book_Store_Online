@@ -196,14 +196,21 @@
                         <span class="text-muted">Miễn phí</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2" style="font-size: 14px;">
+                        <span>Voucher</span>
+                        <select name = "voucher" form = "checkoutForm" id="voucherSelect" class="form-select form-select-sm" style="width: 150px;">
+                            <option value="0">Không dùng</option>
+                            <option value="10">Giảm 10%</option>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2" style="font-size: 14px;">
                         <span>Giảm giá</span>
-                        <span><fmt:formatNumber value="0" type="currency"/></span>
+                        <span id="discountAmount">0₫</span>
                     </div>
                     <div class="d-flex justify-content-between mt-3 pt-3 border-top">
                         <strong class="fs-5">Tổng cộng</strong>
-                        <strong class="total-amount fs-5 text-success">
-                            <input form ="checkoutForm" type ="hidden" name="final_price"  value="value="${total}"">
-                             <fmt:formatNumber value="${total}" type="currency"/>
+                        <strong id="finalTotal" class="total-amount fs-5 text-success">
+                            <fmt:formatNumber value="${total}" type="currency"/>
+                            <input form="checkoutForm" type="hidden" name="final_price" id="finalPriceInput" value="${total}">
                         </strong>
                     </div>
                     <button type="submit" form="checkoutForm" class="btn btn-success w-100 mt-4 py-3 fw-bold">ĐẶT HÀNG NGAY</button>
@@ -215,6 +222,9 @@
 
 
 <jsp:include page="footer.jsp" />
+<script id="jsp_user_flag">
+    const isLoggedIn = ${sessionScope.user != null};
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/checkout.js"></script>
 

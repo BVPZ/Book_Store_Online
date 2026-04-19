@@ -15,7 +15,7 @@ public class ProcessCheckoutServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String paymentMethod = request.getParameter("paymentMethod");
         double totalPrice = Double.parseDouble(request.getParameter("total"));
-        session.setAttribute("finalPrice",totalPrice);
+        String voucher = request.getParameter("voucher");
         String information = "Họ và tên: " + request.getParameter("fullName") +
                             "\nSố điện thoại: "+ request.getParameter("phone") +
                             "\nEmail: " + request.getParameter("email")+
@@ -26,34 +26,40 @@ public class ProcessCheckoutServlet extends HttpServlet {
         session.setAttribute("information", information);
         if(session.getAttribute("user") == null){
 
-            // Xử lý cho khách vãng lai
 
             switch (paymentMethod) {
                 case "COD":
+                    session.setAttribute("finalPrice",totalPrice);
                     response.sendRedirect("order-status");
                     session.setAttribute("paymentMethod", "COD");
                     return;
 
                 case "QRCODE":
+                    session.setAttribute("finalPrice",totalPrice);
                     String paymentUrl = "https://img.vietqr.io/image/MB-220052008-compact2.png?amount="+String.valueOf(totalPrice);
                     request.setAttribute("paymentUrl", paymentUrl);
                     session.setAttribute("paymentMethod", "VIET-QR");
                     break;
             }
         }else{
-
+            double finalPrice = totalPrice;
             // Xử lý cho user
-
+            if("10".equals(voucher)){
+                finalPrice = totalPrice*0.9;
+            }
             switch (paymentMethod) {
                 case "COD":
-                    response.sendRedirect("order-status?paymentMethod=COD");
+                    session.setAttribute("finalPrice",finalPrice);
                     session.setAttribute("paymentMethod", "COD");
+                    response.sendRedirect("order-status?paymentMethod=COD");
+
                     return;
 
                 case "QRCODE":
-                    String paymentUrl = "https://img.vietqr.io/image/MB-220052008-compact2.png?amount="+String.valueOf(totalPrice);
+                    session.setAttribute("finalPrice",finalPrice);
+                    session.setAttribute("paymentMethod", "VIET-QR");
+                    String paymentUrl = "https://img.vietqr.io/image/MB-220052008-compact2.png?amount="+String.valueOf(finalPrice);
                     request.setAttribute("paymentUrl", paymentUrl);
-                    request.setAttribute("paymentMethod", "QRCODE");
                     break;
             }
         }
