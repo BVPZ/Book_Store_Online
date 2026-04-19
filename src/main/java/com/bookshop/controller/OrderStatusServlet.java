@@ -7,10 +7,7 @@ import com.bookshop.model.Order;
 import com.bookshop.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,8 +32,33 @@ public class OrderStatusServlet extends HttpServlet {
             order.setOrderStatus("Pending");
             order.setTotalPrice(price);
             order.setInformationDelivery(information);
-            OrderDao.insertOrder(order,cartItemsCheckout,paymentMethod);
+            int orderId = OrderDao.insertOrder(order,cartItemsCheckout,paymentMethod);
+            Cookie[] cookies = request.getCookies();
+            String oldIds = "";
 
+            // lấy cookie cũ
+            if(cookies != null){
+                for(Cookie c : cookies){
+                    if("guest_order_ids".equals(c.getName())){
+                        oldIds = c.getValue();
+                    }
+                }
+            }
+
+            // thêm order mới
+            String newIds;
+            if(oldIds == null || oldIds.isEmpty()){
+                newIds = String.valueOf(orderId);
+            }else{
+                newIds = oldIds + "-" + orderId;
+            }
+
+            // tạo cookie mới
+            Cookie cookie = new Cookie("guest_order_ids", newIds);
+            cookie.setMaxAge(7 * 24 * 60 * 60); // 7 ngày
+            cookie.setPath("/");
+
+            response.addCookie(cookie);
             Iterator<CartItem> it = cartItems.iterator();
             while(it.hasNext()){
                 CartItem item = it.next();

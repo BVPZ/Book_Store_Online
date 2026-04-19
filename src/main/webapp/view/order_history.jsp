@@ -219,6 +219,13 @@
                                               <fmt:formatNumber value="${detail.price}" type="currency" maxFractionDigits="0"/>
                                           </div>
                                       </div>
+                                      <div class="ms-3">
+                                          <a href="book-detail?id=${detail.book.bookId}"
+                                             class="btn btn-outline-success btn-sm d-flex align-items-center gap-1 px-3 py-1">
+                                              <i class="fas fa-rotate-right"></i>
+                                              Mua lại
+                                          </a>
+                                      </div>
                                    </div>
                                </c:forEach>
 
@@ -290,19 +297,6 @@
                                          <span class="text-primary small fw-bold align-self-center">
                                              <i class="fas fa-shipping-fast me-1"></i> Đang giao hàng
                                          </span>
-                                     </c:when>
-
-                                     <%-- TRƯỜNG HỢP 4: ĐÃ GIAO (Completed) --%>
-                                     <c:when test="${order.orderStatus == 'Completed'}">
-                                         <button class="btn btn-success btn-sm px-3">
-                                             <i class="fas fa-star me-1"></i> Đánh giá sản phẩm
-                                         </button>
-                                         <button class="btn btn-outline-secondary btn-sm px-3">Mua lại</button>
-                                     </c:when>
-
-                                     <%-- TRƯỜNG HỢP 5: ĐÃ HỦY (Cancelled) --%>
-                                     <c:when test="${order.orderStatus == 'Cancelled'}">
-                                         <button class="btn btn-outline-secondary btn-sm px-3">Mua lại</button>
                                      </c:when>
 
                                      <%-- TRƯỜNG HỢP DỰ PHÒNG (Nếu có lỗi hoặc trạng thái lạ) --%>

@@ -114,7 +114,7 @@ public class OrderDao {
     // Hàm lấy chi tiết sản phẩm (JOIN 3 bảng: order_details, books, authors)
     public static ArrayList<OrderDetail> getDetailsByOrderId(int orderId) {
         ArrayList<OrderDetail> details = new ArrayList<>();
-        String sql = "SELECT od.*, b.title, b.image, a.author_name " +
+        String sql = "SELECT od.*,b.book_id, b.title, b.image, a.author_name " +
                 "FROM order_details od " +
                 "JOIN books b ON od.book_id = b.book_id " +
                 "LEFT JOIN authors a ON b.author_id = a.author_id " +
@@ -133,6 +133,7 @@ public class OrderDao {
                 od.setOrderDetailId(rs.getInt("order_detail_id"));
                 // Tạo object Book chứa thông tin để hiển thị
                 Book b = new Book();
+                b.setBookId(rs.getInt("book_id"));
                 b.setTitle(rs.getString("title"));
                 b.setImageUrl(rs.getString("image"));
                 b.setAuthorName(rs.getString("author_name"));
@@ -157,12 +158,12 @@ public class OrderDao {
         order.setInformationDelivery(rs.getString("information_delivery"));
         return order;
     }
-    public static void insertOrder(Order order, ArrayList<CartItem> items, String paymentMethod) {
+    public static int insertOrder(Order order, ArrayList<CartItem> items, String paymentMethod) {
 
         String sql = "INSERT INTO orders (user_id, order_date, total_price, status, information_delivery) VALUES (?, NOW(), ?, ?, ?)";
 
         Connection conn = null;
-
+        int orderId = 0;
         try{
             conn = DBConnection.getConnection();
             conn.setAutoCommit(false);
@@ -174,7 +175,7 @@ public class OrderDao {
             ps.setString(4, order.getInformationDelivery());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
-            int orderId = 0;
+
             if(rs.next()){
                 orderId = rs.getInt(1);
             }
@@ -203,14 +204,15 @@ public class OrderDao {
                     ps2.setDouble(4, item.getPrice());
                     ps2.executeUpdate();
                 }
-                // insert payment
-                String sql3 = "Insert into payments(order_id,payment_method) values(?,?)";
-                try(PreparedStatement ps3 = conn.prepareStatement(sql3))
-                    {
-                    ps3.setInt(1, orderId);
-                    ps3.setString(2, paymentMethod);
-                    ps3.executeUpdate();
-                    }
+
+            }
+            // insert payment
+            String sql3 = "Insert into payments(order_id,payment_method) values(?,?)";
+            try(PreparedStatement ps3 = conn.prepareStatement(sql3))
+            {
+                ps3.setInt(1, orderId);
+                ps3.setString(2, paymentMethod);
+                ps3.executeUpdate();
             }
 
             conn.commit();
@@ -229,6 +231,7 @@ public class OrderDao {
                 e.printStackTrace();
             }
         }
+        return orderId;
     }
     public static ArrayList<Order> getAllOrders() {
         ArrayList<Order> orders = new ArrayList<>();
@@ -314,12 +317,12 @@ public class OrderDao {
         return null;
     }
 
-    public static ArrayList<Order> getOrdersByUserId(String userId) {
+    public static ArrayList<Order> getOrdersByUserId(int userId) {
         ArrayList<Order> list = new ArrayList<>();
         String sql = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, userId);
+            ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Order order = mapResultSetToOrder(rs);

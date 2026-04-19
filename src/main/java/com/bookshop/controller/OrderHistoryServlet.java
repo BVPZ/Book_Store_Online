@@ -24,7 +24,7 @@ public class OrderHistoryServlet extends HttpServlet {
 
         if (user != null) {
             // Lấy từ DB nếu đã login
-            orderList = OrderDao.getOrdersByUserId(String.valueOf(user.getUserId()));
+            orderList = OrderDao.getOrdersByUserId(user.getUserId());
         } else {
             // Lấy từ Cookies nếu là khách vãng lai
             Cookie[] cookies = request.getCookies();
