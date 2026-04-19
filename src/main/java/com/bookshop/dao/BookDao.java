@@ -68,10 +68,13 @@ public class BookDao {
         }
         return book;
     }
-    public static ArrayList<Book> getNewBooks() throws SQLException,Exception
-    {
+    public static ArrayList<Book> getNewBooks() throws SQLException,Exception {
+
         try(Connection con = DBConnection.getConnection();){
-            String sql = "select * from books where books.book_id >= 10 limit 4 ";
+            String sql = "SELECT *" +
+                    " FROM books" +
+                    " ORDER BY created_at DESC" +
+                    " LIMIT 4; ";
             PreparedStatement ps = con.prepareStatement(sql);
             ArrayList<Book> new_books = new  ArrayList<>();
             ResultSet rs = ps.executeQuery();
@@ -89,10 +92,16 @@ public class BookDao {
         }
 
     }
-    public static ArrayList<Book> getBestSellerBooks() throws SQLException,Exception
-    {
+    public static ArrayList<Book> getBestSellerBooks() throws SQLException,Exception {
         try(Connection con = DBConnection.getConnection();){
-            String sql = "select * from books where books.book_id >= 1 limit 4 ";
+            String sql = "SELECT b.*, SUM(od.quantity) AS total_sold " +
+                    " FROM books b" +
+                    " JOIN order_details od ON b.book_id = od.book_id" +
+                    " JOIN orders o ON od.order_id = o.order_id" +
+                    " WHERE o.status != 'Cancelled'" +
+                    " GROUP BY b.book_id" +
+                    " ORDER BY total_sold DESC" +
+                    " LIMIT 4;";
             PreparedStatement ps = con.prepareStatement(sql);
             ArrayList<Book> best_seller_books = new  ArrayList<>();
             ResultSet rs = ps.executeQuery();
@@ -132,8 +141,8 @@ public class BookDao {
                 book.setImageUrl(rs.getString("image"));
                 book.setStock(rs.getInt("stock"));
                 book.setDescription(rs.getString("description"));
-                book.setRating(4.5);
-                book.setReviewCount(120);
+//                book.setRating(4.5);
+//                book.setReviewCount(120);
                 book.setAuthorName(rs.getString("author_name"));
                 String genresStr = rs.getString("genre_names");
                 ArrayList<String> genreList = new ArrayList<>();
@@ -154,6 +163,7 @@ public class BookDao {
         }
         return all_books;
     }
+
     public static ArrayList<Book> searchBooks(String keyword) throws SQLException,Exception {
         try(Connection con = DBConnection.getConnection();){
             String sql = "SELECT * FROM books WHERE title LIKE ?";
@@ -173,7 +183,7 @@ public class BookDao {
             return search_results;
         }
     }
-
+    // lọc sách theo tác giả
     public static ArrayList<Book> getBooksByAuthorId(int authorId)  {
         ArrayList<Book> author_books = new ArrayList<>();
         String sql = "SELECT * FROM books WHERE author_id = ?";

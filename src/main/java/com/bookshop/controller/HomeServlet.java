@@ -19,8 +19,8 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = req.getSession();
         try {
-            if (session.getAttribute("new_books") == null) {session.setAttribute("new_books", BookDao.getNewBooks());}
-            if (session.getAttribute("best_seller_books") == null) {session.setAttribute("best_seller_books", BookDao.getBestSellerBooks());}
+            session.setAttribute("new_books", BookDao.getNewBooks());
+            session.setAttribute("best_seller_books", BookDao.getBestSellerBooks());
             req.setAttribute("all_books", BookDao.getAllBooks());
         } catch (Exception e) {
             e.printStackTrace();
