@@ -10,9 +10,37 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class BookDao {
-    public void  addBook(Book book) throws SQLException
-    {
+    public void addBook(Book book) {
+        String sqlBook = "INSERT INTO books (title, author_id, price, stock, description, image) VALUES (?, ?, ?, ?, ?, ?)";
+        String sqlCategory = "INSERT INTO book_categories (book_id, category_id) VALUES (?, (SELECT category_id FROM categories WHERE category_name = ? LIMIT 1))";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement psBook = con.prepareStatement(sqlBook, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
+            psBook.setString(1, book.getTitle());
+            psBook.setInt(2, book.getAuthorId());
+            psBook.setDouble(3, book.getPrice());
+            psBook.setInt(4, book.getStock());
+            psBook.setString(5, book.getDescription());
+            psBook.setString(6, book.getImageUrl());
+
+            int row = psBook.executeUpdate();
+            if(row > 0) {
+                ResultSet rs = psBook.getGeneratedKeys();
+                if (rs.next()) {
+                    int newBookId = rs.getInt(1);
+                    if (book.getGenres() != null && !book.getGenres().isEmpty()) {
+                        try (PreparedStatement psCat = con.prepareStatement(sqlCategory)) {
+                            psCat.setInt(1, newBookId);
+                            psCat.setString(2, book.getGenres().get(0));
+                            psCat.executeUpdate();
+                        }
+                    }
+                }
+                System.out.println("Thêm sách mới thành công!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public static Book getBookById(int bookId)
     {
@@ -82,27 +110,49 @@ public class BookDao {
         }
 
     }
-    public static  ArrayList<Book> getAllBooks()
-    {
-        try(Connection con = DBConnection.getConnection();){
-            String sql = "select * from books limit 20 ";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ArrayList<Book> all_books = new  ArrayList<>();
-            ResultSet rs = ps.executeQuery();
+    public static ArrayList<Book> getAllBooks() {
+        ArrayList<Book> all_books = new ArrayList<>();
+        String sql = "SELECT b.*, a.author_name, GROUP_CONCAT(c.category_name SEPARATOR ', ') AS genre_names " +
+                "FROM books b " +
+                "LEFT JOIN authors a ON b.author_id = a.author_id " +
+                "LEFT JOIN book_categories bc ON b.book_id = bc.book_id " +
+                "LEFT JOIN categories c ON bc.category_id = c.category_id " +
+                "GROUP BY b.book_id " +
+                "ORDER BY b.book_id DESC";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
                 Book book = new Book();
                 book.setBookId(rs.getInt("book_id"));
-                book.setPrice(rs.getDouble("price"));
                 book.setTitle(rs.getString("title"));
+                book.setPrice(rs.getDouble("price"));
                 book.setImageUrl(rs.getString("image"));
+                book.setStock(rs.getInt("stock"));
+                book.setDescription(rs.getString("description"));
+                book.setRating(4.5);
+                book.setReviewCount(120);
+                book.setAuthorName(rs.getString("author_name"));
+                String genresStr = rs.getString("genre_names");
+                ArrayList<String> genreList = new ArrayList<>();
+                if (genresStr != null && !genresStr.isEmpty()) {
+                    String[] gArray = genresStr.split(", ");
+                    for (String g : gArray) {
+                        genreList.add(g);
+                    }
+                }
+                book.setGenres(genreList);
+
                 all_books.add(book);
             }
-            if (all_books.isEmpty()) System.out.println("lay toan bo sach ko thanh cong");
-            else System.out.println("Lay toan bo sach thanh cong");
-            return  all_books;
+            System.out.println("Lấy toàn bộ sách (kèm Tác giả & Danh mục) thành công!");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("Lỗi khi lấy toàn bộ sách: " + e.getMessage());
         }
+        return all_books;
     }
     public static ArrayList<Book> searchBooks(String keyword) throws SQLException,Exception {
         try(Connection con = DBConnection.getConnection();){
@@ -221,6 +271,64 @@ public class BookDao {
             e.printStackTrace();
         }
     }
+
+    public void updateBook(Book book) {
+        String sqlBook = "UPDATE books SET title=?, author_id=?, price=?, stock=?, description=?, image=? WHERE book_id=?";
+        String sqlDelCat = "DELETE FROM book_categories WHERE book_id=?";
+        String sqlAddCat = "INSERT INTO book_categories (book_id, category_id) VALUES (?, (SELECT category_id FROM categories WHERE category_name = ? LIMIT 1))";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement psBook = con.prepareStatement(sqlBook)) {
+
+            psBook.setString(1, book.getTitle());
+            psBook.setInt(2, book.getAuthorId());
+            psBook.setDouble(3, book.getPrice());
+            psBook.setInt(4, book.getStock());
+            psBook.setString(5, book.getDescription());
+            psBook.setString(6, book.getImageUrl());
+            psBook.setInt(7, book.getBookId());
+
+            int rows = psBook.executeUpdate();
+            if (rows > 0) {
+                if (book.getGenres() != null && !book.getGenres().isEmpty()) {
+                    try (PreparedStatement psDel = con.prepareStatement(sqlDelCat);
+                         PreparedStatement psAdd = con.prepareStatement(sqlAddCat)) {
+
+                        psDel.setInt(1, book.getBookId());
+                        psDel.executeUpdate();
+
+                        psAdd.setInt(1, book.getBookId());
+                        psAdd.setString(2, book.getGenres().get(0));
+                        psAdd.executeUpdate();
+                    }
+                }
+                System.out.println("Đã UPDATE thành công sách ID: " + book.getBookId());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void deleteBook(int bookId) {
+        String sqlCat = "DELETE FROM book_categories WHERE book_id=?";
+        String sqlBook = "DELETE FROM books WHERE book_id=?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement psCat = con.prepareStatement(sqlCat);
+             PreparedStatement psBook = con.prepareStatement(sqlBook)) {
+
+            psCat.setInt(1, bookId);
+            psCat.executeUpdate();
+
+            psBook.setInt(1, bookId);
+            int rows = psBook.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Đã xóa thành công sách ID: " + bookId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 

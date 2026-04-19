@@ -37,6 +37,7 @@ public class Book {
     }
 
     public int getBookId() { return bookId; }
+
     public void setBookId(int bookId) { this.bookId = bookId; }
 
     public int getStock() {return stock;}
@@ -71,6 +72,18 @@ public class Book {
         return formatter.format(this.price).replace("₫", "đ");
     }
 
-    public String getAuthorName() { return AuthorDao.getAuthorbyId(this.authorId).getAuthorName();}
+    public String getAuthorName() {
+        if (this.authorName != null && !this.authorName.isEmpty()) {
+            return this.authorName;
+        }
+        try {
+            return AuthorDao.getAuthorbyId(this.authorId).getAuthorName();
+        } catch (Exception e) {
+            return "Chưa có tác giả";
+        }
+    }
     public void setAuthorName(String authorName) {this.authorName = authorName;}
+    public void setGenres(ArrayList<String> genres) {
+        this.genres = genres;
+    }
 }

@@ -34,12 +34,29 @@ function closeModal() {
     modal.style.display = "none";
 }
 
-function showTab(tab) {
-    document.querySelectorAll(".tab-content").forEach(el => el.style.display = "none");
-    document.getElementById(tab).style.display = "block";
+function showTab(tab, element) {
+    document.querySelectorAll(".tab-content").forEach(el => {
+        if (el) el.style.display = "none";
+    });
 
-    document.querySelectorAll(".nav-item-custom").forEach(el => el.classList.remove("active"));
-    event.target.classList.add("active");
+    const targetContent = document.getElementById(tab);
+    if (targetContent) {
+        targetContent.style.display = "block";
+    }
+
+    document.querySelectorAll(".nav-item-custom").forEach(el => {
+        if (el) el.classList.remove("active");
+    });
+
+    if (element) {
+        if (element.classList) {
+            element.classList.add("active");
+        } else if (element.target && element.target.classList) {
+            element.target.classList.add("active");
+        }
+    } else if (window.event && window.event.target && window.event.target.classList) {
+        window.event.target.classList.add("active");
+    }
 }
 const ctx1 = document.getElementById('revenueChart');
 
@@ -154,4 +171,92 @@ function handleStatusChange(select) {
 
     // submit form
     select.form.submit();
+}
+
+function openAddBookModal() {
+    document.getElementById('bookModalTitle').innerText = 'Thêm sách mới';
+    document.getElementById('bookAction').value = 'add';
+    document.getElementById('bookId').value = '';
+    document.getElementById('bookTitle').value = '';
+    document.getElementById('bookAuthor').value = '';
+    document.getElementById('bookGenre').value = '';
+    document.getElementById('bookPrice').value = '';
+    document.getElementById('bookStock').value = '';
+    document.getElementById('bookDescription').value = '';
+    document.getElementById('bookImage').value = '';
+    document.getElementById('imageHint').style.display = 'none';
+    document.getElementById('bookModal').style.display = 'flex';
+}
+
+function openEditBookModal(id, title, author, genre, price, stock, description, image) {
+    document.getElementById('bookModalTitle').innerText = 'Chỉnh sửa sách';
+    document.getElementById('bookAction').value = 'edit';
+
+    document.getElementById('bookId').value = id;
+    document.getElementById('bookTitle').value = title;
+    document.getElementById('bookAuthor').value = author;
+    document.getElementById('bookGenre').value = genre;
+
+    let cleanPrice = price.toString().replace(/[^0-9.-]+/g,"");
+    document.getElementById('bookPrice').value = cleanPrice;
+
+    document.getElementById('bookStock').value = stock;
+    document.getElementById('bookDescription').value = description;
+
+    document.getElementById('bookImage').value = '';
+    document.getElementById('imageHint').style.display = 'block';
+
+    document.getElementById('bookModal').style.display = 'flex';
+}
+
+function closeBookModal() {
+    document.getElementById('bookModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    let bookModal = document.getElementById('bookModal');
+    let userModal = document.getElementById('userModal');
+
+    if (event.target == bookModal) {
+        closeBookModal();
+    }
+    if (event.target == userModal) {
+        closeModal();
+    }
+}
+
+function openAddAuthorModal() {
+    document.getElementById('authorModal').style.display = 'flex';
+}
+
+function closeAuthorModal() {
+    document.getElementById('authorModal').style.display = 'none';
+}
+
+function openAddCategoryModal() {
+    document.getElementById('categoryModal').style.display = 'flex';
+}
+
+function closeCategoryModal() {
+    document.getElementById('categoryModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    let bookModal = document.getElementById('bookModal');
+    let userModal = document.getElementById('userModal');
+    let authorModal = document.getElementById('authorModal');
+    let categoryModal = document.getElementById('categoryModal');
+
+    if (event.target == bookModal) {
+        closeBookModal();
+    }
+    if (event.target == userModal) {
+        closeModal();
+    }
+    if (event.target == authorModal) {
+        closeAuthorModal();
+    }
+    if (event.target == categoryModal) {
+        closeCategoryModal();
+    }
 }
