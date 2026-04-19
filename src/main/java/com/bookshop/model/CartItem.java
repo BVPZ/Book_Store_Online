@@ -1,32 +1,29 @@
 package com.bookshop.model;
 
 import com.bookshop.dao.AuthorDao;
-import com.bookshop.dao.BookDao;
-
-import java.sql.SQLException;
 
 public class CartItem {
-    private int CartItemId;
-    private int CartId;
-    private int BookId;
+    private int cartItemId;
+    private int cartId;
+    private int bookId;
     private int quantity;
     private Book book;
     public int getCartItemId() {
-        return CartItemId;
+        return cartItemId;
     }
-    public void setCartItemId(int CartItemId) {this.CartItemId = CartItemId;}
+    public void setCartItemId(int CartItemId) {this.cartItemId = CartItemId;}
 
     public int getCartId() {
-        return CartId;
+        return cartId;
     }
     public void setCartId(int CartId) {
-        this.CartId = CartId;
+        this.cartId = CartId;
     }
 
     public int getBookId() {
-        return this.book.getBookId();
+        return this.bookId;
     }
-    public void setBookId(int BookId) {this.BookId = BookId;}
+    public void setBookId(int BookId) {this.bookId = BookId;}
 
     public int getQuantity() {
         return quantity;

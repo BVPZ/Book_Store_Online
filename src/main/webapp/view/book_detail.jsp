@@ -152,16 +152,25 @@
             <div class="desc-header">Mô tả sản phẩm</div>
             <div class="desc-text">${book.description}</div>
 
-            <div class="action-buttons">
-                <a href="${pageContext.request.contextPath}/checkout?id=${book.bookId}">
-                <button class="btn btn-buy-now">Mua ngay</button>
-                </a>
-                <form action="addtocart" method="Post">
-                    <button class="btn btn-add-cart" type="submit">
-                        <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
-                    </button>
-                </form>
-            </div>
+            <c:choose>
+                <c:when test="${book.stock > 0}">
+                    <div class="action-buttons">
+                        <a href="${pageContext.request.contextPath}/checkout?id=${book.bookId}">
+                            <button class="btn btn-buy-now">Mua ngay</button>
+                        </a>
+
+                        <form action="addtocart" method="post">
+                            <button class="btn btn-add-cart" type="submit">
+                                <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
+                            </button>
+                        </form>
+                    </div>
+                </c:when>
+
+                <c:otherwise>
+                    <p style="color:red;">Hết hàng</p>
+                </c:otherwise>
+            </c:choose>
 
             <div class="features-container">
                 <div class="feature-item">

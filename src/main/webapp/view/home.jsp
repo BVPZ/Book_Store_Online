@@ -164,26 +164,28 @@
 
                         <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
                             <h2 class="section-title">SÁCH MỚI LÊN KỆ</h2>
-                            <a href="#" class="view-more">Xem thêm <i class="bi bi-chevron-right"></i></a>
+
                         </div>
                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-3">
                             <c:forEach var="book" items="${sessionScope.new_books}">
-                                <div class="col">
-                                    <div class="product-card">
-                                        <div class="product-img-wrap">
-                                            <img src="${book.imageUrl}" class="product-img" alt="Book">
-                                        </div>
-                                        <div class="product-info">
-                                            <a href="book-detail?id=${book.bookId}" class="product-title">
-                                                    ${book.title}
-                                            </a>
-                                            <span class="product-price">
-                                               <fmt:setLocale value="vi_VN"/>
-                                               <fmt:formatNumber value="${book.price}" type="currency"/>
-                                           </span>
+                                <c:if test="${book.stock > 0}">
+                                    <div class="col">
+                                        <div class="product-card">
+                                            <div class="product-img-wrap">
+                                                <img src="${book.imageUrl}" class="product-img" alt="Book">
+                                            </div>
+                                            <div class="product-info">
+                                                <a href="book-detail?id=${book.bookId}" class="product-title">
+                                                        ${book.title}
+                                                </a>
+                                                <span class="product-price">
+                                                   <fmt:setLocale value="vi_VN"/>
+                                                   <fmt:formatNumber value="${book.price}" type="currency"/>
+                                               </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </c:if>
                             </c:forEach>
                         </div>
                     </div>
@@ -191,26 +193,28 @@
                     <div class="product-section">
                         <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
                             <h2 class="section-title">SÁCH BÁN CHẠY</h2>
-                            <a href="#" class="view-more">Xem thêm <i class="bi bi-chevron-right"></i></a>
+
                         </div>
                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-3">
                             <c:forEach var="book" items="${sessionScope.best_seller_books}">
-                                <div class="col">
-                                    <div class="product-card">
-                                        <div class="product-img-wrap">
-                                            <img src="${book.imageUrl}" class="product-img" alt="Book">
-                                        </div>
-                                        <div class="product-info">
-                                            <a href="book-detail?id=${book.bookId}" class="product-title">
-                                                    ${book.title}
-                                            </a>
-                                            <span class="product-price">
-                                               <fmt:setLocale value="vi_VN"/>
-                                               <fmt:formatNumber value="${book.price}" type="currency"/>
-                                           </span>
+                                <c:if test="${book.stock > 0}">
+                                    <div class="col">
+                                        <div class="product-card">
+                                            <div class="product-img-wrap">
+                                                <img src="${book.imageUrl}" class="product-img" alt="Book">
+                                            </div>
+                                            <div class="product-info">
+                                                <a href="book-detail?id=${book.bookId}" class="product-title">
+                                                        ${book.title}
+                                                </a>
+                                                <span class="product-price">
+                                                   <fmt:setLocale value="vi_VN"/>
+                                                   <fmt:formatNumber value="${book.price}" type="currency"/>
+                                               </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </c:if>
                             </c:forEach>
                         </div>
                     </div>
@@ -220,22 +224,24 @@
                         <h2 class="section-title mb-4" style="font-size: 1.2rem; font-weight: bold; text-transform: uppercase;">Tất cả sách</h2>
                         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                             <c:forEach var="book" items="${all_books}">
-                                <div class="col">
-                                    <div class="product-card">
-                                        <div class="product-img-wrap">
-                                            <img src="${book.imageUrl}" class="product-img" alt="Book">
-                                        </div>
-                                        <div class="product-info">
-                                            <a href="book-detail?id=${book.bookId}" class="product-title">
-                                                    ${book.title}
-                                            </a>
-                                            <span class="product-price">
-                                               <fmt:setLocale value="vi_VN"/>
-                                               <fmt:formatNumber value="${book.price}" type="currency"/>
-                                           </span>
+                                <c:if test="${book.stock > 0}">
+                                    <div class="col">
+                                        <div class="product-card">
+                                            <div class="product-img-wrap">
+                                                <img src="${book.imageUrl}" class="product-img" alt="Book">
+                                            </div>
+                                            <div class="product-info">
+                                                <a href="book-detail?id=${book.bookId}" class="product-title">
+                                                        ${book.title}
+                                                </a>
+                                                <span class="product-price">
+                                                   <fmt:setLocale value="vi_VN"/>
+                                                   <fmt:formatNumber value="${book.price}" type="currency"/>
+                                               </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </c:if>
                             </c:forEach>
                         </div>
                     </div>

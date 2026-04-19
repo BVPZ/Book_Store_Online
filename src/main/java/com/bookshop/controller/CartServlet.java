@@ -1,5 +1,6 @@
 package com.bookshop.controller;
 
+import com.bookshop.dao.BookDao;
 import com.bookshop.dao.CartDao;
 import com.bookshop.dao.CartItemDao;
 import com.bookshop.model.Cart;
@@ -26,6 +27,15 @@ public class CartServlet extends HttpServlet {
             if (session.getAttribute("cartItems")==null){
                 ArrayList<CartItem> cartItems = new ArrayList<>();
                 session.setAttribute("cartItems",cartItems);
+            }else{
+                ArrayList<CartItem> cartItems = (ArrayList<CartItem>)session.getAttribute("cartItems");
+                ArrayList<CartItem> cartItems2 = new ArrayList<>();
+                for (CartItem cartItem : cartItems) {
+                    CartItem cartItem2 = cartItem;
+                    cartItem2.setBook(BookDao.getBookById(cartItem.getBookId()));
+                    cartItems2.add(cartItem2);
+                }
+                session.setAttribute("cartItems",cartItems2);
             }
         }else {
             try {

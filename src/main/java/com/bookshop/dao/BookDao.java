@@ -84,6 +84,7 @@ public class BookDao {
                 book.setPrice(rs.getDouble("price"));
                 book.setTitle(rs.getString("title"));
                 book.setImageUrl(rs.getString("image"));
+                book.setStock(rs.getInt("stock"));
                 new_books.add(book);
             }
             if (new_books.isEmpty()) System.out.println("lay sach moi ko thanh cong");
@@ -111,6 +112,7 @@ public class BookDao {
                 book.setPrice(rs.getDouble("price"));
                 book.setTitle(rs.getString("title"));
                 book.setImageUrl(rs.getString("image"));
+                book.setStock(rs.getInt("stock"));
                 best_seller_books.add(book);
             }
             if(best_seller_books.isEmpty()) System.out.println("lay sach ban chay ko thanh cong");
@@ -178,6 +180,7 @@ public class BookDao {
                 book.setPrice(rs.getDouble("price"));
                 book.setTitle(rs.getString("title"));
                 book.setImageUrl(rs.getString("image"));
+                book.setStock(rs.getInt("stock"));
                 search_results.add(book);
             }
             return search_results;
@@ -200,7 +203,7 @@ public class BookDao {
                 book.setDescription(rs.getString("description"));
                 book.setAuthorId(rs.getInt("author_id"));
                 // Mock rating and review count because they don't exist in the database
-                book.setRating(4.5);
+//                book.setRating(4.5);
                 book.setReviewCount((int) (Math.random() * 1000 + 100));
 
                 author_books.add(book);
@@ -230,6 +233,7 @@ public class BookDao {
                 book.setTitle(rs.getString("title"));
                 book.setPrice(rs.getDouble("price"));
                 book.setImageUrl(rs.getString("image"));
+                book.setStock(rs.getInt("stock"));
                 list.add(book);
             }
         }

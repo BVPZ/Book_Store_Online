@@ -41,7 +41,7 @@ public class AddToCartServlet extends HttpServlet {
                 }
             }
             CartItem cartItem = new CartItem();
-            cartItem.setBook(book);
+            cartItem.setBookId(book.getBookId());
             cartItem.setQuantity(1);
             cartItems.add(cartItem);
             session.setAttribute("cartItems",cartItems);

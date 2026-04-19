@@ -28,7 +28,11 @@ function updateCart() {
 checks.forEach(cb => cb.addEventListener('change', updateCart));
 
 checkAll.addEventListener('change', function() {
-    checks.forEach(cb => cb.checked = this.checked);
+    checks.forEach(cb => {
+        if (!cb.disabled) {
+            cb.checked = this.checked;
+        }
+    });
     updateCart();
 });
 

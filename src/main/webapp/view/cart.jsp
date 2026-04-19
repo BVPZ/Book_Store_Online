@@ -117,7 +117,9 @@
                             <input type="checkbox" class="item-check me-3"
                                    data-cart-book-id="${cartItem.bookId}"
                                    data-cart-id="${cartItem.cartItemId}"
-                                   data-price="${cartItem.price}" name = "selectedItems" value="${cartItem.bookId},${cartItem.quantity},${cartItem.cartItemId}">
+                                   data-price="${cartItem.price}" name = "selectedItems"
+                                   value="${cartItem.bookId},${cartItem.quantity},${cartItem.cartItemId}"
+                                   ${cartItem.quantity >= cartItem.getBook().stock ? "disabled" : ""}>
 
                             <img src="${cartItem.imageUrl}" class="cart-img">
 
