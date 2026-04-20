@@ -26,27 +26,53 @@ public class AddToCartServlet extends HttpServlet {
         Book book =(Book) session.getAttribute("book");
 
         if (user == null) {
+            // 1. Lấy danh sách từ session
             ArrayList<CartItem> cartItems = (ArrayList<CartItem>) session.getAttribute("cartItems");
-            if (cartItems.isEmpty()) {
-                System.out.println("CartItems is empty");
-            }else {
-                for (CartItem cartItem : cartItems) {
-                    if (cartItem.getBookId() == book.getBookId()) {
-                        cartItem.setQuantity(cartItem.getQuantity() + 1);
-                        session.setAttribute("message", "success");
-                        session.setAttribute("cartItems", cartItems);
-                        response.sendRedirect("book-detail?id=" + book.getBookId());
-                        return;
-                    }
+
+
+
+
+            // 2. SỬA LỖI TẠI ĐÂY: Nếu null thì phải khởi tạo mới thay vì gọi .isEmpty()
+            if (cartItems == null) {
+                cartItems = new ArrayList<>();
+            }
+
+
+
+
+            // 3. Kiểm tra xem sách đã có trong giỏ chưa
+            boolean isExist = false;
+            for (CartItem item : cartItems) {
+                if (item.getBookId() == book.getBookId()) {
+                    item.setQuantity(item.getQuantity() + 1);
+                    isExist = true;
+                    break;
                 }
             }
-            CartItem cartItem = new CartItem();
-            cartItem.setBookId(book.getBookId());
-            cartItem.setQuantity(1);
-            cartItems.add(cartItem);
-            session.setAttribute("cartItems",cartItems);
-            System.out.println("CartItems added, Có " + cartItems.size() + "sản phẩm");
-        }else{
+
+
+
+
+            // 4. Nếu là sách mới thì mới thêm vào list
+            if (!isExist) {
+                CartItem newItem = new CartItem();
+                newItem.setBook(book);
+                newItem.setBookId(book.getBookId());
+                newItem.setQuantity(1);
+                newItem.setPrice(book.getPrice()); // Đảm bảo có giá để lưu vào database sau này
+                cartItems.add(newItem);
+            }
+
+
+
+
+            // 5. Lưu lại vào session để ProcessCheckoutServlet có thể lấy ra
+            session.setAttribute("cartItems", cartItems);
+            session.setAttribute("cartItemsCheckout", cartItems);
+            System.out.println("Giỏ hàng vãng lai hiện có: " + cartItems.size() + " loại sản phẩm");}
+
+
+            else{
             try{
                 Cart cart = CartDao.getCartByUserId(user.getUserId());
                 CartItemDao.AddItem(cart.getCartId(),book.getBookId());
