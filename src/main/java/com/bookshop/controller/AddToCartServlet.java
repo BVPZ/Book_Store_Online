@@ -26,21 +26,11 @@ public class AddToCartServlet extends HttpServlet {
         Book book =(Book) session.getAttribute("book");
 
         if (user == null) {
-            // 1. Lấy danh sách từ session
+           
             ArrayList<CartItem> cartItems = (ArrayList<CartItem>) session.getAttribute("cartItems");
-
-
-
-
-            // 2. SỬA LỖI TẠI ĐÂY: Nếu null thì phải khởi tạo mới thay vì gọi .isEmpty()
             if (cartItems == null) {
                 cartItems = new ArrayList<>();
             }
-
-
-
-
-            // 3. Kiểm tra xem sách đã có trong giỏ chưa
             boolean isExist = false;
             for (CartItem item : cartItems) {
                 if (item.getBookId() == book.getBookId()) {
@@ -49,11 +39,6 @@ public class AddToCartServlet extends HttpServlet {
                     break;
                 }
             }
-
-
-
-
-            // 4. Nếu là sách mới thì mới thêm vào list
             if (!isExist) {
                 CartItem newItem = new CartItem();
                 newItem.setBook(book);
@@ -62,11 +47,6 @@ public class AddToCartServlet extends HttpServlet {
                 newItem.setPrice(book.getPrice()); // Đảm bảo có giá để lưu vào database sau này
                 cartItems.add(newItem);
             }
-
-
-
-
-            // 5. Lưu lại vào session để ProcessCheckoutServlet có thể lấy ra
             session.setAttribute("cartItems", cartItems);
             session.setAttribute("cartItemsCheckout", cartItems);
             System.out.println("Giỏ hàng vãng lai hiện có: " + cartItems.size() + " loại sản phẩm");}
