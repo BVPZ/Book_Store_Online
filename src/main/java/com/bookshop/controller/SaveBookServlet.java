@@ -26,9 +26,9 @@ public class SaveBookServlet extends HttpServlet {
             String action = request.getParameter("action");
             String bookIdStr = request.getParameter("bookId");
 
-            System.out.println("---- DEBUG SAVE BOOK ----");
-            System.out.println("Action nhận được: " + action);
-            System.out.println("Book ID nhận được: " + bookIdStr);
+//            System.out.println("---- DEBUG SAVE BOOK ----");
+//            System.out.println("Action nhận được: " + action);
+//            System.out.println("Book ID nhận được: " + bookIdStr);
 
             String title = request.getParameter("title");
             String authorName = request.getParameter("authorName");

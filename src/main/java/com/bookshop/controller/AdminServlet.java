@@ -44,15 +44,14 @@ public class AdminServlet extends HttpServlet {
         }
         request.setAttribute("books", books);
         ArrayList<Order> orders = OrderDao.getAllOrders();
-
+        // Doanh thu = tổng tiền số đơn đã hoàn thành
         double totalRevenue = 0;
         for(Order o : orders){
-            if("Completed".equalsIgnoreCase(o.getOrderStatus()) || "Đã giao".equalsIgnoreCase(o.getOrderStatus())){
+            if("Completed".equalsIgnoreCase(o.getOrderStatus())){
                 totalRevenue += o.getTotalPrice();
             }
         }
         request.setAttribute("orders", orders);
-
         try {
             ArrayList<Author> allAuthors = AuthorDao.getAllAuthors();
             request.setAttribute("allAuthors", allAuthors);
@@ -63,12 +62,12 @@ public class AdminServlet extends HttpServlet {
             e.printStackTrace();
         }
         
-        // 1. Calculate basic metrics
+        // 1. Tính các thông số ở đầu trang admin
         request.setAttribute("cardTotalUsers", users.size());
         request.setAttribute("cardTotalBooks", books.size());
         request.setAttribute("cardTotalOrders", orders.size());
         
-        // For revenue, format like 202M
+        // Format lại số
         String revenueStr = "";
         if (totalRevenue >= 1000000) {
             revenueStr = new DecimalFormat("#.##").format(totalRevenue / 1000000) + "M";
@@ -79,12 +78,12 @@ public class AdminServlet extends HttpServlet {
         }
         request.setAttribute("cardTotalRevenue", revenueStr);
 
-        // 2. Data for Charts
+        // 2. Dữ liệu cho các bảng
         Map<String, Double> revenues = AdminDao.getRevenueLast5Months();
         Map<String, Integer> orderCounts = AdminDao.getOrdersLast5Months();
         Map<String, Integer> categorySales = AdminDao.getBooksCountByCategory();
 
-        // Convert Revenues
+        // Đổi thành dạng mảng bên để bên js đọc đc
         StringBuilder revLabels = new StringBuilder("[");
         StringBuilder revValues = new StringBuilder("[");
         int countRev = 0;
@@ -99,7 +98,7 @@ public class AdminServlet extends HttpServlet {
         revLabels.append("]");
         revValues.append("]");
 
-        // Convert Orders
+        // Đổi thành dạng mảng bên để bên js đọc đc
         StringBuilder orderLabels = new StringBuilder("[");
         StringBuilder orderValues = new StringBuilder("[");
         int countOrder = 0;
@@ -113,8 +112,8 @@ public class AdminServlet extends HttpServlet {
         }
         orderLabels.append("]");
         orderValues.append("]");
-        
-        // Convert Categories
+
+        // Đổi thành dạng mảng bên để bên js đọc đc
         StringBuilder catLabels = new StringBuilder("[");
         StringBuilder catValues = new StringBuilder("[");
         int countCat = 0;

@@ -29,13 +29,15 @@ public class CheckoutServlet extends HttpServlet {
                 CartItem cartItem = new CartItem();
                 cartItem.setBook(selectedBook);
                 cartItem.setQuantity(1);
-                ArrayList<CartItem> cartItemsCheckout = new ArrayList<CartItem>();
+                cartItem.setBookId(bookId);
+                ArrayList<CartItem> cartItemsCheckout = new ArrayList<>();
                 cartItemsCheckout.add(cartItem);
                 request.setAttribute("cartItemsCheckout", cartItemsCheckout);
                 session.setAttribute("cartItemsCheckout", cartItemsCheckout);
                 request.setAttribute("total",Total(cartItemsCheckout));
                 session.setAttribute("finalPrice",Total(cartItemsCheckout));
                 request.getRequestDispatcher("/view/checkout.jsp").forward(request, response);
+                System.out.println(cartItemsCheckout.size());
                 return;
             } catch (NumberFormatException e) {
                 e.printStackTrace();

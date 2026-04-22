@@ -31,7 +31,7 @@ public class OrderDao {
     }
 
     public static int countPurchasedBooksByUserId(int userId) {
-        String sql = "SELECT SUM(od.quantity) FROM order_details od JOIN orders o ON od.order_id = o.order_id WHERE o.user_id = ?";
+        String sql = "SELECT SUM(od.quantity) FROM order_details od JOIN orders o ON od.order_id = o.order_id WHERE o.user_id = ? AND o.status ='Completed' ";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -190,6 +190,9 @@ public class OrderDao {
                     psStock.setInt(1, item.getQuantity());
                     psStock.setInt(2, item.getBookId());
                     psStock.setInt(3, item.getQuantity());
+                    System.out.println("stock");
+                    System.out.println(item.getQuantity());
+                    System.out.println(item.getBookId());
                     int rows = psStock.executeUpdate();
                     if(rows == 0){
                         throw new RuntimeException("Sản phẩm hết hàng");

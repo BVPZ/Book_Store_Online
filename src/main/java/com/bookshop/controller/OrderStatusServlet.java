@@ -26,6 +26,7 @@ public class OrderStatusServlet extends HttpServlet {
         if(session.getAttribute("user")==null){
             // Xử lý khách vãng lai
             ArrayList<CartItem> cartItemsCheckout = (ArrayList<CartItem>) session.getAttribute("cartItemsCheckout");
+            System.out.println("Orderstatus có cick = " + cartItemsCheckout.size());
             ArrayList<CartItem> cartItems = (ArrayList<CartItem>) session.getAttribute("cartItems");
             Order order = new Order();
             order.setUserId(0);

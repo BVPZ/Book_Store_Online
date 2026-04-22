@@ -85,7 +85,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <a href="#" class="nav-link-custom fw-bold"><i class="bi bi-list me-2"></i> DANH MỤC SÁCH</a>
-                <a href="#" class="nav-link-custom border-start ms-2 ps-3">Sản phẩm đã xem</a>
+                <a href="recently-viewed" class="nav-link-custom border-start ms-2 ps-3">Sản phẩm đã xem</a>
             </div>
             <div class="d-flex gap-4">
                 <span class="nav-promo"><i class="bi bi-truck me-1"></i> Ship COD Trên Toàn Quốc</span>
@@ -118,7 +118,7 @@
                     <c:otherwise>
                         ${author.authorName} là một trong những tác giả nổi tiếng với ${author_books.size()} tác phẩm trong thư viện của chúng tôi.
                         <br><br>
-                        Với đánh giá trung bình ${average_rating} sao từ ${total_review_count} lượt đánh giá, các tác phẩm của ${author.authorName} đã nhận được sự yêu thích từ độc giả khắp nơi.
+
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -127,6 +127,7 @@
                     <div class="author-stat-label">Số lượng sách</div>
                     <div class="author-stat-value">${author_books.size()}</div>
                 </div>
+                <!--
                 <div class="author-stat-box">
                     <div class="author-stat-label">Đánh giá trung bình</div>
                     <div class="author-stat-value">
@@ -137,6 +138,7 @@
                     <div class="author-stat-label">Tổng lượt đánh giá</div>
                     <div class="author-stat-value">${total_review_count}</div>
                 </div>
+                -->
             </div>
         </div>
     </div>
@@ -156,9 +158,11 @@
                 </div>
                 <div class="book-card-info">
                     <div class="book-card-title">${b.title}</div>
+                    <!--
                     <div class="book-card-rating">
                         <i class="fas fa-star"></i> ${b.rating} <span>(${b.reviewCount})</span>
                     </div>
+                    -->
                     <div class="book-card-desc">
                         <c:choose>
                             <c:when test="${not empty b.description}">

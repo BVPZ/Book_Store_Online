@@ -95,7 +95,7 @@
 
         <div class="sidebar-nav-menu">
             <a href="#" class="nav-menu-item active" id="nav-profile-info">Thông tin cá nhân</a>
-            <a href="#" class="nav-menu-item">Đơn hàng của tôi</a>
+            <a href="order-history" class="nav-menu-item">Đơn hàng của tôi</a>
             <a href="#" class="nav-menu-item" id="nav-change-password">Đổi mật khẩu</a>
             <hr>
             <a href="logout" class="nav-menu-item text-danger">Đăng xuất</a>
