@@ -10,6 +10,51 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class BookDao {
+    public static ArrayList<Book> getRelatedBooks(int bookId) {
+        ArrayList<Book> list = new ArrayList<>();
+        String sql = "SELECT b.* FROM books b " +
+                     "JOIN book_categories bc ON b.book_id = bc.book_id " +
+                     "WHERE bc.category_id IN (SELECT category_id FROM book_categories WHERE book_id = ?) " +
+                     "AND b.book_id != ? " +
+                     "ORDER BY RAND() LIMIT 4";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setInt(1, bookId);
+            ps.setInt(2, bookId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Book book = new Book();
+                book.setBookId(rs.getInt("book_id"));
+                book.setTitle(rs.getString("title"));
+                book.setPrice(rs.getDouble("price"));
+                book.setImageUrl(rs.getString("image"));
+                book.setStock(rs.getInt("stock"));
+                list.add(book);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static int getCategoryIdByBookId(int bookId) {
+        String sql = "SELECT category_id FROM book_categories WHERE book_id = ? LIMIT 1";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, bookId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("category_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public void addBook(Book book) {
         String sqlBook = "INSERT INTO books (title, author_id, price, stock, description, image) VALUES (?, ?, ?, ?, ?, ?)";
         String sqlCategory = "INSERT INTO book_categories (book_id, category_id) VALUES (?, (SELECT category_id FROM categories WHERE category_name = ? LIMIT 1))";
@@ -42,6 +87,7 @@ public class BookDao {
             e.printStackTrace();
         }
     }
+
     public static Book getBookById(int bookId)
     {
         Book book = new Book();
@@ -55,26 +101,20 @@ public class BookDao {
         book.setBookId(bookId);
         book.setTitle(rs.getString("title"));
         book.setAuthorId(rs.getInt("author_id"));
-//        book.setRating(rs.getDouble("rating"));
-//        book.setReviewCount(rs.getInt("reviewCount"));
         book.setPrice(rs.getDouble("price"));
         book.setImageUrl(rs.getString("image"));
         book.setDescription(rs.getString("description"));
         book.setStock(rs.getInt("stock"));
-        book.setGenres();
         System.out.println("lay thong tin sach dua tren id thanh cong");}
         catch (Exception e) {
             throw new RuntimeException(e);
         }
         return book;
     }
-    public static ArrayList<Book> getNewBooks() throws SQLException,Exception {
 
+    public static ArrayList<Book> getNewBooks() throws SQLException,Exception {
         try(Connection con = DBConnection.getConnection();){
-            String sql = "SELECT *" +
-                    " FROM books" +
-                    " ORDER BY created_at DESC" +
-                    " LIMIT 4; ";
+            String sql = "SELECT * FROM books ORDER BY created_at DESC LIMIT 4; ";
             PreparedStatement ps = con.prepareStatement(sql);
             ArrayList<Book> new_books = new  ArrayList<>();
             ResultSet rs = ps.executeQuery();
@@ -91,8 +131,8 @@ public class BookDao {
             else System.out.println("lay sach moi thanh cong");
             return new_books;
         }
-
     }
+
     public static ArrayList<Book> getBestSellerBooks() throws SQLException,Exception {
         try(Connection con = DBConnection.getConnection();){
             String sql = "SELECT b.*, SUM(od.quantity) AS total_sold " +
@@ -119,8 +159,8 @@ public class BookDao {
             else System.out.println("lay sach ban chay thanh cong");
             return best_seller_books;
         }
-
     }
+
     public static ArrayList<Book> getAllBooks() {
         ArrayList<Book> all_books = new ArrayList<>();
         String sql = "SELECT b.*, a.author_name, GROUP_CONCAT(c.category_name SEPARATOR ', ') AS genre_names " +
@@ -143,8 +183,6 @@ public class BookDao {
                 book.setImageUrl(rs.getString("image"));
                 book.setStock(rs.getInt("stock"));
                 book.setDescription(rs.getString("description"));
-//                book.setRating(4.5);
-//                book.setReviewCount(120);
                 book.setAuthorName(rs.getString("author_name"));
                 String genresStr = rs.getString("genre_names");
                 ArrayList<String> genreList = new ArrayList<>();
@@ -155,13 +193,11 @@ public class BookDao {
                     }
                 }
                 book.setGenres(genreList);
-
                 all_books.add(book);
             }
             System.out.println("Lấy toàn bộ sách (kèm Tác giả & Danh mục) thành công!");
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Lỗi khi lấy toàn bộ sách: " + e.getMessage());
         }
         return all_books;
     }
@@ -186,7 +222,7 @@ public class BookDao {
             return search_results;
         }
     }
-    // lọc sách theo tác giả
+
     public static ArrayList<Book> getBooksByAuthorId(int authorId)  {
         ArrayList<Book> author_books = new ArrayList<>();
         String sql = "SELECT * FROM books WHERE author_id = ?";
@@ -202,10 +238,7 @@ public class BookDao {
                 book.setImageUrl(rs.getString("image"));
                 book.setDescription(rs.getString("description"));
                 book.setAuthorId(rs.getInt("author_id"));
-                // Mock rating and review count because they don't exist in the database
-//                book.setRating(4.5);
                 book.setReviewCount((int) (Math.random() * 1000 + 100));
-
                 author_books.add(book);
             }
         }catch (Exception e) {
@@ -214,9 +247,8 @@ public class BookDao {
         return author_books;
     }
 
-    //locSachTheoTheLoai
     public static ArrayList<Book> getBooksByCategoryId(int categoryId) throws SQLException {
-        ArrayList<Book> list = new ArrayList<>(); // 1. Tạo danh sách trống
+        ArrayList<Book> list = new ArrayList<>(); 
         String sql = "SELECT b.* FROM books b " +
                 "JOIN book_categories bc ON b.book_id = bc.book_id " +
                 "WHERE bc.category_id = ?";
@@ -274,6 +306,7 @@ public class BookDao {
         }
         return list;
     }
+
     public static void increaseQuantity(Connection conn, int bookId, int quantity) {
         String sql =  "UPDATE books SET stock = stock + ? WHERE book_id = ?";
         try(PreparedStatement ps = conn.prepareStatement(sql)){
@@ -322,6 +355,7 @@ public class BookDao {
             e.printStackTrace();
         }
     }
+
     public void deleteBook(int bookId) {
         String sqlCat = "DELETE FROM book_categories WHERE book_id=?";
         String sqlBook = "DELETE FROM books WHERE book_id=?";
@@ -342,7 +376,4 @@ public class BookDao {
             e.printStackTrace();
         }
     }
-
 }
-
-

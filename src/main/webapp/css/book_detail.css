@@ -37,6 +37,7 @@ body {
     font-weight: 500;
     transition: 0.2s;
 }
+
 .image-column {
     width: 35%;
 }
@@ -50,14 +51,11 @@ body {
     flex: 1;
 }
 
-
 .price {
     font-size: 28px;
     color: #00a651;
     font-weight: bold;
 }
-
-
 
 :root {
     --primary-green: #00b14f;
@@ -74,13 +72,9 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-
-
-
 .back-container:hover {
     color: var(--primary-green);
 }
-
 
 .image-column {
     flex: 0 0 35%;
@@ -237,7 +231,6 @@ body {
     font-size: 13px;
 }
 
-
 body {
     display: flex;
     flex-direction: column;
@@ -254,6 +247,7 @@ body {
     background: #fff;
     border-bottom: 1px solid #ddd;
 }
+
 .main-layout {
     display: flex;
     flex-direction: column;
@@ -264,7 +258,6 @@ body {
     position: relative;
     min-height: calc(100vh - 140px);
 }
-
 
 .action-buttons {
     display: flex;
@@ -343,7 +336,6 @@ body {
     transform: translateY(0);
 }
 
-
 .product-page-sample {
     background-color: white;
     padding: 40px;
@@ -355,7 +347,6 @@ body {
     flex-direction: column;
     align-items: center;
 }
-
 
 .product-title {
     font-size: 24px;
@@ -401,7 +392,6 @@ body {
     border: none;
 }
 
-
 .btn-buy-now:hover {
     background-color: #27ae60;
 }
@@ -426,6 +416,78 @@ body {
 .btn-add-cart .text {
     line-height: 1;
 }
+
 body {
     display: block !important;
+}
+
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.product.main-layout -detail-card {
+    width: 95% !important;
+    max-width: 1200px !important;
+    gap: 60px !important;
+    padding: 50px !important;
+    margin-bottom: 40px;
+}
+
+.back-container {
+    position: static !important;
+    display: inline-flex !important;
+    font-size: 16px !important;
+}
+
+.action-buttons {
+    display: flex !important;
+    gap: 15px !important;
+    width: 100% !important;
+}
+
+.action-buttons > button,
+.action-buttons > form {
+    flex: 1 !important;
+}
+
+.action-buttons form button {
+    width: 100% !important;
+}
+
+.search-btn {
+    background-color: var(--primary-green);
+    color: white;
+    padding: 0 20px;
+    border: none;
+}
+
+.search-btn:hover {
+    background-color: #008a43;
+}
+
+.related-section {
+    width: 95%;
+    max-width: 1200px;
+    margin-bottom: 50px;
+}
+
+.related-card {
+    transition: transform 0.2s;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.related-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 2.8em;
 }

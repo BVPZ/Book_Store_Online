@@ -9,8 +9,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 @WebServlet("/book-detail")
 public class BookDetailServlet extends HttpServlet {
@@ -19,21 +21,35 @@ public class BookDetailServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int bookId = Integer.parseInt(request.getParameter("id"));
+        String idParam = request.getParameter("id");
+        if (idParam == null || idParam.isEmpty()) {
+            response.sendRedirect("home"); 
+            return;
+        }
+
+        int bookId = Integer.parseInt(idParam);
 
         try {
             Book book = BookDao.getBookById(bookId);
+            
             if (book != null) {
+                ArrayList<Book> relatedBooks = BookDao.getRelatedBooks(bookId);
+
                 saveRecentlyViewed(request, response, bookId);
 
                 request.setAttribute("book", book);
+                
+                request.setAttribute("relatedBooks", relatedBooks); 
+                
                 request.getSession().setAttribute("book", book);
+                
                 request.getRequestDispatcher("/view/book_detail.jsp").forward(request, response);
             } else {
                 response.getWriter().println("<h1>Khong tim thay sach nay!</h1>");
             }
         } catch (Exception e) {
             e.printStackTrace();
+            response.getWriter().println("Error: " + e.getMessage());
         }
     }
 

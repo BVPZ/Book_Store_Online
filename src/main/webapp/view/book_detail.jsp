@@ -13,41 +13,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    <style>
-        .main-layout {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .product-detail-card {
-            width: 95% !important;
-            max-width: 1200px !important;
-            gap: 60px !important;
-            padding: 50px !important;
-        }
-
-        .back-container {
-            position: static !important;
-            display: inline-flex !important;
-            font-size: 16px !important;
-        }
-
-        .action-buttons {
-            display: flex !important;
-            gap: 15px !important;
-            width: 100% !important;
-        }
-        .action-buttons > button,
-        .action-buttons > form {
-            flex: 1 !important;
-        }
-        .action-buttons form button {
-            width: 100% !important;
-        }
-        .search-btn { background-color: var(--primary-green); color: white; padding: 0 20px; border: none; }
-        .search-btn:hover { background-color: #008a43; }
-    </style>
 </head>
 <body>
 
@@ -129,24 +94,13 @@
         <div class="info-column">
             <div class="title" style="font-size:x-large">${book.title}</div>
             <div class="genre">
-                <c:forEach var="g" items="${book.genres} " varStatus="status">
+                <c:forEach var="g" items="${book.genres}" varStatus="status">
                     ${g} <c:if test="${!status.last}">, </c:if>
                 </c:forEach>
             </div>
 
             <div class="author">Tác giả: <a href="author?id=${book.authorId}" style="text-decoration:none; color:#00a651;">${book.authorName}</a></div>
-            <!--
-            <div style="color: #ffc107; font-size: 15px; margin-top: 10px; margin-bottom: 15px; display: flex; align-items: center;">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-                <span style="color: #6c757d; font-size: 14px; margin-left: 8px;">
-                    ${book.rating} (${book.reviewCount} đánh giá)
-                </span>
-            </div>
-            -->
+            
             <div class="desc-text">Hàng còn lại: ${book.stock}</div>
             <div class="price">${book.getFormattedPrice()}</div>
             <div class="desc-header">Mô tả sản phẩm</div>
@@ -185,9 +139,35 @@
             </div>
         </div>
     </div>
+
+    <div class="related-section">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold text-dark mb-0">Sách cùng thể loại</h4>
+            <div class="flex-grow-1 ms-3 border-bottom" style="opacity: 0.1;"></div>
+        </div>
+        
+        <div class="row row-cols-2 row-cols-md-4 g-4">
+            <c:forEach items="${relatedBooks}" var="rb">
+                <div class="col">
+                    <div class="card h-100 related-card">
+                        <a href="book-detail?id=${rb.bookId}" class="p-3 text-center">
+                            <img src="${rb.imageUrl}" class="card-img-top" alt="${rb.title}" 
+                                 style="height: 180px; object-fit: contain;">
+                        </a>
+                        <div class="card-body p-3">
+                            <h6 class="card-title text-dark fw-bold text-truncate-2 mb-2">${rb.title}</h6>
+                            <p class="text-danger fw-bold mb-0">${rb.price} VNĐ</p>
+                        </div>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+
     <div id="toast" class="toast">
         Thêm vào giỏ hàng thành công!
     </div>
+
     <script>
         function showToast() {
             const toast = document.getElementById("toast");
@@ -209,7 +189,6 @@
         session.removeAttribute("message");
     %>
 </main>
-
 
 <jsp:include page="footer.jsp" />
 </body>
