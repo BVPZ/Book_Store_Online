@@ -16,33 +16,43 @@ import java.util.List;
 
 @WebServlet("/book-detail")
 public class BookDetailServlet extends HttpServlet {
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         String idParam = request.getParameter("id");
         if (idParam == null || idParam.isEmpty()) {
-            response.sendRedirect("home"); 
+            response.sendRedirect("home");
             return;
         }
-
         int bookId = Integer.parseInt(idParam);
-
         try {
             Book book = BookDao.getBookById(bookId);
-            
             if (book != null) {
                 ArrayList<Book> relatedBooks = BookDao.getRelatedBooks(bookId);
-
                 saveRecentlyViewed(request, response, bookId);
 
+                // Lưu category của sách vừa xem để HomeServlet dùng cho "Sách Gợi Ý"
+                int categoryId = BookDao.getCategoryIdByBookId(bookId);
+                if (categoryId > 0) {
+                    request.getSession().setAttribute("lastViewedCategoryId", categoryId);
+                }
+
+                // Lưu lịch sử xem cho AI gợi ý
+                List<Book> viewedHistory = (List<Book>) request.getSession()
+                        .getAttribute("viewedBookHistory");
+                if (viewedHistory == null) {
+                    viewedHistory = new ArrayList<>();
+                }
+                viewedHistory.removeIf(b -> b.getBookId() == bookId);
+                viewedHistory.add(0, book);
+                if (viewedHistory.size() > 10) {
+                    viewedHistory = viewedHistory.subList(0, 10);
+                }
+                request.getSession().setAttribute("viewedBookHistory", viewedHistory);
+
                 request.setAttribute("book", book);
-                
-                request.setAttribute("relatedBooks", relatedBooks); 
-                
+                request.setAttribute("relatedBooks", relatedBooks);
                 request.getSession().setAttribute("book", book);
-                
                 request.getRequestDispatcher("/view/book_detail.jsp").forward(request, response);
             } else {
                 response.getWriter().println("<h1>Khong tim thay sach nay!</h1>");
@@ -55,7 +65,6 @@ public class BookDetailServlet extends HttpServlet {
 
     private void saveRecentlyViewed(HttpServletRequest request, HttpServletResponse response, int bookId) {
         User user = (User) request.getSession().getAttribute("user");
-
         if (user != null) {
             RecentlyViewedDao.addRecentlyViewed(user.getUserId(), bookId);
         } else {
@@ -69,16 +78,13 @@ public class BookDetailServlet extends HttpServlet {
                     }
                 }
             }
-
             LinkedList<String> list = new LinkedList<>(Arrays.asList(recentStr.split("-")));
             list.removeIf(String::isEmpty);
             list.remove(String.valueOf(bookId));
             list.addFirst(String.valueOf(bookId));
-
             while (list.size() > 50) {
                 list.removeLast();
             }
-
             Cookie recentCookie = new Cookie("recent_viewed", String.join("-", list));
             recentCookie.setMaxAge(60 * 60 * 24 * 30);
             recentCookie.setPath("/");

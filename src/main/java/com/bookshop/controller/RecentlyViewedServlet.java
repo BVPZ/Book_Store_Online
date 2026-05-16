@@ -16,7 +16,6 @@ public class RecentlyViewedServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         User user = (User) request.getSession().getAttribute("user");
         ArrayList<Book> recentBooks = new ArrayList<>();
 
@@ -34,7 +33,6 @@ public class RecentlyViewedServlet extends HttpServlet {
                 }
             }
         }
-
         request.setAttribute("recentBooks", recentBooks);
         request.getRequestDispatcher("/view/recently_viewed.jsp").forward(request, response);
     }
