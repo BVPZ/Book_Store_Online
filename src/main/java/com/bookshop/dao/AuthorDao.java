@@ -1,13 +1,13 @@
 package com.bookshop.dao;
 
-import com.bookshop.model.Author;
-import com.bookshop.util.DBConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import com.bookshop.model.Author;
+import com.bookshop.util.DBConnection;
 
 public class AuthorDao {
     public static Author getAuthorbyId(int authorId) {
@@ -77,5 +77,30 @@ public class AuthorDao {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    // Thực thi SQL tùy ý để lấy danh sách tác giả
+    public static ArrayList<Author> getAuthorsFromSql(String sql) throws SQLException {
+        ArrayList<Author> list = new ArrayList<>();
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            java.sql.ResultSetMetaData meta = rs.getMetaData();
+            int colCount = meta.getColumnCount();
+            while (rs.next()) {
+                Author author = new Author();
+                for (int i = 1; i <= colCount; i++) {
+                    String col = meta.getColumnLabel(i).toLowerCase();
+                    switch (col) {
+                        case "author_id": author.setAuthorId(rs.getInt(i)); break;
+                        case "author_name": author.setAuthorName(rs.getString(i)); break;
+                        case "bio": author.setBio(rs.getString(i)); break;
+                        // Có thể mở rộng thêm các trường khác nếu cần
+                    }
+                }
+                list.add(author);
+            }
+        }
+        return list;
     }
 }

@@ -12,6 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/homestyle.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chatbot.css">
 
 </head>
 <body>
@@ -280,8 +281,26 @@
 
 </main>
 
+<!-- NÚT MỞ CHATBOT -->
+<div id="chatbot-toggle">
+    <i class="bi bi-chat-dots-fill"></i>
+</div>
+
+<!-- KHUNG CHATBOT -->
+<div id="chatbot-box">
+    <div id="chatbot-header">
+        <span><i class="bi bi-robot me-2"></i>Chat hỗ trợ</span>
+        <span id="chatbot-close" style="cursor: pointer;">✖</span>
+    </div>
+    <div id="chatbot-messages"></div>
+    <div id="chatbot-input">
+        <input type="text" id="chat-input" placeholder="Nhập tin nhắn...">
+        <button onclick="sendMessage()"><i class="bi bi-send-fill"></i></button>
+    </div>
+</div>
 
 <jsp:include page="footer.jsp" />
+<script src="${pageContext.request.contextPath}/js/home.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
