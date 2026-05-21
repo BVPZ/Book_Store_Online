@@ -478,6 +478,50 @@ public class BookDao {
         }
         return list;
     }
+        public static ArrayList<Book> getRelatedBooks(int bookId) {
+        ArrayList<Book> list = new ArrayList<>();
+        String sql = "SELECT b.* FROM books b " +
+                     "JOIN book_categories bc ON b.book_id = bc.book_id " +
+                     "WHERE bc.category_id IN (SELECT category_id FROM book_categories WHERE book_id = ?) " +
+                     "AND b.book_id != ? " +
+                     "ORDER BY RAND() LIMIT 4";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setInt(1, bookId);
+            ps.setInt(2, bookId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Book book = new Book();
+                book.setBookId(rs.getInt("book_id"));
+                book.setTitle(rs.getString("title"));
+                book.setPrice(rs.getDouble("price"));
+                book.setImageUrl(rs.getString("image"));
+                book.setStock(rs.getInt("stock"));
+                list.add(book);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static int getCategoryIdByBookId(int bookId) {
+        String sql = "SELECT category_id FROM book_categories WHERE book_id = ? LIMIT 1";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, bookId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("category_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }
 
 
