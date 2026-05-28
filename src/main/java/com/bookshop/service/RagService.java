@@ -23,7 +23,7 @@ import com.google.gson.JsonParser;
 public class RagService {
     private static final String EMBEDDING_URL = "http://127.0.0.1:11434/v1/embeddings";
     private static final String EMBEDDING_MODEL = "nomic-embed-text";
-    private static final int TOP_K = 5;  // Increased to capture description documents
+    private static final int TOP_K = 10;  // Increased to capture description documents
     
     private List<KnowledgeDocument> knowledgeBase;
 

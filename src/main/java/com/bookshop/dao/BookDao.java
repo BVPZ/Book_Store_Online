@@ -74,7 +74,7 @@ public class BookDao {
         try(Connection con = DBConnection.getConnection();){
             String sql = "SELECT *" +
                     " FROM books" +
-                    " ORDER BY created_at DESC" +
+                    " ORDER BY book_id DESC" +
                     " LIMIT 4; ";
             PreparedStatement ps = con.prepareStatement(sql);
             ArrayList<Book> new_books = new  ArrayList<>();

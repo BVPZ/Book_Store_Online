@@ -1,7 +1,9 @@
 package com.bookshop.controller;
 
 import com.bookshop.dao.BookDao;
+import com.bookshop.dao.CategoryDao;
 import com.bookshop.model.Book;
+import com.bookshop.model.Category;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,11 +29,13 @@ public class CategoryServlet extends HttpServlet {
 
                 // 2. Gọi hàm lấy sách từ DAO
                 ArrayList<Book> list = BookDao.getBooksByCategoryId(categoryId);
+                Category category = CategoryDao.getCategoryById(categoryId);
 
                 // 3. Đẩy list sách vào request
                 // Lưu ý quan trọng: Ở file home.jsp bạn đang dùng ${sessionScope.all_books}
                 // Nhưng khi lọc, ta dùng requestScope để dữ liệu mới đè lên dữ liệu cũ
                 request.setAttribute("all_books", list);
+                request.setAttribute("selectedCategory", category);
                 request.getRequestDispatcher("/view/home.jsp").forward(request, response);
 
             } catch (SQLException | NumberFormatException e) {

@@ -88,23 +88,23 @@
 
     <div class="product-detail-card">
         <div class="image-column">
-            <img src="${book.imageUrl}" alt="${book.title}" class="product-image">
+            <img src="${book.imageUrl}" alt="${book.title}" class="product-image" data-book-image>
         </div>
 
         <div class="info-column">
-            <div class="title" style="font-size:x-large">${book.title}</div>
+            <div class="title" style="font-size:x-large" data-book-title>${book.title}</div>
             <div class="genre">
                 <c:forEach var="g" items="${book.genres}" varStatus="status">
                     ${g} <c:if test="${!status.last}">, </c:if>
                 </c:forEach>
             </div>
 
-            <div class="author">Tác giả: <a href="author?id=${book.authorId}" style="text-decoration:none; color:#00a651;">${book.authorName}</a></div>
+            <div class="author">Tác giả: <a href="author?id=${book.authorId}" style="text-decoration:none; color:#00a651;" data-book-author>${book.authorName}</a></div>
             
             <div class="desc-text">Hàng còn lại: ${book.stock}</div>
-            <div class="price">${book.getFormattedPrice()}</div>
+            <div class="price" data-book-price>${book.getFormattedPrice()}</div>
             <div class="desc-header">Mô tả sản phẩm</div>
-            <div class="desc-text">${book.description}</div>
+            <div class="desc-text" data-book-description>${book.description}</div>
 
             <c:choose>
                 <c:when test="${book.stock > 0}">

@@ -45,6 +45,19 @@ public class ChatbotServlet extends HttpServlet {
 
     private static RagService ragService;
 
+    // Ensure RAG is loaded on-demand (thread-safe)
+    public static synchronized void ensureRagLoaded() {
+        if (ragService == null) {
+            ragService = new RagService();
+            try {
+                ragService.loadKnowledgeBase();
+                System.out.println("[Chatbot] RAG Service initialized (on-demand).");
+            } catch (SQLException e) {
+                System.err.println("[Chatbot] Failed to initialize RAG: " + e.getMessage());
+            }
+        }
+    }
+
     // ── Khởi tạo ─────────────────────────────────────────────────────────────
 
     @Override
@@ -165,11 +178,11 @@ public class ChatbotServlet extends HttpServlet {
 
         // 5. bookbot diễn giải kết quả
         String prompt = "Dựa theo dữ liệu tôi gửi dưới đây, hãy đưa ra gợi ý cho người dùng, "
-                + "trả lời tự nhiên vì giờ câu trả lời của bạn sẽ giao tiếp với người dùng.\n\n"
-                + "Nếu không có dữ liệu nào được gửi bên dưới hoặc 1 dòng dữ liệu có bất kì thuộc tính là null thì hệ thống không tìm thấy dữ liệu này, Trả lời là không có.\n"
-                + ""
+                + "trả lời tự nhiên vì giờ câu trả lời của bạn sẽ giao tiếp với người dùng."
+                + "Không trả lời kiểu 'dựa theo dữ liệu bạn cung cấp' mà hãy trả lời :'Dựa trên câu hỏi của bạn cửa hàng chúng tôi tìm thấy 1 số sách như sau' "
+                + "Nếu không có dữ liệu nào được gửi bên dưới hoặc 1 dòng dữ liệu có tên sách là null thì hệ thống không tìm thấy dữ liệu này, Trả lời là không có.\n"
                 + "Dữ liệu từ hệ thống tìm được:\n" + data
-                + "\n\nCâu hỏi của khách hàng: " + userMessage;
+                + ".Câu hỏi của khách hàng: " + userMessage;
         return callOllama(prompt, "", MODEL_BOOKBOT);
     }
 
@@ -283,6 +296,7 @@ public class ChatbotServlet extends HttpServlet {
     private String buildRequestBody(String userMessage, String ragContext, String model) {
         String userContent = (ragContext != null && !ragContext.isBlank())
                 ? "Dựa theo dữ liệu tôi gửi dưới đây, hãy đưa ra gợi ý cho người dùng, "
+                + "Không trả lời kiểu 'dựa theo dữ liệu bạn cung cấp' mà hãy trả lời :'Dựa trên câu hỏi của bạn cửa hàng chúng tôi tìm thấy 1 số sách như sau' "
                   + "trả lời tự nhiên vì giờ bạn đang giao tiếp với người dùng.\n\n"
                   + "Dữ liệu tham khảo từ cửa hàng:\n" + ragContext
                   + "\n\nCâu hỏi của khách hàng: " + userMessage

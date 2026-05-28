@@ -99,7 +99,7 @@
     word-break: break-word;
 }
 
-.chatbot-bot .bubble {
+..chatbot-bot .bubble {
     background: #f1f3f5;
     color: #212529;
     padding: 12px 14px;
@@ -109,8 +109,45 @@
     word-break: break-word;
 }
 
+.chatbot-user {
+    text-align: right;
+}
+.chatbot-user .bubble {
+    background: #00a651;
+    color: white;
+    padding: 12px 14px;
+    border-radius: 18px 18px 0 18px;
+    display: inline-block;
+    max-width: 82%;
+    word-break: break-word;
+}
 .chatbot-system {
     text-align: center;
     font-size: 13px;
     color: #6c757d;
+}
+
+.chatbot-system .bubble {
+    background: transparent;
+    color: #495057;
+    padding: 10px 12px;
+    border-radius: 12px;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.chatbot-system .features {
+    text-align: left;
+    margin: 0.5rem 0 0 0;
+    padding: 6px 12px;
+    list-style: disc;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    color: #333;
+}
+
+.chatbot-system .features li {
+    margin: 6px 0;
+    font-size: 13px;
 }

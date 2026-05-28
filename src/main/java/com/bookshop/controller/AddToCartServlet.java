@@ -3,6 +3,7 @@ package com.bookshop.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.bookshop.dao.BookDao;
 import com.bookshop.dao.CartDao;
 import com.bookshop.dao.CartItemDao;
 import com.bookshop.model.Book;
@@ -23,39 +24,87 @@ public class AddToCartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        Book book =(Book) session.getAttribute("book");
+        
+        String bookIdParam = request.getParameter("bookId");
+        int bookId = 0;
+        Book book = null;
 
-        if (user == null) {
-            ArrayList<CartItem> cartItems = (ArrayList<CartItem>) session.getAttribute("cartItems");
-            if (cartItems.isEmpty()) {
-                System.out.println("CartItems is empty");
-            }else {
-                for (CartItem cartItem : cartItems) {
-                    if (cartItem.getBookId() == book.getBookId()) {
-                        cartItem.setQuantity(cartItem.getQuantity() + 1);
-                        session.setAttribute("message", "success");
-                        session.setAttribute("cartItems", cartItems);
-                        response.sendRedirect("book-detail?id=" + book.getBookId());
-                        return;
-                    }
-                }
-            }
-            CartItem cartItem = new CartItem();
-            cartItem.setBookId(book.getBookId());
-            cartItem.setQuantity(1);
-            cartItems.add(cartItem);
-            session.setAttribute("cartItems",cartItems);
-            System.out.println("CartItems added, Có " + cartItems.size() + "sản phẩm");
-        }else{
-            try{
-                Cart cart = CartDao.getCartByUserId(user.getUserId());
-                CartItemDao.AddItem(cart.getCartId(),book.getBookId());
-            }catch (Exception e){
+        if (bookIdParam != null && !bookIdParam.isEmpty()) {
+            try {
+                bookId = Integer.parseInt(bookIdParam);
+                book = BookDao.getBookById(bookId);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        session.setAttribute("message","success");
-        response.sendRedirect("book-detail?id="+book.getBookId());
+
+        if (book == null) {
+            book = (Book) session.getAttribute("book");
+            if (book != null) {
+                bookId = book.getBookId();
+            }
+        }
+
+        String isAjaxStr = request.getParameter("ajax");
+        boolean isAjax = (isAjaxStr != null && isAjaxStr.equals("true")) || 
+                         "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+
+        if (book == null) {
+            if (isAjax) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"success\":false,\"message\":\"Không tìm thấy thông tin sách.\"}");
+            } else {
+                response.sendRedirect("home");
+            }
+            return;
+        }
+
+        if (user == null) {
+            ArrayList<CartItem> cartItems = (ArrayList<CartItem>) session.getAttribute("cartItems");
+            if (cartItems == null) {
+                cartItems = new ArrayList<>();
+                session.setAttribute("cartItems", cartItems);
+            }
+            
+            boolean found = false;
+            for (CartItem cartItem : cartItems) {
+                if (cartItem.getBookId() == bookId) {
+                    cartItem.setQuantity(cartItem.getQuantity() + 1);
+                    found = true;
+                    break;
+                }
+            }
+            
+            if (!found) {
+                CartItem cartItem = new CartItem();
+                cartItem.setBookId(bookId);
+                cartItem.setQuantity(1);
+                cartItem.setBook(book);
+                cartItems.add(cartItem);
+            }
+            session.setAttribute("cartItems", cartItems);
+            System.out.println("CartItems updated, Có " + cartItems.size() + " sản phẩm");
+        } else {
+            try {
+                Cart cart = CartDao.getCartByUserId(user.getUserId());
+                if (cart != null && cart.getCartId() > 0) {
+                    CartItemDao.AddItem(cart.getCartId(), bookId);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        session.setAttribute("message", "success");
+        
+        if (isAjax) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"success\":true}");
+        } else {
+            response.sendRedirect("book-detail?id=" + bookId);
+        }
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
