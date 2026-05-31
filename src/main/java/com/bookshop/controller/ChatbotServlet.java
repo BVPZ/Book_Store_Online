@@ -36,6 +36,16 @@ public class ChatbotServlet extends HttpServlet {
     private static final String MODEL_BOOKBOT    = "bookbot";
     private static final String MODEL_BOOKBOTSQL = "bookbotsql";
 
+    private static final String SQL_MODEL_SYSTEM_PROMPT = "Bạn là AI chuyên sinh câu lệnh SQL MySQL cho hệ thống cửa hàng sách. "
+            + "Chỉ trả về đúng một câu lệnh SQL thuần hoặc đúng một từ: NONE nếu không thể tạo SQL. "
+            + "Schema: books b, authors a, categories c, book_categories bc, orders o, order_details od, users u, cart c, cart_items ci, payments p. "
+            + "books có author_id, không có category_id. categories phải join qua book_categories: b.book_id = bc.book_id và bc.category_id = c.category_id. "
+            + "authors phải join qua b.author_id = a.author_id. Không dùng a.id, không dùng b.category_id. "
+            + "Luôn chọn toàn bộ cột chính của sách bằng b.*, không chọn riêng một trường như b.title hoặc một trường rỗng khác trừ khi câu hỏi yêu cầu tính toán tổng hợp. "
+            + "Nếu câu hỏi liên quan đến nội dung, mô tả, tóm tắt, cốt truyện hoặc 'nội dung cuốn sách', hãy dùng cột b.description trong điều kiện WHERE và dùng LIKE '%...%'. "
+            + "Nếu câu hỏi liên quan tới tiêu đề, dùng b.title. Nếu liên quan đến tác giả, dùng a.author_name. "
+            + "Nếu liên quan đến thể loại, dùng c.category_name. Luôn tuân thủ schema đã biết. KHÔNG giải thích, KHÔNG dùng markdown. ";
+
     // Dùng chung HttpClient để tận dụng connection pooling
     private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
@@ -95,11 +105,16 @@ public class ChatbotServlet extends HttpServlet {
             String queryType = classifyQuery(userMessage);
             System.out.println("[Chatbot] Query type = " + queryType);
 
-            String reply = switch (queryType) {
-                case "DataQuery"          -> handleDataQuery(userMessage);
-                case "ContentDetailQuery" -> handleContentDetailQuery(userMessage);
-                default                   -> handleGeneralQuery(userMessage);
-            };
+            String reply;
+            if (queryType.startsWith("RESPOND:")) {
+                reply = queryType.substring("RESPOND:".length()).trim();
+            } else {
+                reply = switch (queryType) {
+                    case "DataQuery"          -> handleDataQuery(userMessage);
+                    case "ContentDetailQuery" -> handleContentDetailQuery(userMessage);
+                    default                   -> handleGeneralQuery(userMessage);
+                };
+            }
 
             json.addProperty("reply", reply);
 
@@ -118,12 +133,28 @@ public class ChatbotServlet extends HttpServlet {
      * DataQuery | ContentDetailQuery | Unknown
      */
     private String classifyQuery(String userMessage) throws IOException, InterruptedException {
-        String prompt = "Phân loại yêu cầu sau của khách hàng. "
-                + "Chỉ trả về đúng 1 trong 3 từ: ContentDetailQuery, DataQuery, Unknown — "
-                + "không thêm bất kỳ ký tự nào khác.\n"
+        String prompt = "Bạn là bộ phân loại câu hỏi đầu vào cho cửa hàng sách. "
+                + "Nếu khách hàng chào hỏi đơn giản như 'xin chào', 'chào bạn', 'hi', hãy trả lời lại bằng lời chào thân thiện và bắt đầu với 'RESPOND:'. "
+                + "Nếu khách hàng hỏi 'bạn có thể làm gì', hãy nêu rõ các chức năng: tìm kiếm sách, tìm thông tin sách có sẵn, tìm tác giả/thể loại, và tư vấn mua sách. "
+                + "Nếu câu hỏi liên quan đến cửa hàng, trả lời gọn gàng. "
+                + "Nếu câu hỏi thuộc về tìm kiếm sách hoặc tìm kiếm nội dung, chỉ trả về một trong hai nhãn sau: DataQuery hoặc ContentDetailQuery. "
+                + "Nếu câu hỏi không liên quan đến những chức năng sau: Tìm kiếm sách theo yêu cầu, Tìm thông tin sách có sẵn, Tìm tác giả, thể loại, Tư vấn mua sách, thì trả lời chính xác: 'RESPOND: Không thể trả lời các câu hỏi của bạn'. "
+                + "Khi trả lời trực tiếp, luôn bắt đầu bằng 'RESPOND:' và chỉ dùng cho câu trả lời tự nhiên, không dùng cho nhãn phân loại. "
+                + "Khi phân loại, chỉ trả về đúng một chuỗi: DataQuery, ContentDetailQuery, hoặc Unknown. Không thêm ký tự nào khác.\n"
+                + "Câu hỏi về cuốn sách có trong cửa hàng không, hỏi về giá tiền của cuốn sách, hỏi về nội dung cuốn sách là câu hỏi phân loại DataQuery.\n"
                 + "Câu hỏi: " + userMessage;
 
-        String result = callOllama(prompt, "", MODEL_BOOKBOT).trim();
+        String result = callOllamaWithBookbot(prompt, 256).trim();
+        result = result.lines().findFirst().orElse(result).trim();
+
+        if (result.startsWith("RESPOND:")) {
+            String payload = result.substring("RESPOND:".length()).trim();
+            if (payload.equals("DataQuery") || payload.equals("ContentDetailQuery") || payload.equals("Unknown")) {
+                System.out.println("[Chatbot] Misleading RESPOND payload treated as label: " + payload);
+                return payload;
+            }
+            return "RESPOND:" + payload;
+        }
 
         return switch (result) {
             case "ContentDetailQuery", "DataQuery", "Unknown" -> result;
@@ -240,13 +271,47 @@ public class ChatbotServlet extends HttpServlet {
     }
 
     /**
-     * Gọi bookbotsql mà không inject system prompt từ Java.
-     * Để Modelfile của model tự điều khiển — chỉ truyền mọi user message thuần.
+     * Gọi bookbotsql để sinh SQL và bổ sung hướng dẫn dùng b.description khi hỏi về nội dung sách.
      */
     private String callOllamaForSql(String userMessage) throws IOException, InterruptedException {
+        JsonObject systemMsg = new JsonObject();
+        systemMsg.addProperty("role", "system");
+        systemMsg.addProperty("content", SQL_MODEL_SYSTEM_PROMPT);
+
         JsonObject userMsg = new JsonObject();
         userMsg.addProperty("role", "user");
         userMsg.addProperty("content", userMessage);
+
+        JsonArray messages = new JsonArray();
+        messages.add(systemMsg);
+        messages.add(userMsg);
+
+        JsonObject payload = new JsonObject();
+        payload.addProperty("model", MODEL_BOOKBOTSQL);
+        payload.add("messages", messages);
+        payload.addProperty("temperature", 0.0);
+        payload.addProperty("max_tokens", 512);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(OLLAMA_URL))
+                .timeout(Duration.ofSeconds(100))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(payload.toString(), StandardCharsets.UTF_8))
+                .build();
+
+        HttpResponse<String> response = HTTP_CLIENT
+                .send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+
+        if (response.statusCode() != 200) {
+            throw new IOException("bookbotsql trả về HTTP " + response.statusCode() + ": " + response.body());
+        }
+        return parseReply(response.body());
+    }
+
+    private String callOllamaWithSqlModel(String content, int maxTokens) throws IOException, InterruptedException {
+        JsonObject userMsg = new JsonObject();
+        userMsg.addProperty("role", "user");
+        userMsg.addProperty("content", content);
 
         JsonArray messages = new JsonArray();
         messages.add(userMsg);
@@ -255,7 +320,7 @@ public class ChatbotServlet extends HttpServlet {
         payload.addProperty("model", MODEL_BOOKBOTSQL);
         payload.add("messages", messages);
         payload.addProperty("temperature", 0.0);
-        payload.addProperty("max_tokens", 512);
+        payload.addProperty("max_tokens", maxTokens);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(OLLAMA_URL))
@@ -408,5 +473,34 @@ public class ChatbotServlet extends HttpServlet {
             sb.append("... và ").append(authors.size() - 10).append((" tác giả khác."));
         }
         return sb.toString().trim();
+    }
+    private String callOllamaWithBookbot(String content, int maxTokens) throws IOException, InterruptedException {
+        JsonObject userMsg = new JsonObject();
+        userMsg.addProperty("role", "user");
+        userMsg.addProperty("content", content);
+
+        JsonArray messages = new JsonArray();
+        messages.add(userMsg);
+
+        JsonObject payload = new JsonObject();
+        payload.addProperty("model", MODEL_BOOKBOT); // <-- dùng bookbot
+        payload.add("messages", messages);
+        payload.addProperty("temperature", 0.0);
+        payload.addProperty("max_tokens", maxTokens);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(OLLAMA_URL))
+                .timeout(Duration.ofSeconds(100))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(payload.toString(), StandardCharsets.UTF_8))
+                .build();
+
+        HttpResponse<String> response = HTTP_CLIENT
+                .send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+
+        if (response.statusCode() != 200) {
+            throw new IOException("bookbot trả về HTTP " + response.statusCode() + ": " + response.body());
+        }
+        return parseReply(response.body());
     }
 }
