@@ -2,7 +2,9 @@ package com.bookshop.controller;
 
 import com.bookshop.dao.BookDao;
 import com.bookshop.dao.RecentlyViewedDao;
+import com.bookshop.dao.ReviewDao;
 import com.bookshop.model.Book;
+import com.bookshop.model.Review;
 import com.bookshop.model.User;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
@@ -31,13 +33,11 @@ public class BookDetailServlet extends HttpServlet {
                 ArrayList<Book> relatedBooks = BookDao.getRelatedBooks(bookId);
                 saveRecentlyViewed(request, response, bookId);
 
-                // Lưu category của sách vừa xem để HomeServlet dùng cho "Sách Gợi Ý"
                 int categoryId = BookDao.getCategoryIdByBookId(bookId);
                 if (categoryId > 0) {
                     request.getSession().setAttribute("lastViewedCategoryId", categoryId);
                 }
 
-                // Lưu lịch sử xem cho AI gợi ý
                 List<Book> viewedHistory = (List<Book>) request.getSession()
                         .getAttribute("viewedBookHistory");
                 if (viewedHistory == null) {
@@ -49,6 +49,21 @@ public class BookDetailServlet extends HttpServlet {
                     viewedHistory = viewedHistory.subList(0, 10);
                 }
                 request.getSession().setAttribute("viewedBookHistory", viewedHistory);
+
+                List<Review> reviews = ReviewDao.getReviewsByBookId(bookId);
+                double avgRating = ReviewDao.getAverageRating(bookId);
+                int reviewCount = ReviewDao.getReviewCount(bookId);
+
+                request.setAttribute("reviews", reviews);
+                request.setAttribute("avgRating", avgRating);
+                request.setAttribute("reviewCount", reviewCount);
+
+                User user = (User) request.getSession().getAttribute("user");
+                if (user != null) {
+                    boolean canReview = ReviewDao.canReview(user.getUserId(), bookId)
+                                     && !ReviewDao.hasReviewed(user.getUserId(), bookId);
+                    request.setAttribute("canReview", canReview);
+                }
 
                 request.setAttribute("book", book);
                 request.setAttribute("relatedBooks", relatedBooks);
