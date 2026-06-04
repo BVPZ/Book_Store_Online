@@ -112,6 +112,7 @@ public class ChatbotServlet extends HttpServlet {
                 reply = switch (queryType) {
                     case "DataQuery"          -> handleDataQuery(userMessage);
                     case "ContentDetailQuery" -> handleContentDetailQuery(userMessage);
+                    case "Unknown"            -> handleUnknownQuery(userMessage);
                     default                   -> handleGeneralQuery(userMessage);
                 };
             }
@@ -133,18 +134,15 @@ public class ChatbotServlet extends HttpServlet {
      * DataQuery | ContentDetailQuery | Unknown
      */
     private String classifyQuery(String userMessage) throws IOException, InterruptedException {
-        String prompt = "Bạn là bộ phân loại câu hỏi đầu vào cho cửa hàng sách. "
-                + "Nếu khách hàng chào hỏi đơn giản như 'xin chào', 'chào bạn', 'hi', hãy trả lời lại bằng lời chào thân thiện và bắt đầu với 'RESPOND:'. "
-                + "Nếu khách hàng hỏi 'bạn có thể làm gì', hãy nêu rõ các chức năng: tìm kiếm sách, tìm thông tin sách có sẵn, tìm tác giả/thể loại, và tư vấn mua sách. "
-                + "Nếu câu hỏi liên quan đến cửa hàng, trả lời gọn gàng. "
-                + "Nếu câu hỏi thuộc về tìm kiếm sách hoặc tìm kiếm nội dung, chỉ trả về một trong hai nhãn sau: DataQuery hoặc ContentDetailQuery. "
-                + "Nếu câu hỏi không liên quan đến những chức năng sau: Tìm kiếm sách theo yêu cầu, Tìm thông tin sách có sẵn, Tìm tác giả, thể loại, Tư vấn mua sách, thì trả lời chính xác: 'RESPOND: Không thể trả lời các câu hỏi của bạn'. "
-                + "Khi trả lời trực tiếp, luôn bắt đầu bằng 'RESPOND:' và chỉ dùng cho câu trả lời tự nhiên, không dùng cho nhãn phân loại. "
-                + "Khi phân loại, chỉ trả về đúng một chuỗi: DataQuery, ContentDetailQuery, hoặc Unknown. Không thêm ký tự nào khác.\n"
-                + "Câu hỏi về cuốn sách có trong cửa hàng không, hỏi về giá tiền của cuốn sách, hỏi về nội dung cuốn sách là câu hỏi phân loại DataQuery.\n"
-                + "Câu hỏi: " + userMessage;
-
-        String result = callOllamaWithBookbot(prompt, 256).trim();
+        String prompt = "Bạn là bộ phân loại câu hỏi đầu vào cho cửa hàng sách.\n"
+                + "Hãy phân loại câu hỏi của khách hàng vào một trong ba loại sau:\n"
+                + "- DataQuery: Cho những câu hỏi thuộc về sách hoặc tìm kiếm dữ liệu (giá sách, thể loại, tác giả, cuốn sách đó có ở cửa hàng không, hoặc các thuộc tính khác của sách như tên, đánh giá,...).\n"
+                + "- ContentDetailQuery: Nếu hỏi về nội dung sách, tóm tắt, mô tả, cốt truyện hoặc câu hỏi cần dùng RAG để tìm kiếm thông tin chi tiết trong database.\n"
+                + "- Unknown: Nếu là các câu hỏi khác không thể phân loại (chào hỏi, trò chuyện tự do, câu hỏi không liên quan đến chức năng của cửa hàng sách,...).\n\n"
+                + "Chỉ trả về đúng một chuỗi là tên của loại: DataQuery, ContentDetailQuery hoặc Unknown. Không thêm bất kỳ từ ngữ, giải thích hay ký tự nào khác.\n"
+                + "Câu hỏi của khách hàng: " + userMessage;
+        System.out.println("[Chatbot] Classification Prompt:\n" + prompt);
+        String result = callOllamaWithBookbot(prompt, 64).trim();
         result = result.lines().findFirst().orElse(result).trim();
 
         if (result.startsWith("RESPOND:")) {
@@ -159,7 +157,7 @@ public class ChatbotServlet extends HttpServlet {
         return switch (result) {
             case "ContentDetailQuery", "DataQuery", "Unknown" -> result;
             default -> {
-                System.out.println("[Chatbot] Unexpected classification result: " + result);
+                System.out.println("[Chatbot] Unexpected classification result: " + result + ". Fallback to Unknown.");
                 yield "Unknown";
             }
         };
@@ -226,6 +224,11 @@ public class ChatbotServlet extends HttpServlet {
 
     private String handleGeneralQuery(String userMessage) throws IOException, InterruptedException {
         return handleRagQuery(userMessage);
+    }
+
+    private String handleUnknownQuery(String userMessage) throws IOException, InterruptedException {
+        String prompt = "đây là câu hỏi của khách hàng, hãy trả lời tự nhiên:\n" + userMessage;
+        return callOllamaWithBookbot(prompt, 512);
     }
 
     /** RAG context → bookbot */

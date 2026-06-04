@@ -154,6 +154,18 @@
                                 </div>
                             </div>
                         </label>
+                        <label class="payment-item-box">
+                            <div class="payment-item-inner">
+                                <input type="radio" name="paymentMethod" value="VNPAY">
+                                <div class="payment-icon-container">
+                                    <i class="fa-solid fa-credit-card" style="color: #0070ba;"></i>
+                                </div>
+                                <div class="payment-info">
+                                    <strong class="payment-title">Cổng thanh toán VNPAY</strong>
+                                    <small class="payment-sub">Thanh toán qua thẻ ATM, tài khoản ngân hàng hoặc ví VNPAY</small>
+                                </div>
+                            </div>
+                        </label>
                     </div>
 
                     <div id="payment-note" class="alert alert-primary border-0 mt-3 mb-0" style="font-size: 0.85rem; background-color: #f0f7ff; color: #004085;">

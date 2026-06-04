@@ -29,4 +29,17 @@ public class PaymentDao {
         }
         return null;
     }
+
+    public static boolean updatePaymentStatus(int orderId, String status) {
+        String sql = "UPDATE payments SET payment_status = ? WHERE order_id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, orderId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

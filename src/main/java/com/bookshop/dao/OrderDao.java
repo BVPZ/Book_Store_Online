@@ -266,8 +266,8 @@ public class OrderDao {
             psOrder.setInt(2, orderId);
             int updatedRows = psOrder.executeUpdate();
 
-            // 2. Nếu cập nhật trạng thái thành công và trạng thái mới là "Canceled" (Hủy)
-            if (updatedRows > 0 && "Canceled".equalsIgnoreCase(newStatus)) {
+            // 2. Nếu cập nhật trạng thái thành công và trạng thái mới là "Canceled" hoặc "Cancelled" (Hủy)
+            if (updatedRows > 0 && ("Canceled".equalsIgnoreCase(newStatus) || "Cancelled".equalsIgnoreCase(newStatus))) {
                 // Lấy danh sách sản phẩm của đơn hàng này
                 // Sử dụng hàm getDetailsByOrderId bạn đã viết ở dòng 53
                 ArrayList<OrderDetail> details = getDetailsByOrderId(conn, orderId);
@@ -298,6 +298,23 @@ public class OrderDao {
             }
         }
     }
+
+    public static boolean updateStatus(int orderId, String newStatus) {
+        try (Connection conn = DBConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            boolean ok = updateStatus(conn, orderId, newStatus);
+            if (ok) {
+                conn.commit();
+                return true;
+            } else {
+                conn.rollback();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static Order getOrderById(int orderId){
         String sql = "SELECT * FROM orders WHERE order_id = ?";
         try(Connection conn = DBConnection.getConnection();
